@@ -1,0 +1,3 @@
+﻿@model Tuple<string, string>
+@using ISas.Web.Models;
+@Html.EncodedPath("", "GetFeeDocument_View_HtmlReport", "StudentFeeDetails", new { TransRefNo = Model.Item1, Mode = "RECEIPT", erpno = Model.Item2, PrintOnly = "YES" }, htmlAttributes: new { })

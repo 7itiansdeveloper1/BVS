@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e1b7ed7f133a41e18f21cd7c0b71429a" Name="Diagram1">
+        <EntityTypeShape EntityType="iSAS_BVSModel.Document_TransactionMaster" Width="1.5" PointX="11" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Exam_AssessmentMaster" Width="1.5" PointX="11" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Exam_ExamMaster" Width="1.5" PointX="8.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Exam_GradingMaster" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Exam_SubjectMaster" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Fee_StructureMaster" Width="1.5" PointX="3.75" PointY="42" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Merit_TransactionMaster" Width="1.5" PointX="8" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_AdmissionCategory" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_AreaMaster" Width="1.5" PointX="0.75" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_AuthModuleMaster" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_BloodGroupMaster" Width="1.5" PointX="3.75" PointY="45.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_CategoryMaster" Width="1.5" PointX="3.75" PointY="49.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_CityMaster" Width="1.5" PointX="3.75" PointY="53.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_ClassMaster" Width="1.5" PointX="3.75" PointY="58.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_ClubMaster" Width="1.5" PointX="3.75" PointY="63.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_CountryMaster" Width="1.5" PointX="3.75" PointY="67.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_DesignationMaster" Width="1.5" PointX="1.5" PointY="117.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_DocMaster" Width="1.5" PointX="8.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_DocumentMaster" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_HouseMaster" Width="1.5" PointX="3.75" PointY="72.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_MeritParameterMaster" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_MinorityCategoryMaster" Width="1.5" PointX="3.75" PointY="75.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_NationalityMaster" Width="1.5" PointX="3.75" PointY="79.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_ProfessionMaster" Width="1.5" PointX="3.75" PointY="83.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_QualificationMaster" Width="1.5" PointX="3.75" PointY="87.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_ReligonMaster" Width="1.5" PointX="3.75" PointY="91.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_RoleMaster" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_SectionMaster" Width="1.5" PointX="3.75" PointY="95.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_SessionMaster" Width="1.5" PointX="3.75" PointY="98.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_StateMaster" Width="1.5" PointX="3.75" PointY="103.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_UserRoleMaster" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_UsersInfo" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.School_WingMaster" Width="1.5" PointX="1.5" PointY="58.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Staff_DeptMaster" Width="1.5" PointX="1.5" PointY="121.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Staff_ShiftMaster" Width="1.5" PointX="13.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Staff_StaffDetailMaster" Width="1.5" PointX="3.75" PointY="112.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Staff_TimeGroupMaster" Width="1.5" PointX="13.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Student_AdmissionMaster" Width="1.5" PointX="6" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Student_RegistrationMaster" Width="1.5" PointX="3" PointY="30.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Transport_PickedUpBy" Width="1.5" PointX="3.75" PointY="108.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Transport_RouteMaster" Width="1.5" PointX="3.75" PointY="130.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Transport_StopMaster" Width="1.5" PointX="3.75" PointY="134.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Transport_TransportMode" Width="1.5" PointX="3.75" PointY="139.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.User" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.webpages_Membership" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.webpages_OAuthMembership" Width="1.5" PointX="15.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.webpages_Roles" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Fee_ClassWiseDue" Width="1.5" PointX="15.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Outbox" Width="1.5" PointX="15.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Sent" Width="1.5" PointX="15.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.SMS_GroupMaster" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iSAS_BVSModel.Strength" Width="1.5" PointX="0.75" PointY="17.75" IsExpanded="true" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Document___Docum__1B0A9E7C" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Exam_Asse__ExamI__7DF95E82" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___544D3D79" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Merit_Tra__Param__6E37F805" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Fathe__2D337058" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Gardi__33E06DE7" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Mothe__3B818FAF" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___49CFAF06" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___507CAC95" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__403C232B" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__45F4FC81" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__School_Ro__Modul__38060486" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Staff_Sta__BldGr__615232DC" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___45FF1E22" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Staff_Staff__Cat__68F354A4" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___48DB8ACD" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Fathe__2E279491" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Gardi__34D49220" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Mothe__3C75B3E8" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4BB7F778" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___5170D0CE" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__41304764" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__46E920BA" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__School_Cl__Promo__2F650636" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__School_Cl__WingI__2C88998B" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__AdmCl__277A9702" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4416D5B0" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__RegCl__2C352A7E" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___47E76694" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Fathe__300FDD03" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Gardi__36BCDA92" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Mothe__3E5DFC5A" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4F88885C" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___53591940" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__43188FD6" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__48D1692C" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Staff_Sta__Desig__62465715" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___46F3425B" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4CAC1BB1" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Staff_Sta__Natio__633A7B4E" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4E946423" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Fathe__2B4B27E6" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Gardi__31F82575" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Mothe__3999473D" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Staff_Sta__Quali__642E9F87" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Fathe__2A5703AD" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Gardi__3104013C" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Mothe__38A52304" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Staff_Sta__Relgn__6522C3C0" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4AC3D33F" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___450AF9E9" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Sessi__422E8D3E" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Fathe__2F1BB8CA" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Gardi__35C8B659" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Mothe__3D69D821" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4DA03FEA" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___5264F507" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__42246B9D" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_R__Stude__47DD44F3" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___554161B2" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Staff_Staf__Dept__6616E7F9" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Stud___4322B177" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__DRout__286EBB3B" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__DStop__2962DF74" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Modeo__37B0FECB" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__Picke__3F522093" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__PRout__404644CC" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Student_A__PStop__413A6905" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.FK__Transport__Route__5EAA0504" ManuallyRouted="false" />
+        <AssociationConnector Association="iSAS_BVSModel.webpages_UsersInRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

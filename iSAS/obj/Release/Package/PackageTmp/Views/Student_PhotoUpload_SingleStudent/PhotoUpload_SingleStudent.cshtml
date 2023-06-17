@@ -1,0 +1,225 @@
+﻿@model ISas.Entities.Student_Entities.Student_ImagesModels
+
+<section class="content-header">
+    <h1>
+        Upload Photo
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Student</li>
+        <li>Upload Photo</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("UploadFile", "Student_PhotoUpload_SingleStudent", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.UploadFor)
+        @Html.HiddenFor(r => Model.ERPNo)
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">@Html.DisplayFor(r => Model.ImageForName)</h5>
+                <h5 class="box-title pull-right">
+                    <button class="btn btn-info btn-sm" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">Upload</button>
+                    <a href="#" class="btn btn-success btn-sm" id="hlcropImage" onclick="CallingCropImage('StudentImageURL')" style="vertical-align:top;">Crop Image</a>
+
+
+                    <small><input type="file" id="StudentImageURL_flPhoto" onchange="readFile(this, 'StudentImageURL');" class="flPhoto pull-left" name="upload" /></small>
+                </h5>
+                <h5 class="box-title pull-right" style="padding-right:2%;vertical-align:middle;">
+                    <small class="">
+                        <span> Selected Area Size : </span>
+                        <span> Width: <label id="lblWidth">0px</label></span>
+                        <span> Height: <label id="lblHeight">0px</label></span>
+                    </small>
+                </h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @*<img class="img-responsive" src="../../dist/img/photo2.png" alt="Photo">*@
+                                <canvas class="img-responsive" id="StudentImageURL_canvas" height="5" width="5" style="border:1px solid #808080;"></canvas>
+                                <input type="hidden" name="StudentImageURL_Croped" id="StudentImageURL_Croped" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @*<img class="img-responsive" src="../../dist/img/photo2.png" alt="Photo">*@
+                                <div style=" overflow:auto;max-height:100%;max-width:100%;">
+                                    <img id="StudentImageURL" src="~/@Model.StudentImageURL" alt="@Model.ImageForName" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+<script type="text/javascript">
+            var imageCropWidth = 0;
+            var imageCropHeight = 0;
+            var cropPointX = 0;
+            var cropPointY = 0;
+            var jcropApi;
+            $(document).ready(function () {
+                //initCrop();
+            });
+
+            function emptyValForNewUpload() {
+                imageCropWidth = 0;
+                imageCropHeight = 0;
+                cropPointX = 0;
+                cropPointY = 0;
+                jcropApi = null;
+            }
+
+            function CallingCropImage(uploadForID) {
+               // this.preventDefault();
+                cropImage(uploadForID);
+            }
+
+            //$("#hlcropImage1").on("click", function (e) {
+            //    /*
+            //    The event.preventDefault() method stops the default action of
+            //    an element from happening. For example: Prevent a submit button
+            //    from submitting a form. Prevent a link from following the URL
+            //    */
+            //    debugger;
+            //    e.preventDefault();
+            //    cropImage('FatherImageURL');
+            //});
+
+            function initCrop(uploadForID) {
+                $('#' + uploadForID).Jcrop({
+                    onChange: setCoordsAndImgSize,
+                    aspectRatio: 0, // 1 means will be same for height and weight
+                    onSelect: setCoordsAndImgSize
+                }, function () { jcropApi = this });
+
+                emptyValForNewUpload();
+            }
+
+            function showCoordinate() {
+                $("#lblWidth").text(imageCropWidth + "px");
+                $("#lblHeight").text(imageCropHeight + "px");
+            }
+
+            function setCoordsAndImgSize(e) {
+                imageCropWidth = e.w;
+                imageCropHeight = e.h;
+                cropPointX = e.x;
+                cropPointY = e.y;
+                $("#lblWidth").text(imageCropWidth + "px");
+                $("#lblHeight").text(imageCropHeight + "px");
+                $("#lblHeight").text(imageCropHeight + "px");
+            }
+
+            function cropImage(uploadForID) {
+                if (imageCropWidth == 0 && imageCropHeight == 0) {
+                    alert("Please select crop area.");
+                    initCrop(uploadForID);
+                    return;
+                }
+
+                var img = $("#" + uploadForID).attr("src");
+                /*Show cropped image*/
+                showCroppedImage(uploadForID);
+            }
+
+            function showCroppedImage(uploadForID) {
+                var x1 = cropPointX;
+                var y1 = cropPointY;
+                var width = imageCropWidth;
+                var height = imageCropHeight;
+                var canvas = $("#" +uploadForID +"_canvas")[0];
+                var context = canvas.getContext('2d');
+                var img = new Image();
+                img.onload = function () {
+                    canvas.height = height;
+                    canvas.width = width;
+                    context.drawImage(img, x1, y1, width, height, 0, 0, width, height);
+                    $('#' + uploadForID + '_Croped').val(canvas.toDataURL());
+                };
+                img.src = $('#' + uploadForID).attr("src");
+            }
+
+            function readFile(input, uploadForID) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    /*Destroy jcrop initialization other wise it will hold it previous image in img tag*/
+
+                    if ($('#' + uploadForID).data('Jcrop')) {
+                        $('#' + uploadForID).data('Jcrop').destroy();
+                        $('#' + uploadForID).removeAttr('style');
+                    }
+
+                    if (jcropApi != null) {
+                        jcropApi.destroy();
+                    }
+                    reader.onload = function (e) {
+                        var image = new Image();
+                        //Set the Base64 string return from FileReader as source.
+                        image.src = e.target.result;
+                        //Validate the File Height and Width.
+                        image.onload = function () {
+                            //alert(uploadForID);
+                            //alert(this.width);
+                            //alert(this.height);
+                            $('#' + uploadForID).width(this.width);
+                            $('#' + uploadForID).height(this.height);
+                        };
+
+                        $('#' + uploadForID).attr('src', "");
+                        var img = $('#' + uploadForID).attr('src', e.target.result);
+                        /*Current uploaded image size*/
+                        var width = img[0].height;
+                        var height = img[0].width;
+                        $("#lblWidth").text(width + "px");
+                        $("#lblHeight").text(height + "px");
+                        //InitCrop must call here otherwise it will not work
+                        initCrop(uploadForID);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+                $('#' + uploadForID).val(null);
+            }
+            //$('#flPhoto').change(function () {
+            //    readFile(this);
+            //    //initCrop();
+            //});
+</script>
+
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenMessegeAutoHideDiv(response);
+                setTimeout(function () { window.close() }, 3000);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+</script>
+

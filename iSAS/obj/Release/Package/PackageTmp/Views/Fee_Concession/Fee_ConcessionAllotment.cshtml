@@ -1,0 +1,418 @@
+﻿@model ISas.Entities.FeesEntities.Fee_ConcessionModels
+@using ISas.Web.Models;
+@{
+    ViewBag.Title = "Fee Concesion Allotment";
+    var paymentModes = new List<SelectListItem>();
+    paymentModes.Add(new SelectListItem { Text = "FEE", Value = "FE", Selected = true });
+    paymentModes.Add(new SelectListItem { Text = "CASH", Value = "CH" });
+    paymentModes.Add(new SelectListItem { Text = "CHEQUE", Value = "CE" });
+
+    Model.ConcessionTypeList.Add(new SelectListItem { Text = "PER", Value = "PER" });
+    Model.ConcessionTypeList.Add(new SelectListItem { Text = "AMT", Value = "AMT" });
+}
+
+<section class="content-header">
+    <h1>
+        Apply Concession
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li class="active">Apply Concession</li>
+    </ol>
+</section>
+
+
+
+<section class="content">
+    @using (Html.BeginForm("Fee_Concession_CRUD", "Fee_Concession", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.Hidden("hddnRowLenght", 0)
+
+        @Html.HiddenFor(r => Model.Selected_ConcessionAmount)
+        @Html.HiddenFor(r => Model.Selected_CreditNoteId)
+        @Html.HiddenFor(r => Model.Selected_DueDate)
+        @Html.HiddenFor(r => Model.IsSingleSave)
+        <div class="row">
+            <div class="col-md-6">
+                @{Html.RenderAction("_StudentSearchPartial", "Common"); }
+            </div>
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="box-title">Credit Note Details</h5>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.LabelFor(r => Model.FeeModeId)</span>
+                                    @Html.DropDownListFor(m => m.FeeModeId, new SelectList(paymentModes, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                    @Html.ValidationMessageFor(r => Model.FeeModeId, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.LabelFor(r => Model.SelectedBankId)</span>
+                                    @Html.DropDownListFor(m => m.SelectedBankId, new SelectList(Model.BankList, "Value", "Text"), "--SELECT--", htmlAttributes: new { @class = "form-control select2 otherThanCash", style = "width:100%;" })
+                                    @Html.ValidationMessageFor(r => Model.SelectedBankId, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.LabelFor(r => Model.BranchName)</span>
+                                    @Html.TextBoxFor(m => m.BranchName, htmlAttributes: new { @class = "form-control otherThanCash" })
+                                    @Html.ValidationMessageFor(r => Model.BranchName, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.LabelFor(r => Model.TransactionNo)</span>
+                                    @Html.TextBoxFor(m => m.TransactionNo, htmlAttributes: new { @class = "form-control otherThanCash" })
+                                    @Html.ValidationMessageFor(r => Model.TransactionNo, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.LabelFor(r => Model.TransactionDate)</span>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        @Html.TextBoxFor(m => m.TransactionDate, htmlAttributes: new { @class = "form-control pull-right date otherThanCash" })
+                                        @Html.ValidationMessageFor(r => Model.TransactionDate, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-widget">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.LabelFor(r => Model.HeadId, "Head")</span>
+                                    @Html.DropDownListFor(m => m.HeadId, new SelectList(Model.HeadList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getCreditNoteOrConcessionList()" })
+                                    @Html.ValidationMessageFor(r => Model.HeadId, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.LabelFor(r => Model.ConcessionCategoryId, "Con. Cat.")</span>
+                                    @Html.DropDownListFor(m => m.ConcessionCategoryId, new SelectList(Model.ConcessionCategoryList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "GetConcessionCategoryPercent()" })
+                                    @Html.ValidationMessageFor(r => Model.ConcessionCategoryId, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        @Html.DropDownListFor(m => m.ConcessionTypeId, new SelectList(Model.ConcessionTypeList, "Value", "Text"), htmlAttributes: new { @class = "form-control", style = "width:100px;", onchange = "GetConcessionCategoryPercent()" })
+                                    </div>
+                                    <!-- /btn-group -->
+                                    @Html.TextBoxFor(r => Model.ConcessionValue, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="input-group">
+                                    <input type="button" class="btn btn-primary btn-sm" value="Apply All" onclick="ConcessionApplyAll()" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h5 class="box-title">Concession/Credit Note</h5>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="CreditListMainDiv">
+                                    &nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <input type="button" onclick="DoAjaxPostAndMore(this);" value="SAVE ALL" class="btn btn-success" />
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    $(document).ready(function () {
+        $("input[type='text']").on("click", function () {
+            $(this).select();
+        });
+        $('#rw_space').css('display', 'none');
+        $('#rwFee_Mobile').css('display', 'none');
+
+        if ('@ViewBag.erpNo' != null && '@ViewBag.erpNo' != "") {
+            $('#ERPNo').val('@ViewBag.erpNo');
+            checkToCallFunction($('#ERPNo').val(), '');
+        }
+
+        CheckToDisableFeild();
+    });
+
+    function ConcessionApplyAll() {
+        var rowCount = $('#hddnRowLenght').val();
+
+        if ($('#ConcessionTypeId').val() == 'AMT') {
+            for (var i = 0; i < rowCount; i++) {
+                if ($('#ConsessionList_' + i + '__IsEditable').val() == 'True') {
+                    $('#ConsessionList_' + i + '__ConcAmount').val($('#ConcessionValue').val());
+                    CalculateRow(i);
+                }
+            }
+        } else {
+            var concessionPercent = parseFloat(parseInt($('#ConcessionValue').val()) / 100);
+            for (var i = 0; i < rowCount; i++) {
+                if ($('#ConsessionList_' + i + '__IsEditable').val() == 'True') {
+                    var DueAmt = parseInt($('#ConsessionList_' + i + '__Amount').val());
+                    var concessionAmt = parseInt(parseFloat(concessionPercent) * parseFloat(DueAmt));
+                    $('#ConsessionList_' + i + '__ConcAmount').val(concessionAmt);
+                    CalculateRow(i);
+                }
+            }
+        }
+    }
+
+    function EmptyValForNewStudent() {
+        $('#HeadId').val(null);
+        $('#HeadId').html(null);
+    }
+
+    function CalculateRow(i) {
+        var dueAmt = $('#ConsessionList_' + i + '__Amount').val();
+        var concessionAmt = $('#ConsessionList_' + i + '__ConcAmount').val();
+        var paidAmt = $('#ConsessionList_' + i + '__PaidAmount').val();
+        var balAmt = $('#ConsessionList_' + i + '__Balance').val();
+        if (parseInt(concessionAmt) > parseInt(balAmt)) {
+            $('#ConsessionList_' + i + '__ConcAmount').val(0);
+            $('#ConsessionList_' + i + '__ConcAmount').css('border', '1px solid red');
+            $('#ConsessionList_' + i + '__Balance').val(parseInt(dueAmt) - (parseInt(paidAmt)));
+        } else {
+            $('#ConsessionList_' + i + '__Balance').val(parseInt(dueAmt) - (parseInt(concessionAmt) + parseInt(paidAmt)));
+            $('#ConsessionList_' + i + '__ConcAmount').css('border', '1px sold #fff');
+        }
+
+        $('#Selected_ConcessionAmount').val($('#ConsessionList_' + i + '__ConcAmount').val());
+
+        $('#displayOnly_' + i).find("td").eq(3).html($('#ConsessionList_' + i + '__ConcAmount').val());
+        $('#displayOnly_' + i).find("td").eq(5).html($('#ConsessionList_' + i + '__Balance').val());
+    }
+
+
+    function EnableEditableRow(selectedRow) {
+        var rowCount = $('#hddnRowLenght').val();
+        for (var i = 0; i < rowCount; i++) {
+            if (i == selectedRow) {
+                $('#Selected_CreditNoteId').val($('#ConsessionList_' + i + '__CreditNoteRefNo').val());
+                $('#Selected_DueDate').val($('#ConsessionList_' + i + '__DisplayDueDate').val());
+                $('#Selected_ConcessionAmount').val($('#ConsessionList_' + i + '__ConcAmount').val());
+
+                $('#displayOnly_' + i).css('display', 'none');
+                $('#editable_' + i).removeAttr('style');
+            } else {
+                $('#displayOnly_' + i).removeAttr('style');
+                $('#editable_' + i).css('display', 'none');
+            }
+        }
+    }
+    function DisableEditableRow(i) {
+        $('#editable_' + i).css("display", "none;");
+        $('#displayOnly_' + i).removeAttr("style");
+    }
+
+    function CheckToDisableFeild() {
+        var trnMode = $('#FeeModeId').val();
+        if (trnMode == 'CH' || trnMode == 'FE') {
+            $('#SelectedBankId').val(null).change();
+            $('#BranchName').val('');
+            $('#TransactionNo').val('');
+            $('#TransactionDate').val('');
+            $('.otherThanCash').attr('disabled', true);
+        } else {
+            $('.otherThanCash').attr('disabled', false);
+        }
+        //
+    }
+
+    function onStudentChangeFunction() {
+        var headHtml = '<option value="">--Select--</option>';
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_Concession/GetHeadList",
+            data: { ERPNo: $('#StudentId').val(), SessionId: $('#SessionId').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    headHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                }
+                $('#HeadId').html(headHtml);
+                $('#CreditListMainDiv').html('');
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function getCreditNoteOrConcessionList() {
+        if ($('#StudentId').val() != null && $('#StudentId').val() != '') {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_Concession/_CreditNote_ConsessionDetails",
+                data: { ERPNo: $('#StudentId').val(), FeeHeadId: $('#HeadId').val(), SessionId: $('#SessionId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    $('#CreditListMainDiv').html(response);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        }
+    }
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        if ($('#ConcessionCategoryId').val() == '' || $('#ConcessionCategoryId').val() == null) {
+            OpenMessegeAutoHideDiv('Please select concession reason first..!', 'Info');
+            return false;
+        }
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getCreditNoteOrConcessionList();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function GetConcessionCategoryPercent() {
+        if ($('#ConcessionCategoryId').val() != null && $('#ConcessionCategoryId').val() != '' && $('#ConcessionTypeId').val() == 'PER') {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_Concession/GetConcessionCategoryPercent",
+                data: { ConcessionCategoryId: $('#ConcessionCategoryId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    $('#ConcessionValue').val(result);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            $('#ConcessionValue').val(0);
+        }
+    }
+
+
+    function CancelCreditNoteConfirm(i) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to cancel this credit note?", MyYesFunction, MyNoFunction, i);
+    }
+
+    function MyYesFunction(i) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_Concession/Fee_Concession_Cancel",
+            data: { SessionId: $('#SessionId').val(), ERPNo: $('#StudentId').val(), DueDate: $('#ConsessionList_' + i + '__DisplayDueDate').val(), FeeHeadId: $('#HeadId').val(), CreditNoteId: $('#ConsessionList_' + i + '__CreditNoteRefNo').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                getCreditNoteOrConcessionList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+</script>

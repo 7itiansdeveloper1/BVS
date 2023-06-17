@@ -1,0 +1,119 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Examination_Entities.Examination_ChildSubjectSetupModels
+<section class="content-header">
+    <h1>
+        Child Subject Setup For :- <label class="text text-primary">@Html.DisplayFor(r => Model.Exam_TemplateName)</label>, Subject : <label class="text-primary">@Html.DisplayFor(r => Model.SubjectName)</label>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Exam</li>
+        <li><a href="@Url.Action("New", "Exam_TemplateSetup")">Templete Setup</a></li>
+        <li class="active"><a href="@Html.EncodedPath(" ", "New", "Examination_SubjectMaster", new {TemplateId = Model.ExamTemplateId, TempleteName = Model.Exam_TemplateName }, htmlAttributes:new { })">Subject Setup</a></li>
+        <li class="active">Child Subject Setup</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Examination_ChildSubjectSetup_CRUD", "Examination_ChildSubjectSetup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.ExamTemplateId)
+        @Html.HiddenFor(r => Model.TransactionMode)
+        @Html.HiddenFor(r => Model.SubjectId)
+        @Html.HiddenFor(r => Model.SubjectPropertyId)
+
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ChildSubjectName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.ChildSubjectName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.ChildSubjectName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SubjectDisplayName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.SubjectDisplayName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.SubjectDisplayName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PrintOrder)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.PrintOrder, htmlAttributes: new { @class = "form-control", type = "number" })
+                                @Html.ValidationMessageFor(r => Model.PrintOrder, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+
+    <div class="" id="departmentMasterMainDiv">
+        @{ Html.RenderAction("LandingPage", "Examination_ChildSubjectSetup", new { TemplateId = Model.ExamTemplateId, SubjectId = Model.SubjectId }); }
+    </div>
+</section>
+
+<script>
+    function getSubjectList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Examination_ChildSubjectSetup/LandingPage",
+            data: { TemplateId: '@Model.ExamTemplateId', SubjectId : '@Model.SubjectId'  },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#departmentMasterMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location.reload(); }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

@@ -1,0 +1,142 @@
+﻿@model ISas.Entities.FeesEntities.paymentStatus
+
+@{
+
+    //Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    ViewBag.Title = "Failed";
+}
+
+<html>
+<head>
+    <link href="~/paytm/css/style.css" rel="stylesheet" />
+    <style>
+        table, th, td {
+            border: 2px solid black;
+            border-collapse: collapse;
+            padding:5px;
+            font-weight:bold;
+        }
+        .head{
+
+        }
+    </style>
+</head>
+<body>
+    <div class="">
+        <input type="hidden" name="Orderid" id="Orderid" value="@Model.transactionId" />
+        <input type="hidden" name="PaymentStatus" id="PaymentStatus" value="@Model.paymentMessage" />
+
+        <img src="~/paytm/images/warning.png" class="success-img" />
+
+
+        @if (@Model.status == "Failure")
+        {
+        <div class="head">
+            <h1 class="warning-title">Payment Failed!</h1>
+            <table style="margin:0 auto">
+                <tr>
+                    <td style="font-weight:bold" id="Orderid">Order Id</td>
+                    <td>@Model.transactionId</td>
+                </tr>
+                <tr>
+                    <td id="bankrefrenceNo">Bank Refrence No</td>
+                    <td>@Model.bankRefrenceNo</td>
+                </tr>
+                <tr>
+                    <td>Amount</td>
+                    <td>@Model.amount</td>
+                </tr>
+                <tr>
+                    <td>Transaction Time</td>
+                    <td>@Model.transactionDateTime</td>
+                </tr>
+            </table>
+
+        </div>
+                
+                @*<b>  <label>Order ID:</label><input type="text" value="@Model.transactionId" class="input-box"></b>*@
+                @*<b>  <label>Tracking ID:</label><input type="text" value="@Model.bankTransactionId" class="input-box"></b>
+                <b>  <label>Bank RefrenceNo :</label><input type="text" value="@Model.bankRefrenceNo" class="input-box"></b>
+                <b>  <label>Transaction Time :</label><input type="text" value="@Model.transactionDateTime" class="input-box"></b>*@
+            
+
+            @*<input type="button" id="btnback_" class="fail-button" value="Go Back to Dashbaord">*@
+
+        }
+        else
+        {
+            <div class="head">
+                <h1 class="warning-title">Payment Pending!</h1>
+                <label>Your Payment is Pending!</label><br />
+                <div style="margin:0 12%;">
+                    <label>Please wait we are checking payment Status from Paytm Bank</label><br />
+                    <label id="noticeid">At this time your payment showing pending from merchant account if payment is Success you will see on your dashbaord</label><br />
+                    <label> <span id="txtTime"></span> </label>
+                </div>
+                <label> <span> Order Id :@Model.transactionId</span> </label>
+            </div>
+            @*<input type="button" id="btnback" class="fail-button" value="Go Back to Dashbaord">*@
+
+        }
+
+
+    </div>
+
+</body>
+</html>
+
+
+<script>
+    var myVar;
+    var Start_ = 20;
+    $(document).ready(function () {
+        $('#btnback').hide();
+        $('#noticeid').hide();
+
+        myVar = setInterval("showTime()", 1000);
+
+        //window.setInterval(function () {
+        //    CheckStatus();
+        //}, 6000);
+
+    });
+
+    $('#btnback').on('click', function () {
+        debugger;
+        window.location.href = "/Dashboard/StudentDashboard";
+    });
+
+
+
+    function showTime() {
+        Start_--;
+        if (Start_ > 0) {
+            $("#txtTime").html(Start_);     // display time on the page
+        }
+        else {
+            $("#txtTime").hide();
+            $("#noticeid").show();
+            var status_ = $('#PaymentStatus').val();
+            //status
+            if (status_ == "Pending") {
+                $('#btnback').show();
+            }
+        }
+    }
+
+
+    function CheckStatus() {
+        //var status = $('#PaymentStatus').val();
+        //var datapost = { Orderid: $('#Orderid').val() };
+        //var datat_ = JSON.stringify(datapost);
+        $.get('/StudentFeeDetails/StatusAPI', { Orderid: $('#Orderid').val(), bankrefrenceNo: $('#bankrefrenceNo').val() }, function (data) {
+            if (data == "Successful") {
+                window.location.href = "/PaymentGateway/SuccessPayment?Orderid=" + $('#Orderid').val() ;
+            }
+            else {
+                location.reload(true);
+            }
+        });
+
+    }
+</script>

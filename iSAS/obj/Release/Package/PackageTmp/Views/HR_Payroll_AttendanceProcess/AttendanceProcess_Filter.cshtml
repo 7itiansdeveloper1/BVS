@@ -1,0 +1,135 @@
+﻿@model ISas.Entities.HR_Payroll_Entities.HR_Payroll_AttendanceProcessModels
+
+<section class="content-header">
+    <h1>Attendance Process</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>HR & Payroll</li>
+        <li class="active">Attendance Process</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("HR_Payroll_FinalCTS_CRUD", "HR_Payroll_FinalCTS", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Monthley Attendance List</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PayBandID)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.PayBandID, new SelectList(Model.PayBandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "$('#Value').val(''); $('.table_row_HeadList').removeClass('selected');" })
+                                @Html.ValidationMessageFor(r => Model.PayBandID, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.AttenMonthID)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.AttenMonthID, new SelectList(Model.MonthList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "$('#Value').val(''); $('.table_row_HeadList').removeClass('selected');" })
+                                @Html.ValidationMessageFor(r => Model.AttenMonthID, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <br />
+                            <h5>
+                                <button type="button" class="btn btn-success btnDefaultColor" onclick="GetMonthleyAttenDetails()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="monthDetailsMainDiv">
+                            @*@Html.Partial("_AttendanceProcess_Details", Model)*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+
+<script>
+    function ApplyLeaveView(StaffID, StaffName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../HR_Payroll_AttendanceProcess/_ApplyLeave',
+            data: { StaffID: StaffID, StaffName },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenMessegeModal(response, 'Primary', 'lg', 'Apply Leave For : ' + StaffName );
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function GetMonthleyAttenDetails() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../HR_Payroll_AttendanceProcess/_AttendanceProcess_Details',
+            data: { PayBandId: $('#PayBandID').val(), MonthDate: $('#AttenMonthID').val()},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#monthDetailsMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore_ApplyLeave(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, 'Success');
+                    GetMonthleyAttenDetails();
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

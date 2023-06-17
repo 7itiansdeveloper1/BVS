@@ -1,0 +1,1929 @@
+﻿@model ISas.Entities.RegistrationEntities.Student_AdmissionMaster_Model
+@{
+    ViewBag.Title = "Student Admission";
+    var regStatus = new List<SelectListItem>();
+    regStatus.Add(new SelectListItem { Text = "Active", Value = "Active", Selected = true });
+    regStatus.Add(new SelectListItem { Text = "Cancel", Value = "Cancel" });
+    regStatus.Add(new SelectListItem { Text = "Withdrawl", Value = "Withdrawl" });
+}
+<section class="content-header">
+    <h1>
+        Admissions <small>(UPDATE)</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li><a href="@Url.Action("Student_AdmissionLandingPage", "Student_Admission")">Admissions</a></li>
+        <li class="active">Update</li>
+    </ol>
+</section>
+@using (Html.BeginForm("StudentAdmission_CRUD", "Student_Admission", FormMethod.Post, htmlAttributes: new { id = "form1", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(r => Model.OfficeInfo.Stud_RegNo)
+    @Html.Hidden("SubmitType", "Save")
+    @Html.HiddenFor(r => r.Function)
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab1" data-toggle="tab" aria-expanded="true">Student Info</a></li>
+                        <li class=""><a href="#tab2" data-toggle="tab" aria-expanded="false">Father Info</a></li>
+                        <li class=""><a href="#tab3" data-toggle="tab" aria-expanded="false">Mother Info</a></li>
+                        <li class=""><a href="#tab4" data-toggle="tab" aria-expanded="false">Address Info</a></li>
+                        <li class=""><a href="#tab5" data-toggle="tab" aria-expanded="false">Availed Facility</a></li>
+                        <li class=""><a href="#tab6" data-toggle="tab" aria-expanded="false">Guardian Info</a></li>
+                        <h5 class="box-title pull-right">
+                            Last Modified : <label class="text-primary">@Html.DisplayFor(r => Model.LastModifiedBy) </label>
+                        </h5>
+                    </ul>
+
+
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab1">
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">For Office Use Info</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.OfficeInfo.Session)</label>
+                                                <div class="select">
+                                                    @Html.DropDownListFor(m => m.OfficeInfo.Session, Model.DropDownList.SessionList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                    @Html.ValidationMessageFor(r => Model.OfficeInfo.Session, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.OfficeInfo.Stud_RegNo)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.OfficeInfo.Stud_RegNo, htmlAttributes: new { @class = "form-control", @readonly = true })
+                                                    @Html.ValidationMessageFor(r => Model.OfficeInfo.Stud_RegNo, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @if (Model.DropDownList.IsAdmNoAutoIncrement)
+                                        {
+                                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                                <div class="form-group">
+                                                    <label for="">@Html.LabelFor(r => Model.OfficeInfo.Stud_AdmNo)</label>
+                                                    <div class="select">
+                                                        @Html.TextBoxFor(m => m.OfficeInfo.Stud_AdmNo, htmlAttributes: new { @class = "form-control", @readonly = true })
+                                                        @Html.ValidationMessageFor(r => Model.OfficeInfo.Stud_AdmNo, null, htmlAttributes: new { style = "color:red;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                                <div class="form-group">
+                                                    <label for="">@Html.LabelFor(r => Model.OfficeInfo.Stud_AdmNo)</label>
+                                                    <div class="select">
+                                                        @Html.TextBoxFor(m => m.OfficeInfo.Stud_AdmNo, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(r => Model.OfficeInfo.Stud_AdmNo, null, htmlAttributes: new { style = "color:red;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.OfficeInfo.Stud_UID)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.OfficeInfo.Stud_UID, htmlAttributes: new { @class = "form-control", @readonly = true })
+                                                    @Html.ValidationMessageFor(r => Model.OfficeInfo.Stud_UID, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.OfficeInfo.Stud_DOA)</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    @Html.TextBoxFor(m => m.OfficeInfo.Stud_DOA, htmlAttributes: new { @class = "form-control pull-right date" })
+                                                    @Html.ValidationMessageFor(r => Model.OfficeInfo.Stud_DOA, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.OfficeInfo.Stud_StaffwardID)</label>
+                                                <div class="select">
+                                                    @Html.DropDownListFor(m => m.OfficeInfo.Stud_StaffwardID, Model.DropDownList.StaffNameList, "--Select Staff Name--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                    @Html.ValidationMessageFor(r => Model.OfficeInfo.Stud_StaffwardID, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label for="">@Html.LabelFor(r => Model.OfficeInfo.Stud_Staffward)</label>
+                                                        <div class="select">
+                                                            @Html.RadioButtonFor(r => Model.OfficeInfo.Stud_Staffward, true, htmlAttributes: new { onchange = "fun_checkToDisableStaffList()", @class = "staffWardRadio" }) <span>YES</span>
+                                                            @Html.RadioButtonFor(r => Model.OfficeInfo.Stud_Staffward, false, htmlAttributes: new { onchange = "fun_checkToDisableStaffList()", @class = "staffWardRadio" }) <span>NO</span>
+                                                            @Html.ValidationMessageFor(r => Model.OfficeInfo.Stud_Staffward, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="">@Html.LabelFor(r => Model.OfficeInfo.AdmCategoryId)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.OfficeInfo.AdmCategoryId, Model.DropDownList.AdmCategoryList, "--Select Adm. Category--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.OfficeInfo.AdmCategoryId, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.OfficeInfo.SRANo)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.OfficeInfo.SRANo, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(r => Model.OfficeInfo.SRANo, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box box-warning">
+                                <div class="box-header with-border">
+                                    <h5 class="box-title">Student's Info</h5>
+                                    <h5 class="box-title pull-right">Sibling Name :- <label class="label label-info">@Html.DisplayFor(r => Model.StudentInfo.SiblingNames)</label> </h5>
+                                </div>
+
+
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-2">
+                                            <label for="">@Html.LabelFor(r => Model.StudentInfo.NewAdm, "Old/New")</label>
+                                            <div class="form-group">
+                                                <div class="radio">
+                                                    <label> @Html.RadioButtonFor(r => r.StudentInfo.AdmissionType, "N", htmlAttributes: new { })<span>NEW</span>&nbsp;</label>
+                                                    <label>@Html.RadioButtonFor(r => r.StudentInfo.AdmissionType, "O", htmlAttributes: new { })<span>OLD</span></label>
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.NewAdm, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-2">
+                                            <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Gender)</label>
+                                            <div class="form-group">
+                                                <div class="radio">
+                                                    <label> @Html.RadioButtonFor(r => r.StudentInfo.Stud_Gender, "M", htmlAttributes: new { })<span>Boy</span>&nbsp;</label>
+                                                    <label> @Html.RadioButtonFor(r => r.StudentInfo.Stud_Gender, "F", htmlAttributes: new { })<span>Girl</span></label>
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Gender, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-2">
+                                            <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Parents)</label>
+                                            <div class="form-group">
+                                                <div class="radio">
+                                                    <label> @Html.RadioButtonFor(r => r.StudentInfo.Stud_Parents, "BO", htmlAttributes: new { })<span>Both</span>&nbsp;</label>
+                                                    <label> @Html.RadioButtonFor(r => r.StudentInfo.Stud_Parents, "SM", htmlAttributes: new { })<span title="Single Mother">SM</span>&nbsp;</label>
+                                                    <label>@Html.RadioButtonFor(r => r.StudentInfo.Stud_Parents, "SF", htmlAttributes: new { })<span title="Single Father">SF</span></label>
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Parents, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_DOB)</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    @Html.TextBoxFor(m => m.StudentInfo.Stud_DOB, htmlAttributes: new { @class = "form-control pull-right date" })
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_DOB, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_BirthPlace)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.StudentInfo.Stud_BirthPlace, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_BirthPlace, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_FirstName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_FirstName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_FirstName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_MiddleName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_MiddleName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_MiddleName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_LastName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Class)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_Class, Model.DropDownList.ClassList, "--Select Class--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionListByClass('StudentInfo_Stud_Class', 'StudentInfo_Stud_Section')" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Class, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Section)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_Section, Model.DropDownList.SectionList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Section, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Status)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_Status, Model.DropDownList.StatusList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Status, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_ClassRollNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_ClassRollNo, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_ClassRollNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_BldGrp)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_BldGrp, Model.DropDownList.BloodGroupList, "--Select Blood Group--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_BldGrp, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_House)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_House, Model.DropDownList.HouseList, "--Select House--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_House, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Club)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_Club, Model.DropDownList.ClubList, "--Select Club--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Club, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Category)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_Category, Model.DropDownList.SubCategoryList, "--Select Category--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Category, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Religion)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_Religion, Model.DropDownList.ReligionList, "--Select Religion--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Religion, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Image)</label>
+                                                        <div id="S">
+                                                            <img id="selfImg" src="~/@Model.StudentInfo.Stud_Image" style="width:100px;height:120px;" />
+                                                            <input type="file" class="upload" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_MCategory)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_MCategory, Model.DropDownList.MinorCategoryList, "--Select Minor Category--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_MCategory, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Nationality)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.Stud_Nationality, Model.DropDownList.NationalityList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Nationality, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Aadhar)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(r => r.StudentInfo.Stud_Aadhar, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Aadhar, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.AdmClass)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.StudentInfo.AdmClass, Model.DropDownList.ClassList, "--Select Class--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.AdmClass, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Height)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(r => r.StudentInfo.Stud_Height, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Height, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Weight)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(r => r.StudentInfo.Stud_Weight, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Weight, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Age)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(r => r.StudentInfo.Stud_Age, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Age, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Academic Background</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastSchool)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_LastSchool, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastSchool, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastBoard)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_LastBoard, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastBoard, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastBoardLocation)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_LastBoardLocation, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastBoardLocation, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastBoardNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_LastBoardNo, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastBoardNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastClass)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_LastClass, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastClass, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_Noofyearattend)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_Noofyearattend, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_Noofyearattend, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastPer)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.StudentInfo.Stud_LastPer, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastPer, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_LastAchievement)</label>
+                                                        <div class="select">
+                                                            @Html.TextAreaFor(m => m.StudentInfo.Stud_LastAchievement, htmlAttributes: new { @class = "form-control", style = "height:112px;" })
+                                                            @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_LastAchievement, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Medical Information</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_MProblem)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.StudentInfo.Stud_MProblem, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_MProblem, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_MDoctor)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.StudentInfo.Stud_MDoctor, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_MDoctor, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_MAllergyMedicine)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.StudentInfo.Stud_MAllergyMedicine, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_MAllergyMedicine, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-md-3">
+                                            <div class="form-group">
+                                                <label for="">@Html.LabelFor(r => Model.StudentInfo.Stud_MClinicAdd)</label>
+                                                <div class="select">
+                                                    @Html.TextBoxFor(m => m.StudentInfo.Stud_MClinicAdd, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(r => Model.StudentInfo.Stud_MClinicAdd, null, htmlAttributes: new { style = "color:red;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab2">
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Father's Info</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_FirstName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_FirstName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_FirstName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_MiddleName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_MiddleName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_MiddleName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_LastName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_LastName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_LastName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Qualif)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.FatherInfo.Father_Qualif, Model.DropDownList.QualificationList, "--Select Qualification--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Qualif, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Prof)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.FatherInfo.Father_Prof, Model.DropDownList.ProfissionList, "--Select Profession--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Prof, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_MoblieNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_MoblieNo, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_MoblieNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Aadhar)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_Aadhar, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Aadhar, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_AnnualIncome)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_AnnualIncome, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_AnnualIncome, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Email)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_Email, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Email, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Alumni)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.FatherInfo.Father_Alumni, Model.DropDownList.AlumniList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Alumni, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_AlumniYear)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_AlumniYear, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_AlumniYear, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Age)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_Age, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Age, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Stud_GFatherName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Stud_GFatherName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Stud_GFatherName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Image)</label>
+                                                        <div class="select" id="F">
+                                                            <img id="fatherImg" src="~/@Model.FatherInfo.Father_Image" style="width:100px;height:120px;" />
+                                                            <input type="file" class="upload" />
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Image, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Grand_FatherImage)</label>
+                                                        <div id="GF">
+                                                            <img id="GFImg" src="~/@Model.FatherInfo.Grand_FatherImage" style="width:100px;height:120px;" />
+                                                            <input type="file" class="upload" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Address Details</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_OffAdd)</label>
+                                                        <div class="select">
+                                                            @Html.TextAreaFor(m => m.FatherInfo.Father_OffAdd, htmlAttributes: new { @class = "form-control", row = "4", style = "height:112px;" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_OffAdd, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Country)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.FatherInfo.Father_Country, Model.DropDownList.CountryList, "--Select Country--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getStateListByCountry('FatherInfo_Father_Country','FatherInfo_Father_State', 'FatherInfo_Father_City')" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Country, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_State)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.FatherInfo.Father_State, Model.DropDownList.Father_StateList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getCityListByState('FatherInfo_Father_State', 'FatherInfo_Father_City')" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_State, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_City)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.FatherInfo.Father_City, Model.DropDownList.Father_CityList, "--Select City--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_City, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_Area)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.FatherInfo.Father_Area, Model.DropDownList.AreaList, "--Select Area--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_Area, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_PinCode)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_PinCode, htmlAttributes: new { @class = "form-control", maxlength = "6", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_PinCode, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_MoblieNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_MoblieNo, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_MoblieNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.FatherInfo.Father_OffNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.FatherInfo.Father_OffNo, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.FatherInfo.Father_OffNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab3">
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Mother's Info</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_FirstName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_FirstName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_FirstName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_MiddleName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_MiddleName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_MiddleName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_LastName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_LastName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_LastName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Qualif)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.MotherInfo.Mother_Qualif, Model.DropDownList.QualificationList, "--Select Qualification--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Qualif, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Prpf)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.MotherInfo.Mother_Prpf, Model.DropDownList.ProfissionList, "--Select Profession--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Prpf, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_MobileNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_MobileNo, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_MobileNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Aadhar)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_Aadhar, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Aadhar, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_AnnualIncome)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_AnnualIncome, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_AnnualIncome, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Email)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_Email, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Email, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Alumni)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.MotherInfo.Mother_Alumni, Model.DropDownList.AlumniList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Alumni, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_AlumniYear)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_AlumniYear, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_AlumniYear, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Age)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_Age, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Age, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Stud_GMotherName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Stud_GMotherName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Stud_GMotherName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Image)</label>
+                                                        <div id="M">
+                                                            <img id="motherImg" src="~/@Model.MotherInfo.Mother_Image" style="width:100px;height:120px;" />
+                                                            <input type="file" class="upload" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Grand_MotherImage)</label>
+                                                        <div id="GM">
+                                                            <img id="GMImg" src="~/@Model.MotherInfo.Grand_MotherImage" style="width:100px;height:120px;" />
+                                                            <input type="file" class="upload" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Address Details</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_OffAdd)</label>
+                                                        <div class="select">
+                                                            @Html.TextAreaFor(m => m.MotherInfo.Mother_OffAdd, htmlAttributes: new { @class = "form-control", row = "4", style = "height:112px;" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_OffAdd, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Country)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.MotherInfo.Mother_Country, Model.DropDownList.CountryList, "--Select Country--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getStateListByCountry('MotherInfo_Mother_Country','MotherInfo_Mother_State', 'MotherInfo_Mother_City')" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Country, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_State)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.MotherInfo.Mother_State, Model.DropDownList.Mother_StateList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getCityListByState('MotherInfo_Mother_State', 'MotherInfo_Mother_City')" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_State, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_City)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.MotherInfo.Mother_City, Model.DropDownList.MotherCityList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_City, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Area)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.MotherInfo.Mother_Area, Model.DropDownList.AreaList, "--Select Area--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Area, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_Pincode)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_Pincode, htmlAttributes: new { @class = "form-control", maxlength = "6", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_Pincode, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_MobileNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_MobileNo, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_MobileNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.MotherInfo.Mother_OffNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.MotherInfo.Mother_OffNo, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.MotherInfo.Mother_OffNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab4">
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Correspondence Address :</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrAdd)</label>
+                                                        <div class="select">
+                                                            @Html.TextAreaFor(m => m.AddressInfo.Stud_CorrAdd, htmlAttributes: new { @class = "form-control", style = "height:112px;" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrAdd, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrCountry)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_CorrCountry, Model.DropDownList.CountryList, "--Select Country--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getStateListByCountry('AddressInfo_Stud_CorrCountry','AddressInfo_Stud_CorrState', 'AddressInfo_Stud_CorrCity')" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrCountry, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrState)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_CorrState, Model.DropDownList.Corres_AddStateList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getCityListByState('AddressInfo_Stud_CorrState', 'AddressInfo_Stud_CorrCity')" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrState, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrCity)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_CorrCity, Model.DropDownList.Corres_AddCityList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrCity, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrArea)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_CorrArea, Model.DropDownList.AreaList, "--Select Area--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrArea, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrPinCode)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_CorrPinCode, htmlAttributes: new { @class = "form-control", maxlength = "6", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrPinCode, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrMobile)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_CorrMobile, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrMobile, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrPhNo1)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_CorrPhNo1, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrPhNo1, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_CorrPhNo2)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_CorrPhNo2, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_CorrPhNo2, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+
+                            <div class="box box-warning">
+                                <div class="box-header with-border">
+                                    <h5>
+                                        Permanent  Address :
+                                        <span class="pull-right">
+                                            @Html.CheckBox("SameAsCorresAddressChkBox", false, htmlAttributes: new { onchange = "SameAsCorres_ChkBoxChange()" }) Same as Correspondence
+                                        </span>
+                                    </h5>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermAdd)</label>
+                                                        <div class="select">
+                                                            @Html.TextAreaFor(m => m.AddressInfo.Stud_PermAdd, htmlAttributes: new { @class = "form-control", style = "height:112px;" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermAdd, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermCountry)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_PermCountry, new SelectList(Model.DropDownList.CountryList, "Value", "Text"), "--Select Country--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getStateListByCountry('AddressInfo_Stud_PermCountry','AddressInfo_Stud_PermState', 'AddressInfo_Stud_PermCity')" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermCountry, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermState)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_PermState, Model.DropDownList.Perm_AddStateList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getCityListByState('AddressInfo_Stud_PermState', 'AddressInfo_Stud_PermCity')" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermState, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermCity)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_PermCity, Model.DropDownList.Perm_AddCityList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermCity, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermArea)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.AddressInfo.Stud_PermArea, Model.DropDownList.AreaList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermArea, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermPinCode)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_PermPinCode, htmlAttributes: new { @class = "form-control", maxlength = "6", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermPinCode, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermMobile)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_PermMobile, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermMobile, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermPh1)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_PermPh1, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermPh1, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AddressInfo.Stud_PermPh2)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.AddressInfo.Stud_PermPh2, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.AddressInfo.Stud_PermPh2, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab5">
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="box box-warning">
+                                        <h5 class="box-header with-border">Transporation</h5>
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-sm-6 col-md-3">
+                                                            <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.Stud_TransReq)</label>
+                                                            <div class="form-group">
+                                                                <div class="radio">
+                                                                    <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.Stud_TransReq, true, htmlAttributes: new { onchange = "checkToEnableRoute_Stop()" })<span>YES</span>&nbsp;</label>
+                                                                    <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.Stud_TransReq, false, htmlAttributes: new { onchange = "checkToEnableRoute_Stop()" })<span>NO</span></label>
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.Stud_TransReq, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6 col-md-5">
+                                                            <div class="form-group">
+                                                                <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.Facility)</label>
+                                                                <div class="radio">
+                                                                    <label>@Html.RadioButtonFor(r => r.AvailFacilityInfo.Facility, "PD", htmlAttributes: new { })<span>PICK & DROP</span>&nbsp;</label>
+                                                                    <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.Facility, "P", htmlAttributes: new { })<span>PICK</span>&nbsp;</label>
+                                                                    <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.Facility, "D", htmlAttributes: new { })<span>DROP</span></label>
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.Facility, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6 col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.Stud_PickedUpName)</label>
+                                                                <div class="select">
+                                                                    @Html.TextBoxFor(r => Model.AvailFacilityInfo.Stud_PickedUpName, htmlAttributes: new { @class = "form-control" })
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.Stud_PickedUpName, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-sm-6 col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.PRouteId)</label>
+                                                                <div class="select">
+                                                                    @Html.DropDownListFor(r => Model.AvailFacilityInfo.PRouteId, Model.DropDownList.Pick_RouteList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getRouteStopeByRouteId('AvailFacilityInfo_PRouteId', 'AvailFacilityInfo_PStopId')" })
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.PRouteId, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6 col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.PStopId)</label>
+                                                                <div class="select">
+                                                                    @Html.DropDownListFor(r => Model.AvailFacilityInfo.PStopId, Model.DropDownList.Pick_StopList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.PStopId, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6 col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.TranDate)</label>
+                                                                <div class="input-group date">
+                                                                    <div class="input-group-addon">
+                                                                        <i class="fa fa-calendar"></i>
+                                                                    </div>
+                                                                    @Html.TextBoxFor(m => m.AvailFacilityInfo.TranDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.TranDate, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                                <!-- /.input group -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.ModeofTransport)</label>
+                                                                <div class="select">
+                                                                    @Html.DropDownListFor(r => Model.AvailFacilityInfo.ModeofTransport, new SelectList(Model.DropDownList.ModeOfTransList, "Value", "Text", Model.AvailFacilityInfo.ModeofTransport), "--Select Mode--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.ModeofTransport, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.PickedupBy)</label>
+                                                                <div class="select">
+                                                                    @Html.DropDownListFor(r => Model.AvailFacilityInfo.PickedupBy, new SelectList(Model.DropDownList.PickedByList, "Value", "Text", Model.AvailFacilityInfo.PickedupBy), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                                    @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.PickedupBy, null, htmlAttributes: new { style = "color:red;" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.PickedUPBy_Image)</label>
+                                                            <div id="P">
+                                                                <img id="PImg" src="~/@Model.AvailFacilityInfo.PickedUPBy_Image" style="width:100px;height:120px;" />
+                                                                <input type="file" class="upload" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="box box-warning">
+                                        <h5 class="box-header with-border">SMS</h5>
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.AvailSMS)</label>
+                                                        <div class="radio">
+                                                            <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.AvailSMS, true, htmlAttributes: new { })<span>YES</span> &nbsp;</label>
+                                                            <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.AvailSMS, false, htmlAttributes: new { })<span>NO</span></label>
+                                                            @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.Stud_TransReq, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.AvailSnacks)</label>
+                                                        <div class="radio">
+                                                            <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.AvailSnacks, true, htmlAttributes: new { })<span>YES</span>&nbsp;</label>
+                                                            <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.AvailSnacks, false, htmlAttributes: new { })<span>NO</span></label>
+                                                            @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.AvailSnacks, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.SMSF, "SMS ON")</label>
+                                                        <div class="radio">
+                                                            <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.SMS_WHOM, "F", htmlAttributes: new { onchange = "GetSMSNo()" })<span>FATHER</span>&nbsp;</label>
+                                                            <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.SMS_WHOM, "M", htmlAttributes: new { onchange = "GetSMSNo()" })<span>MOTHER</span>&nbsp;</label>
+                                                            <label>@Html.RadioButtonFor(r => r.AvailFacilityInfo.SMS_WHOM, "G", htmlAttributes: new { onchange = "GetSMSNo()" })<span>GUARDIAN</span>&nbsp;</label>
+                                                            <label> @Html.RadioButtonFor(r => r.AvailFacilityInfo.SMS_WHOM, "O", htmlAttributes: new { onchange = "GetSMSNo()" })<span>OTHER</span></label>
+                                                            @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.AvailSnacks, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.AvailFacilityInfo.SMSNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(r => Model.AvailFacilityInfo.SMSNo, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.AvailFacilityInfo.AvailSnacks, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab6">
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Guardian's Info</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_FirstName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_FirstName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_FirstName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_MiddleName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_MiddleName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_MiddleName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_LastName)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_LastName, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_LastName, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Qualif)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.GurdianInfo.Gardian_Qualif, Model.DropDownList.QualificationList, "--Select Qualification--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Qualif, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Prof)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.GurdianInfo.Gardian_Prof, Model.DropDownList.ProfissionList, "--Select Profession--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Prof, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_MobileNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_MobileNo, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_MobileNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Aadhar)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_Aadhar, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Aadhar, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_AnnualIncome)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_AnnualIncome, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_AnnualIncome, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Email)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_Email, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Email, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Alumni)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.GurdianInfo.Gardian_Alumni, Model.DropDownList.AlumniList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_AlumniYear, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_AlumniYear)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_AlumniYear, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_AlumniYear, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-1">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Age)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_Age, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Age, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-6 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Relation)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_Relation, htmlAttributes: new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Relation, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_image)</label>
+                                                    <div id="G">
+                                                        <img id="GardianImg" src="~/@Model.GurdianInfo.Gardian_image" style="width:100px;height:120px;" />
+                                                        <input type="file" class="upload" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+
+                            <div class="box box-warning">
+                                <h5 class="box-header with-border">Address Details</h5>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_OffAdd)</label>
+                                                        <div class="select">
+                                                            @Html.TextAreaFor(m => m.GurdianInfo.Gardian_OffAdd, htmlAttributes: new { @class = "form-control", row = "4", style = "height:112px;" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_OffAdd, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Country)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.GurdianInfo.Gardian_Country, new SelectList(Model.DropDownList.CountryList, "Value", "Text"), "--Select Country--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getStateListByCountry('Student_CorrCountry','Student_CorrState', 'Student_CorrCity')" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Country, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_State)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.GurdianInfo.Gardian_State, Model.DropDownList.Gurdi_StateList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getCityListByState('Student_CorrState', 'Student_CorrCity')" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_State, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_City)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.GurdianInfo.Gardian_City, Model.DropDownList.Gurdi_CityList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_City, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_Area)</label>
+                                                        <div class="select">
+                                                            @Html.DropDownListFor(m => m.GurdianInfo.Gardian_Area, new SelectList(Model.DropDownList.AreaList), "--Select Area--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_Area, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_PinCode)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_PinCode, htmlAttributes: new { @class = "form-control", maxlength = "6", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_PinCode, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_MobileNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_MobileNo, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_MobileNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="">@Html.LabelFor(r => Model.GurdianInfo.Gardian_OffNo)</label>
+                                                        <div class="select">
+                                                            @Html.TextBoxFor(m => m.GurdianInfo.Gardian_OffNo, htmlAttributes: new { @class = "form-control", maxlength = "10", onkeypress = "return NumericOnly(event)" })
+                                                            @Html.ValidationMessageFor(r => Model.GurdianInfo.Gardian_OffNo, null, htmlAttributes: new { style = "color:red;" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                        </div>
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+                <!-- /.nav-tabs-custom -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-footer">
+                    <button class="btn btn-warning" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">UPDATE</button>
+                    <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            CheckEnableDisableSMSNo();
+            //checkToEnableRoute_Stop();
+        });
+
+        function checkToEnableRoute_Stop() {
+            if ($("input[name='AvailFacilityInfo.Stud_TransReq']:checked").val() == 'True') {
+                $('#AvailFacilityInfo_PRouteId').attr('disabled', false);
+                $('#AvailFacilityInfo_PStopId').attr('disabled', false);
+                getModeOfTransports(true);
+            } else {
+                //alert('calling');
+                $('#AvailFacilityInfo_PRouteId').val(null).change();
+                $('#AvailFacilityInfo_PStopId').val(null).change();
+                $('#AvailFacilityInfo_PStopId').html('');
+
+                $('#AvailFacilityInfo_PRouteId').attr('disabled', true);
+                $('#AvailFacilityInfo_PStopId').attr('disabled', true);
+                getModeOfTransports(false);
+            }
+        }
+
+    function getModeOfTransports(availedTransport) {
+        $('#AvailFacilityInfo_ModeofTransport').html('<option value="">--Select Mode--</option>');
+        var modeOfTransport = '<option value="">--Select Mode--</option>';
+        $.ajax({
+            type: "GET",
+            url: "../Student_Admission/GetModeOfTransportList",
+            data: { AvailedTransport: availedTransport },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    modeOfTransport += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                }
+                $('#AvailFacilityInfo_ModeofTransport').html('');
+                $('#AvailFacilityInfo_ModeofTransport').html(modeOfTransport);
+            },
+        });
+    }
+
+        function GetSMSNo()
+        {
+            CheckEnableDisableSMSNo();
+            if ($('#AvailFacilityInfo_SMS_WHOM:checked').val() == 'F') {
+                $('#AvailFacilityInfo_SMSNo').val($('#FatherInfo_Father_MoblieNo').val());
+            }
+            else if ($('#AvailFacilityInfo_SMS_WHOM:checked').val() == 'M') {
+                $('#AvailFacilityInfo_SMSNo').val($('#MotherInfo_Mother_MobileNo').val());
+            }
+            else if ($('#AvailFacilityInfo_SMS_WHOM:checked').val() == 'G') {
+                $('#AvailFacilityInfo_SMSNo').val($('#GurdianInfo_Gardian_MobileNo').val());
+            }
+            else if ($('#AvailFacilityInfo_SMS_WHOM:checked').val() == 'O') {
+                $('#AvailFacilityInfo_SMSNo').val('');
+            }
+        }
+
+        function CheckEnableDisableSMSNo() {
+            if ($('#AvailFacilityInfo_SMS_WHOM:checked').val() == 'O') {
+                $('#AvailFacilityInfo_SMSNo').attr('readonly', false);
+            } else {
+                $('#AvailFacilityInfo_SMSNo').attr('readonly', true);
+            }
+        }
+
+
+        $('.upload').on('change', function (e) {
+            var currentImageID = "";
+            // var i = $(this).closest('tr').attr('id');
+            var forDocType = $(this).closest('div').attr('id');
+            if (forDocType == 'S') {
+                currentImageID = "selfImg";
+            } else if (forDocType == 'F') {
+                currentImageID = "fatherImg";
+            }
+            else if (forDocType == 'M') {
+                currentImageID = "motherImg";
+            }
+            else if (forDocType == 'G') {
+                currentImageID = "GardianImg";
+            }
+            else if (forDocType == 'GF') {
+                currentImageID = "GFImg";
+            }
+            else if (forDocType == 'GM') {
+                currentImageID = "GMImg";
+            }
+            else if (forDocType == 'P') {
+                currentImageID = "PImg";
+            }
+
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#' + currentImageID)
+                        .attr('src', e.target.result)
+                        .width(130)
+                        .height(150);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+
+
+            var files = e.target.files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+
+                        data.append("id" + x, files[x]);
+                    }
+                    data.append('StudentERPNo', $('#OfficeInfo_Stud_UID').val());
+
+                    data.append('ForDocType', forDocType);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("UploadFile", "Student_PhotoUpload")',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        OpenMessegeAutoHideDiv(result.Msg, result.Color );
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                    }
+                });
+            } else {
+                    OpenMessegeAutoHideDiv("This browser doesn't support HTML5 file uploads!", 'Info');
+            }
+        }
+    });
+</script>
+
+<script>
+    function UpdateSubmitTypeValue(evt) {
+        $('#SubmitType').val('BasicForm');
+        DoAjaxPostAndMore(evt);
+    }
+    function SameAsCorres_ChkBoxChange() {
+        if ($('#SameAsCorresAddressChkBox').is(':checked')) {
+            var stateHtml = '<option value  = "">--Select--</option>';
+            stateHtml += '<option selected="selected" value = "' + $('#AddressInfo_Stud_CorrState').val() + '">' + $('#AddressInfo_Stud_CorrState option:selected').text() + '</option>';
+
+            var cityHtml = '<option value = "">--Select--</option>';
+            cityHtml += '<option selected="selected" value = "' + $('#AddressInfo_Stud_CorrCity').val() + '">' + $('#AddressInfo_Stud_CorrCity option:selected').text() + '</option>';
+
+            $('#AddressInfo_Stud_PermAdd').val($('#AddressInfo_Stud_CorrAdd').val());
+            $('#AddressInfo_Stud_PermPinCode').val($('#AddressInfo_Stud_CorrPinCode').val());
+            $('#AddressInfo_Stud_PermMobile').val($('#AddressInfo_Stud_CorrMobile').val());
+            $('#AddressInfo_Stud_PermPh1').val($('#AddressInfo_Stud_CorrPhNo1').val());
+            $('#AddressInfo_Stud_PermPh2').val($('#AddressInfo_Stud_CorrPhNo2').val());
+
+            $('#AddressInfo_Stud_PermCountry').val($('#AddressInfo_Stud_CorrCountry').val());
+            $('#AddressInfo_Stud_PermState').html(stateHtml);
+            $('#AddressInfo_Stud_PermCity').html(cityHtml);
+            $('#AddressInfo_Stud_PermArea').val($('#AddressInfo_Stud_CorrArea').val()).change();
+
+        }
+        else {
+            $('#AddressInfo_Stud_PermAdd').val('');
+            $('#AddressInfo_Stud_PermPinCode').val('');
+            $('#AddressInfo_Stud_PermMobile').val('');
+            $('#AddressInfo_Stud_PermPh1').val('');
+            $('#AddressInfo_Stud_PermPh2').val('');
+
+            $('#AddressInfo_Stud_PermCountry').val('');
+            $('#AddressInfo_Stud_PermState').html('<option value  = "">--Select--</option>');
+            $('#AddressInfo_Stud_PermCity').html('<option value  = "">--Select--</option>');
+            $('#AddressInfo_Stud_PermArea').val('').change();
+        }
+    }
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Student_Admission/Student_AdmissionLandingPage"; }, $('#hddnReloadTime').val());
+                }
+                else if ($('#SubmitType').val() == 'AdvanceForm' || $('#SubmitType').val() == 'BasicForm') {
+                    $('#PanelMainDiv').html(response);
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            }
+        });
+    }
+</script>
+

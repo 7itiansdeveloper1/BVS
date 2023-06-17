@@ -1,0 +1,96 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Exam_Entities.Exam_AnswersheetModels
+@{
+    ViewBag.Title = "Question Paper Master";
+}
+<style>
+    .image-upload > input {
+        display: none;
+    }
+
+    .image-upload span {
+        width: 80px;
+        cursor: pointer;
+    }
+</style>
+<section class="content-header">
+    <h1>Answer Sheet</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Examination</li>
+        <li class="active"><a href="@Url.Action("Exam_QuestionPaperMaster", "Exam_QuestionPaper")">Question Paper</a></li>
+        <li class="active">Answer sheet List</li>
+    </ol>
+</section>
+
+<section class="content">
+
+    <div class="box box-primary">
+        <!--/.box-header -->
+
+        <div class="box-header with-border">
+            <h5 class="box-title">Class :- <strong class="text-primary">@Html.DisplayFor(r => Model.ClassName)</strong></h5>
+            <h5 class="box-title">Subject :- <strong class="text-primary">@Html.DisplayFor(r => Model.SubjectName)</strong></h5>
+            <h5 class="box-title">Assessment :- <strong class="text-primary">@Html.DisplayFor(r => Model.AssessmentName)</strong></h5>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Download answer sheet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.answersheetLists != null && Model.answersheetLists.Count > 0)
+                    {
+                        int count = 1;
+                        for (int i = 0; i < Model.answersheetLists.Count(); i++)
+                        {
+                            <tr class="editable" id="editable_@i">
+                                <td>
+                                    @Html.DisplayFor(r => count)
+                                    @Html.HiddenFor(r => Model.answersheetLists[i].ERPNO, htmlAttributes: new { })
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(r => Model.answersheetLists[i].Student)
+                                    @Html.HiddenFor(r => Model.answersheetLists[i].Student, htmlAttributes: new { })
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(r => Model.answersheetLists[i].Class)
+                                    @Html.HiddenFor(r => Model.answersheetLists[i].Class, htmlAttributes: new { })
+                                </td>
+
+                                <td>
+                                    @if (!string.IsNullOrEmpty(Model.answersheetLists[i].ansDocPath))
+                                    {
+                                        <a title="Click here to download Uploaded  Pdf" class="text-sm btnDefaultColor" href="~/@Model.answersheetLists[i].ansDocPath" download="@Model.answersheetLists[i].ansDocPath"><i class="fa fa-file-pdf-o"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    
+
+</section>
+<script>
+    $(function () {
+        $('#example1').DataTable();
+        $('#hddnRowLenght').val('50');
+    });
+</script>

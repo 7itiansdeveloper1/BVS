@@ -1,0 +1,123 @@
+﻿@model ISas.Entities.Academic.Academic_DocumentMappingModel
+@{
+    ViewBag.Title = "New";
+}
+
+<section class="content-header">
+    <h1>
+        Document Mappping
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>School</li>
+        <li class="active">Document Mapping</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("Academic_DocumentMapping_CRUD", "Academic_DocumentMapping", FormMethod.Post, htmlAttributes: new { }))
+    {
+    <div class="box box-success">
+        <div class="box-header with-border ">
+            <h5 class="box-title">Document Mapping for department</h5>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.DepartmentList)</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.DepartmentList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getDocumentsList()" })
+                            @Html.ValidationMessageFor(r => Model.DepartmentId, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="DocumentDIV">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+            <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+
+        </div>
+    </div>
+    }   
+
+ </section>
+<script>
+   
+    //function SelectDocuments() {
+    //    var deptId = $('#DepartmentId').val();
+    //    if (deptId != null && deptId != "") {
+    //        $('.chkBoxDocument').prop('checked', false);
+    //        $('.' + deptId).prop('checked', true);
+    //    } else {
+    //        $('.chkBoxDocument').prop('checked', false);
+    //    }
+    //}
+    //function checkToSelectAllStaff() {
+    //    if ($('#chkBoxStaffAllSelect').is(':checked')) {
+    //        $('.chkBoxDocument').prop('checked', true);
+    //    }
+    //    else {
+    //        $('.chkBoxDocument').prop('checked', false);
+    //    }
+    //}
+
+    function getDocumentsList() {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Academic_DocumentMapping/_DocumentList',
+            data: { departmentId: $('#DepartmentId').val()},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#DocumentDIV').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, 'Success');
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+</script>

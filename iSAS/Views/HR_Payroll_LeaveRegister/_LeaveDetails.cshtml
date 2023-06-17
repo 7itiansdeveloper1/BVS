@@ -1,0 +1,103 @@
+﻿@model ISas.Entities.HR_Payroll_Entities.HR_Payroll_LeaveRegisterModels
+@{
+    string reportName = "Leave Register For : " + Model.StaffName + "(" + Model.StaffCode + ")";
+}
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+</div>
+
+@Html.Hidden("hddnStaffCode", Model.StaffCode)
+@Html.Hidden("hddnStaffName", Model.StaffName)
+
+<table id="example1" class="table table-responsive table-bordered table-condensed nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>  <strong>Staff Code </strong></th>
+            <th><span class="text-primary"><strong>@Html.DisplayFor(r => Model.StaffCode) </strong></span></th>
+            <th>  <strong>Staff Name </strong></th>
+            <th colspan="2"><span class="text-primary"><strong>@Html.DisplayFor(r => Model.StaffName)</strong></span></th>
+        </tr>
+        <tr>
+            <th>Trans ID</th>
+            <th>Trans. Type</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Leave Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.LeaveList.Count; i++)
+        {
+            <tr>
+                <td>@Html.DisplayFor(r => Model.LeaveList[i].TransID)</td>
+                <td>@Html.DisplayFor(r => Model.LeaveList[i].TransType)</td>
+                <td>@Html.DisplayFor(r => Model.LeaveList[i].FromDate)</td>
+                <td>@Html.DisplayFor(r => Model.LeaveList[i].ToDate)</td>
+                <td>@Html.DisplayFor(r => Model.LeaveList[i].LvCode)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 10,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>

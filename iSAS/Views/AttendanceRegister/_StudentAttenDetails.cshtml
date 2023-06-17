@@ -1,0 +1,106 @@
+﻿@model  ISas.Entities.AttendanceRegisterViewModel
+@using ISas.Web.Models;
+@{
+    string reportName = "Attendance Register";
+}
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+</div>
+<table id="example1" class="table table-responsive table-bordered table-condensed nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Roll No</th>
+            <th>Student</th>
+            <th>Adm No</th>
+            <th>Month OD</th>
+            <th>Month Att</th>
+            <th>Prev OD</th>
+            <th>Prev Att</th>
+            <th>Total OD</th>
+            <th>Total Att</th>
+            <th>%</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.AttenDetails_New)
+        {
+            <tr>
+                <td>@Html.DisplayFor(r => row.sno)</td>
+                <td>@Html.DisplayFor(r => row.RollNo)</td>
+                <td>@Html.EncodedActionLink(row.Student, "_StudentAttendanceSummary", "AttendanceRegister", new { sessionId = Model.SelectedSessionId, classId = Model.SelectedClassId, sectionId = Model.SelectedSectionId, monthName = Model.SelectedAttRegDate, ERPNo = row.ERPNo }, htmlAttributes: new { target = "_blank" })</td>
+                <td>@Html.DisplayFor(r => row.AdmNo)</td>
+                <td>@Html.DisplayFor(r => row.CurrentMonthOpenDay)</td>
+                <td>@Html.DisplayFor(r => row.CurrentMonthAttendance)</td>
+                <td>@Html.DisplayFor(r => row.PreviousMonthOpenDay)</td>
+                <td>@Html.DisplayFor(r => row.PrviousMonthAttendance)</td>
+                <td>@Html.DisplayFor(r => row.TotalNoofOpenDay)</td>
+                <td>@Html.DisplayFor(r => row.TotalAttendance)</td>
+                <td>@Html.DisplayFor(r => row.AttendancePercentage)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>

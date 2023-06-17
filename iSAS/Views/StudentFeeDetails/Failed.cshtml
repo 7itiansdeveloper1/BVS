@@ -1,0 +1,111 @@
+﻿@model ISas.Entities.FeesEntities.paytmEntities
+
+@{
+
+//    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    ViewBag.Title = "Failed";
+}
+
+<html>
+<head>
+    <link href="~/paytm/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <input type="hidden" name="Orderid" id="Orderid" value="@Model.tnxId" />
+        <input type="hidden" name="PaymentStatus" id="PaymentStatus" value="@Model.paymentStatus" />
+
+        <img src="~/paytm/images/warning.png" class="success-img" />
+
+
+        @if (@Model.paymentStatus == "Failed")
+        {
+            <div class="head">
+                <h1 class="warning-title">Payment Failed!</h1>
+                <label>Your Payment is Failed!</label>
+                <label style="margin:6% 0 0 0; color:red">Try again!</label>
+            </div>
+
+            <div class="input-div" style="margin-left:15%;">
+                <b>  <label>Order ID:</label><input type="text" value="@Model.tnxId" class="input-box"></b>
+            </div>
+            <input type="button" id="btnback_" class="fail-button" value="Go Back to Dashbaord">
+
+        }
+        else
+        {
+            <div class="head">
+                <h1 class="warning-title">Payment Pending!</h1>
+                <label>Your Payment is Pending!</label><br />
+                <div style="margin:0 12%;">
+                    <label>Please wait We are checking payment Status from Paytm Bank</label><br />
+                    <label id="noticeid">At this time your payment showing pending from merchant account if payment is Success you will see on your dashbaord</label><br />
+                    <label> <span id="txtTime"></span> </label>
+                </div>
+                <label> <span> Order Id :@Model.tnxId</span> </label>
+            </div>
+            <input type="button" id="btnback" class="fail-button" value="Go Back to Dashbaord">
+
+        }
+
+
+    </div>
+
+</body>
+</html>
+
+
+<script>
+    var myVar;
+    var Start_ = 20;
+    $(document).ready(function () {
+        $('#btnback').hide();
+        $('#noticeid').hide();
+
+        myVar = setInterval("showTime()", 1000);
+
+        window.setInterval(function () {
+            CheckStatus();
+        }, 6000);
+
+    });
+
+    $('#btnback').on('click', function () {
+        debugger;
+        window.location.href = "/Dashboard/StudentDashboard";
+    });
+
+
+
+    function showTime() {
+        Start_--;
+        if (Start_ > 0) {
+            $("#txtTime").html(Start_);     // display time on the page
+        }
+        else {
+            $("#txtTime").hide();
+            $("#noticeid").show();
+            var status_ = $('#PaymentStatus').val();
+            //status
+            if (status_ == "Pending") {
+                $('#btnback').show();
+            }
+        }
+    }
+
+
+    function CheckStatus() {
+        var status = $('#PaymentStatus').val();
+        var datapost = { Orderid: $('#Orderid').val() };
+        var datat_ = JSON.stringify(datapost);
+        $.get('/StudentFeeDetails/StatusAPI', { Orderid: $('#Orderid').val() }, function (data) {
+            if (data == "Success") {
+                window.location.href = "/StudentFeeDetails/SuccessPayment?Orderid=" + $('#Orderid').val();
+            }
+            else if (status == "Pending" && data == "Failed") {
+                location.reload(true);
+            }
+        });
+
+    }
+</script>

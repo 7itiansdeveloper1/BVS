@@ -1,0 +1,155 @@
+﻿@model ISas.Entities.Examination_Entities.Examination_ReportCardModels
+
+<section class="content-header">
+    <h1>
+        Report Card
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Examination</li>
+        <li class="active">Report Card</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("ReportCard_POST", "Examination_ReportCard", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Term</label>
+                            @Html.DropDownListFor(m => m.ExamId, Model.ExamList, "-- Select Exam --", new { @class = "form-control select2", style = "width:100%;", onchange = "getClassList()" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Class</label>
+                            @Html.DropDownListFor(m => m.ClassId, new SelectList(string.Empty, "", ""), "--- Select Class ---", new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionList()" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Section</label>
+                            @Html.DropDownListFor(m => m.SectionId, new SelectList(string.Empty, "", ""), "--- Select Section ---", new { @class = "form-control select2", style = "width:100%;", onchange = "getStudentList()" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-widget">
+            <div class="box-header with-border">
+                <h5 class="box-title">Student Details</h5>
+                <div class="pull-right">
+                    <button type="submit" id="btnPrintSelected" disabled="disabled" onclick="return checkValidation('SELECTED', '0')" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print Selected</button>
+                    <button type="submit" id="btnPrintAll" disabled="disabled" onclick="return checkValidation('ALL', '0')" class="btn btn-default"><i class="fa fa-print"></i> Print All</button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div id="divMarkList">
+                    @Html.Partial("_ReportCard_StudentDetails")
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function checkValidation(submitType, i) {
+        if (submitType == 'ALL') {
+            $('.chkBoxSelectStud').prop('checked', true);
+            return true;
+        } else if (submitType == 'CURRENT') {
+            $('.chkBoxSelectStud').prop('checked', false);
+            $('#StudentDetails_' + i + '__Selected').prop('checked', true);
+        }
+        else if (submitType == 'SELECTED') {
+            var selectedCount = 0;
+            $('#example1 > tbody > tr').each(function (i) {
+                if ($('#StudentDetails_' + i + '__Selected').is(':checked')) {
+                    selectedCount++;
+                }
+            });
+            if (selectedCount > 0) {
+                return true;
+            } else {
+                OpenMessegeAutoHideDiv('Select at least on record to print..!', 'Info');
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+    function fun_CheckToSelectAllStudent() {
+        if ($('#selectAllChkBox').is(':checked')) {
+            $('.chkBoxSelectStud').prop('checked', true);
+        } else {
+            $('.chkBoxSelectStud').prop('checked', false);
+        }
+    }
+
+    function getClassList() {
+        $.ajax({
+            url: '../Examination_ReportCard/GetReportCardDropDowns',
+            data: { Mode: 'GetClassList', ExamId: $('#ExamId').val()},
+            type: 'get',
+            success: function (data) {
+                var $ddlClass = $('#ClassId');
+                $ddlClass.empty();
+                $('#SectionId').empty();
+                $('#SectionId').append($("<option />").text("--- Select Section ---"));
+
+                $ddlClass.append($("<option />").text("--- Select Class ---"));
+                $.each(data, function () {
+                    $ddlClass.append($("<option />").val(this.Value).text(this.Text));
+                });
+            },
+        })
+    }
+
+    function getSectionList() {
+        $.ajax({
+            url: '../Examination_ReportCard/GetReportCardDropDowns',
+            data: { ClassId: $('#ClassId').val(), Mode: 'GetSectionList', ExamId: $('#ExamId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SectionId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Section ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.Value).text(this.Text));
+                })
+            })
+        });
+    }
+
+    function getStudentList() {
+        $.ajax({
+            url: '../Examination_ReportCard/_ReportCard_StudentDetails',
+            beforeSend: function () {
+                spinnerShow();
+            },
+            data: {
+                ClassId: $('#ClassId').val(), SectionId: $('#SectionId').val(), ExamId: $('#ExamId').val(),
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            type: 'get',
+            success: (function (data) {
+                $('#divMarkList').empty();
+                $('#divMarkList').html(data);
+            }),
+            complete: function () {
+                spinnerHide();
+            }
+        })
+    }
+</script>

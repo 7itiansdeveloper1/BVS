@@ -1,0 +1,70 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Academic.Academic_HomeWorkMasterModels
+
+<section class="content-header">
+    <h1>Student Response</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Academic</li>
+        <li>Activity Portfolio</li>
+        <li class="active">Student Response</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title"><strong> @Model.responseListName</strong></h5>
+            <content class="pull-right" style="padding-right:2%;"><h4>Total Submission: <span class="text-primary" style="font-weight:800"> @Html.DisplayFor(r => Model.responseList.Count) </span> </h4></content>
+        </div>
+        <div class="box-body" style="overflow-y:scroll;">
+            <table id="example1" class="table table-responsive table-bordered table-condensed display" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Submission Date</th>
+                        <th>Have Link</th>
+                        <th>Have Attachment</th>
+                        <th>isreviewd </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int count = 1;
+                        for (int i = 0; i < Model.responseList.Count(); i++)
+                        {
+                    <tr>
+                        <td>@Html.DisplayFor(r => Model.responseList[i].SNo) @Html.HiddenFor(r => Model.responseList[i].HomeWorkId)</td>
+                        <td>@Html.DisplayFor(r => Model.responseList[i].Student) @Html.HiddenFor(r => Model.responseList[i].ERP) </td>
+                        <td>@Html.DisplayFor(r => Model.responseList[i].Class)</td>
+                        <td>@Html.DisplayFor(r => Model.responseList[i].SubmitDate)</td>
+                        <td>@Html.DisplayFor(r => Model.responseList[i].havingLink)</td>
+                        <td>@Html.DisplayFor(r => Model.responseList[i].havingAttachment)</td>
+                        <td>@Html.DisplayFor(r => Model.responseList[i].isReviewed)</td>
+                        <td class="text-center">
+                            @Html.EncodedActionLink(" ", "GetAnswerSheet", "Academic_HomeWorkMaster", new { homeworkid = Model.responseList[i].HomeWorkId, studentname = Model.responseList[i].Student + " (" + Model.responseList[i].Class + ")", studentid = Model.responseList[i].ERP, homeworkname = Model.responseListName }, htmlAttributes: new { @class = "fa fa-sign-out btnDefaultColor", title = "Go to answersheet", target = "_blank" })
+                        </td>
+                    </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+
+        $('#example1 > tbody  > tr').each(function (index, tr) {
+                alert(index);
+                console.log($('#responseList_' + index + '__isReviewed').val());
+    });
+
+</script>

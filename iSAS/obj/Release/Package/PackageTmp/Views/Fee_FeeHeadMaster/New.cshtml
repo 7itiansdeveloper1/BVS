@@ -1,0 +1,210 @@
+﻿@model ISas.Entities.FeesEntities.Fee_FeeHeadMasterModels
+@{
+    ViewBag.Title = "New";
+}
+
+<section class="content-header">
+    <h1>
+        Head Master <small>(ADD)</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li class="active"><a href="@Url.Action("LandingPage", "Fee_FeeHeadMaster")">Head Master</a> </li>
+        <li>Add</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Fee_FeeHeadMaster_CRUD", "Fee_FeeHeadMaster", FormMethod.Post, htmlAttributes: new { @class = "form" }))
+    {
+        @Html.HiddenFor(r => Model.HeadID)
+
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Fee Head</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HeadName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HeadName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HeadName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HeadAlias)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HeadAlias, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HeadAlias, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PrintOrder)</label>
+                            <div class="select">
+                                <input type="number" id="PrintOrder" name="PrintOrder" class="form-control", value="@Model.PrintOrder" />
+                                @Html.ValidationMessageFor(r => Model.PrintOrder, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3" style="padding-left:3%;">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.Annual, htmlAttributes:new { @class = ""})
+                                    @Html.LabelFor(r => Model.Annual)
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsNonRefundable)
+                                    @Html.LabelFor(r => Model.IsNonRefundable)
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsAdjustable)
+                                    @Html.LabelFor(r => Model.IsAdjustable)
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsMainHead)
+                                    @Html.LabelFor(r => Model.IsMainHead)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsFineEnableHead)
+                                    @Html.LabelFor(r => Model.IsFineEnableHead)
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsTransportHead)
+                                    @Html.LabelFor(r => Model.IsTransportHead)
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsAdvanceHead)
+                                    @Html.LabelFor(r => Model.IsAdvanceHead)
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsDiscountHead)
+                                    @Html.LabelFor(r => Model.IsDiscountHead)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsConcessionHead)
+                                    @Html.LabelFor(r => Model.IsConcessionHead)
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsFineHead)
+                                    @Html.LabelFor(r => Model.IsFineHead)
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsMiscHead)
+                                    @Html.LabelFor(r => Model.IsMiscHead)
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.IsActive)
+                                    @Html.LabelFor(r => Model.IsActive)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.NewAdm)
+                                    @Html.LabelFor(r => Model.NewAdm)
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.Installment)
+                                    @Html.LabelFor(r => Model.Installment)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+              
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+</section>
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Fee_FeeHeadMaster/LandingPage"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

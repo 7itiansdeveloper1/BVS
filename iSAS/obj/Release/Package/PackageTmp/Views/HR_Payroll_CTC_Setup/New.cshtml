@@ -1,0 +1,231 @@
+﻿@model ISas.Entities.HR_Payroll_Entities.HR_Payroll_CTC_SetupModels
+@{
+    List<SelectListItem> headTypes = new List<SelectListItem>();
+    headTypes.Add(new SelectListItem { Text = "Fixed", Value = "Fixed" });
+    headTypes.Add(new SelectListItem { Text = "Formula", Value = "Formula" });
+    headTypes.Add(new SelectListItem { Text = "Individual", Value = "Individual" });
+    headTypes.Add(new SelectListItem { Text = "Variable", Value = "Variable" });
+    headTypes.Add(new SelectListItem { Text = "Slab", Value = "Slab" });
+
+    List<SelectListItem> operatorList = new List<SelectListItem>();
+    operatorList.Add(new SelectListItem { Text = "*", Value = "MUL" });
+    operatorList.Add(new SelectListItem { Text = "/", Value = "DIV" });
+    operatorList.Add(new SelectListItem { Text = "+", Value = "ADD" });
+    operatorList.Add(new SelectListItem { Text = "-", Value = "SUB" });
+
+    List<SelectListItem> variableList = new List<SelectListItem>();
+    variableList.Add(new SelectListItem { Text = "5%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "10%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "15%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "20%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "25%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "30%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "35", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "40%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "45%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "50%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "55%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "60%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "65%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "70%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "75%", Value = "SUB" });
+    variableList.Add(new SelectListItem { Text = "80%", Value = "SUB" });
+
+}
+
+<style>
+    tr.selected td {
+        background-color: #333;
+        color: #fff;
+    }
+</style>
+
+<section class="content-header">
+    <h1>
+        CTS Setup
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>HR & Payroll</li>
+        <li><a href="@Url.Action("New", "HR_Payroll_PayBandMaster")">PayBand Master</a></li>
+        <li>CTS Setup</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("HR_Payroll_CTC_Setup_CRUD", "HR_Payroll_CTC_Setup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.PayBandId)
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Pay Band : <span class="text-primary"> @Html.DisplayFor(r => Model.PayBandName) </span> </h5>
+                <h5 class="box-title pull-right">
+                    @Html.ValidationMessageFor(r => Model.SlabValidationMsg, null, htmlAttributes: new { style = "color:red;" })
+                </h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.HeadId)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.HeadId, new SelectList(Model.HeadList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                        @Html.ValidationMessageFor(r => Model.HeadId, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.HeadType)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.HeadType, new SelectList(headTypes, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "$('#Value').val(''); $('.table_row_HeadList').removeClass('selected');" })
+                                        @Html.ValidationMessageFor(r => Model.HeadType, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Value)</label>
+                                    <div class="select">
+                                        @Html.TextAreaFor(m => m.Value, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(r => Model.Value, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab1" data-toggle="tab" aria-expanded="true">Formula</a></li>
+                                <li class=""><a href="#tab2" data-toggle="tab" aria-expanded="false">Slab</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab1">
+                                    <div class="row">
+                                        <div class="col-md-3" style="min-height:200px;max-height:200px;overflow:auto;">
+                                            <table class="table table-bordered  table-responsive table-hover dt-responsive nowrap">
+                                                <tbody>
+                                                    @for (int i = 0; i < Model.HeadList.Count; i++)
+                                                    {
+                                                        <tr class="table_row_HeadList" onclick="selectHead('@Model.HeadList[i].Text')">
+                                                            <td>
+                                                                @Html.HiddenFor(r => Model.HeadList[i].Value)
+                                                                @Html.DisplayFor(r => Model.HeadList[i].Text)
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab2">
+                                    <div class="row">
+                                        <div class="col-md-12" style="min-height:200px;max-height:200px;overflow:auto;">
+                                            <table class="table table-bordered  table-responsive table-hover dt-responsive nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S. No.</th>
+                                                        <th>Minimum</th>
+                                                        <th>Maximum</th>
+                                                        <th>Result</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        int count = 1;
+                                                        for (int i = 0; i < Model.SlabList.Count; i++)
+                                                        {
+                                                            <tr>
+                                                                <td>@Html.DisplayFor(r=> count)</td>
+                                                                <td>@Html.TextBoxFor(r => Model.SlabList[i].Minimum, htmlAttributes:new { @class = "form-control"})</td>
+                                                                <td>@Html.TextBoxFor(r => Model.SlabList[i].Maximum, htmlAttributes: new { @class = "form-control" })</td>
+                                                                <td>@Html.TextBoxFor(r => Model.SlabList[i].Result, htmlAttributes: new { @class = "form-control" })</td>
+                                                            </tr>
+                                                            count++;
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-12">
+            @{ Html.RenderAction("LandingPage", "HR_Payroll_CTC_Setup", new { PayBandID = Model.PayBandId }); }
+        </div>
+    </div>
+</section>
+
+<script>
+
+    $('.table_row_HeadList').click(function () {
+        if($('#HeadType').val() != 'Fixed' && $('#HeadType').val() != 'Individual'){
+            $('.table_row_HeadList').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+
+    function selectHead(val) {
+        if($('#HeadType').val() != 'Fixed' && $('#HeadType').val() != 'Individual'){
+            $('#Value').val(val);
+        }else{
+            $('#Value').val("");
+            OpenMessegeAutoHideDiv("You can't select from formula for Fixed/Individual..!", 'Info');
+        }
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location.reload(); }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

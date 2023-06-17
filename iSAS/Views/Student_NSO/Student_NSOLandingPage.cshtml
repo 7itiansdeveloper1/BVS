@@ -1,0 +1,156 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.Student_NSOModel>
+@{
+    string reportName = "NSO Details";
+}
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+</div>
+
+<section class="content-header">
+    <h1>
+        NSO
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li class="active">NSO</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">NSO List</h5>
+            <span class="pull-right box-title">
+                @Html.ActionLink("ADD NEW", "NewStudent_NSO", "Student_NSO", new { }, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+            </span>
+        </div>
+
+        <div class="box-body">
+            <table id="example1" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>NSO No</th>
+                        <th>Applied Date</th>
+                        <th>ERP No</th>
+                        <th>Admission No</th>
+                        <th class="text-center">Is Cancelled</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].StudentName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].NSO_No)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].NSO_AppliedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].ERPNO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].AdmissionNo)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(r => Model[i].IsNSOCancelled)
+                            </td>
+                            <td class="text-center">
+                                @Html.EncodedActionLink(" ", "Updation", "Student_NSO", new { NSONo = Model[i].NSO_No }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>
+
+
+

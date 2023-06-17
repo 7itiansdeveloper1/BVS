@@ -1,0 +1,88 @@
+﻿@model ISas.Entities.DashboardEntities.StudentFeeStatusModel
+@using ISas.Web.Models;
+<div class="box box-primary" id="receiptDivMain">
+
+
+
+
+    <div class="box-header with-border">
+        <h3 class="box-title">Fee Receipts</h3>
+        @*@if (Model.EnableNoDueReceipt)
+        {
+            <h5 class="box-title pull-right"> <small> @Html.EncodedActionLink(" ", "NodueReceipt", "StudentFeeDetails", new { erpno = Model.StudentERPNo }, htmlAttributes: new { @class = " fa fa-print btnDefaultColor", title = "No Due Print", target = "_blank" })</small> </h5>
+        }*@
+    </div>
+
+
+    <div class="box-body">
+        <table id="tblReceiptDetails" class="table table-hover table-bordered table-responsive table-condensed">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th title="Receipt No">Rec. #</th>
+                    <th title="Receipt Date">Rec. Date</th>
+                    <th title="Mode">Mode</th>
+                    <th title="Duration">Dur.</th>
+                    <th title="Due Amount">Due</th>
+                    <th title="Concession Amount">Conc.</th>
+                    <th title="Discount Amount">Dis.</th>
+                    <th title="Advance Amount">Adv.</th>
+                    <th title="Amount to be Paid">Payable</th>
+                    <th title="Paid Amount">Paid</th>
+                    <th title="Balance Amount">Bal.</th>
+                    <th title="Excess Amount">Exc.</th>
+                    <th title="Status">Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.feeDetailsList.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.feeDetailsList.Count; i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].ReceiptNo)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].ReceiptDate)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Mode)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Duration)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Due)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Concession)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Discount)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Advance)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Payable)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Paid)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Balance)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Excess)</td>
+                            <td>@Html.DisplayFor(r => Model.feeDetailsList[i].Status)</td>
+                            <td style="min-width:70px;">
+                                @if (@Model.feeDetailsList[i].IsCancelable)
+                                {
+                                    <a onclick="CancelOrDeleteReceiptConfirm('@Model.feeDetailsList[i].ReceiptNo', 'CANCEL')" title="Cancel Receipt" class="fa fa-remove btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <a title="Cancel Receipt" class="fa fa-remove btnDefaultColorFaded"></a>
+                                }
+
+                                <i class=""></i>
+
+                                @Html.EncodedActionLink(" ", "GetFeeDocument_View_HtmlReport", "StudentFeeDetails", new { TransRefNo = Model.feeDetailsList[i].ReceiptNo, Mode = "RECEIPT", erpno = Model.feeDetailsList[i].ERPNo, PrintType = "YES" }, htmlAttributes: new { @class = "fa fa-print btnDefaultColor", target = "_blank" })
+                                @Html.EncodedActionLink(" ", "GetFeeDocument_View_HtmlReport", "StudentFeeDetails", new { TransRefNo = Model.feeDetailsList[i].ReceiptNo, Mode = "RECEIPT", erpno = Model.feeDetailsList[i].ERPNo }, htmlAttributes: new { @class = "fa fa-eye btnDefaultColor", target = "_blank" })
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@*<script>
+        $(document).ready(function () {
+            $('#tblReceiptDetails').DataTable();
+        });
+    </script>*@

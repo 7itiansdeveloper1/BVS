@@ -1,0 +1,98 @@
+D:\Me\Project\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\Me\Project\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\Me\Project\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojResolveAssemblyReference.cache
+D:\Me\Project\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\Me\Project\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojResolveAssemblyReference.cache
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\obj\Release\iSAS.Entities.csprojResolveAssemblyReference.cache
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\bin\Release\EntityFramework.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\bin\Release\EntityFramework.xml
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\bin\Release\EntityFramework.dll
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\bin\Release\EntityFramework.xml
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojResolveAssemblyReference.cache
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+F:\Work Data\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+F:\Work Data\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+F:\Work Data\iSAS\iSAS.Entities\bin\Release\EntityFramework.dll
+F:\Work Data\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+F:\Work Data\iSAS\iSAS.Entities\bin\Release\System.Web.Mvc.dll
+F:\Work Data\iSAS\iSAS.Entities\bin\Release\EntityFramework.xml
+F:\Work Data\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+F:\Work Data\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojResolveAssemblyReference.cache
+F:\Work Data\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CoreCompileInputs.cache
+F:\Work Data\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+F:\Work Data\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+D:\LIVECODE\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\LIVECODE\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\LIVECODE\iSAS\iSAS.Entities\bin\Release\EntityFramework.dll
+D:\LIVECODE\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+D:\LIVECODE\iSAS\iSAS.Entities\bin\Release\EntityFramework.xml
+D:\LIVECODE\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+D:\LIVECODE\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojResolveAssemblyReference.cache
+D:\LIVECODE\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CoreCompileInputs.cache
+D:\LIVECODE\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\LIVECODE\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+E:\WORK DATA\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+E:\WORK DATA\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+E:\WORK DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.dll
+E:\WORK DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+E:\WORK DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.xml
+E:\WORK DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+E:\WORK DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojResolveAssemblyReference.cache
+E:\WORK DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CoreCompileInputs.cache
+E:\WORK DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+E:\WORK DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+F:\Work Data\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.dll
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.xml
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CoreCompileInputs.cache
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojAssemblyReference.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\bin\Release\EntityFramework.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\bin\Release\EntityFramework.xml
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csprojAssemblyReference.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CoreCompileInputs.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Entities\obj\Release\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\EntityFramework.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\System.Web.Razor.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\System.Web.WebPages.Razor.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\System.Web.WebPages.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\Microsoft.Web.Infrastructure.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\System.Web.WebPages.Deployment.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\EntityFramework.xml
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\bin\Release\EntityFramework.SqlServer.xml
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\obj\Release\iSAS.Entities.csprojAssemblyReference.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CoreCompileInputs.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\obj\Release\iSAS.Entities.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\obj\Release\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Entities\obj\Release\iSAS.Entities.pdb

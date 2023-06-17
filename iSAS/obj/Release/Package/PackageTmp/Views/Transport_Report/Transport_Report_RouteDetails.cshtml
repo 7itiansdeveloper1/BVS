@@ -1,0 +1,203 @@
+﻿@model List<ISas.Entities.TransportEntities.Transport_RouteDetailsModel>
+@{
+    string reportName = "Transport Route List";
+}
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+</div>
+
+
+<section class="content-header">
+    <h1>Reports</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Transport</li>
+        <li class="active">Reports</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">Transport Routes List</h5>
+        </div>
+        <div class="box-body">
+            <div style="overflow:auto;">
+                <table id="example1" class="table table-responsive table-bordered table-condensed" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Vehicle</th>
+                            <th>Route Name</th>
+                            <th>Driver Name</th>
+                            <th>Seat Capacity</th>
+                            <th>Availability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            for (int i = 0; i < Model.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(r => Model[i].Sno)</td>
+                                    <td>
+                                        <span title="Click here to view Student Details" onclick="GetBusStudentDetails('@Model[i].VehId', '@Model[i].RouteName', '@Model[i].DriverName')" style="cursor:pointer;color:blue;">
+                                            <u><i>@Html.DisplayFor(r => Model[i].Vehicle)</i></u>
+                                        </span>
+                                    </td>
+                                    <td>@Html.DisplayFor(r => Model[i].RouteName)</td>
+                                    <td>@Html.DisplayFor(r => Model[i].DriverName)</td>
+                                    <td>@Html.DisplayFor(r => Model[i].TotalSeat)</td>
+                                    <td>@Html.DisplayFor(r => Model[i].Availability)</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">Bus Student Details</h5>
+            <h5 class="box-title pull-right">
+                <a href="#" onclick="exportToExcel('tblTransportRouteDetails')" title="Export to Excel" class="fa fa-file-excel-o btnDefaultColor"></a>
+            </h5>
+            <span class="box-title pull-right" style="margin-right:0.5%;">
+                <a href="#" onclick="printBusStudentDetails()" title="Print" class="fa fa-print btnDefaultColor"></a>
+            </span>
+
+            <h5 class="box-title pull-right">
+                <span><label>Route : </label> <span class="text-primary"><strong id="routeNameHtml"></strong> </span> </span>
+                <span><label>Driver Name : </label> <span class="text-primary"><strong id="driverNameHtml"></strong> </span> </span>
+                <span style="width:5px;">&nbsp;</span>
+            </h5>
+        </div>
+        <div class="box-body">
+            <div id="busStudentDetails">
+                @*@Html.Partial("_Transport_Report_BusStudentDetails")*@
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>
+
+<script>
+    //function printRouteDetails() {
+    //    var html = $('#tblPrintHeader_TransportRoute').html();
+    //    html += $('#transportListMainDiv').html();
+    //    var w = window.open();
+    //    $(w.document.body).html(html);
+    //    w.print();
+    //    //w.close();
+    //}
+
+
+    function printBusStudentDetails() {
+        var html = $('#tblPrintHeader_BusStudent').html();
+        html += $('#transportStudentMainDiv').html();
+        var w = window.open();
+        $(w.document.body).html(html);
+        w.print();
+        //w.close();
+    }
+
+    function GetBusStudentDetails(VehID, RouteName, DriverName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Transport_Report/_Transport_Report_BusStudentDetails',
+            data: { VehID: VehID, RouteName, DriverName },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#busStudentDetails').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

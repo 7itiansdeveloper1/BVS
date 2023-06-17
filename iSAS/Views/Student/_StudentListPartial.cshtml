@@ -1,0 +1,31 @@
+﻿@model ISas.Web.ViewModels.Student_OptionalSubjectViewModel
+
+<table  class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%" id="AttendanceTable">
+    <thead>
+        <tr>
+            <th hidden>ERP No.</th>
+            <th>Adm No.</th>
+            <th>Roll No.</th>
+            <th>Student Name</th>
+            <th>@Model.SelectedParameterId</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Model.StudentList)
+        {
+            <tr class="abc">
+                <td hidden>@item.Student.StudentERPNo </td>
+                <td>@item.Student.StudentAdmNo </td>
+                <td>@item.Student.StudentRollNo </td>
+                <td>@item.Student.StudentName </td>
+
+                <td>
+                    <div class="select">
+                        @Html.DropDownListFor(m => m.SelectedOptioanSubjectId, new SelectList(Model.OptionalSubjectList, "Value", "Text", item.Parameter1), new { @class = "input-sm" })
+                    </div>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

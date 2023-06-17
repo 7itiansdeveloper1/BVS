@@ -1,0 +1,406 @@
+﻿@using ISas.Web.Models;
+@model  ISas.Entities.DashboardEntities.StudentFeeDashbaord
+@{
+    int totalPayableAmount = 0; string duedate = ""; Int64 duedatesindex = 0;
+    string transRefNo = "";
+    if (Model.feeDueList != null && Model.feeDueList.Count > 0)
+    {
+        totalPayableAmount = Model.feeDueList.Where(r => r.isSelected).Select(r => r.Balance).DefaultIfEmpty(0).Sum();
+        duedate = Model.feeDueList.Where(r => r.isSelected).Select(r => r.DueDate).LastOrDefault();
+        duedatesindex = Model.feeDueList.Where(r => r.isSelected).Select(r => r.sno).LastOrDefault();
+
+    }
+}
+<section class="content-header">
+    <h1>
+        Student Fee Details
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li class="active">Fee Details</li>
+    </ol>
+</section>
+
+<section class="content">
+
+    @using (Html.BeginForm("DownloadReceipt", "StudentFeeDetails", FormMethod.Post, htmlAttributes: new { }))
+    {
+
+        @Html.Hidden("hdndueDates", duedate)
+        @Html.Hidden("hdnRefNo", transRefNo)
+        @Html.Hidden("hdnpaidamt", totalPayableAmount)
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <!-- Widget: user widget style 1 -->
+                <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-yellow">
+                        <div class="widget-user-image">
+                            <img class="img-circle" src="../@Model.studentImage" alt="User Image">
+                        </div>
+                        <!-- /.widget-user-image -->
+                        <h3 class="widget-user-username">@Model.Student</h3>
+                        <h5 class="widget-user-desc">@Model.Class</h5>
+                    </div>
+                    <div class="box-footer no-padding">
+                        <ul class="nav nav-stacked">
+                            <li><a href="#">Adm No <span class="pull-right badge bg-blue">@Model.AdmNo</span></a></li>
+                            <li><a href="#">Father Name <span class="pull-right badge bg-aqua">@Model.Father</span></a></li>
+                            <li><a href="#">Fee Structure <span class="pull-right badge bg-green">@Model.FeeStructureName</span></a></li>
+                            <li><a href="#">Address <span class="pull-right badge bg-red">@Model.Address</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- /.widget-user -->
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-12">
+                <div class="nav-tabs-custom">
+
+                    <ul class="nav nav-tabs" id="myTab">
+                        <li class="active"><a href="#tab1" data-toggle="tab">FEE DUE</a></li>
+                        <li><a href="#tab2" data-toggle="tab">FEE PAID</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab1">
+                            @*<div class="box-header with-border">
+                                    <h5 class="box-title">FEE DUE</h5>
+                                    <h5 class="box-title pull-right"> <small> @Html.ActionLink("Download Fee Book ", "GetFeeDocument", "StudentFeeDetails", new { TransRefNo = "", Mode = "FEEBOOK", erpno = Session["UserID"].ToString() }, htmlAttributes: new { @class = "", title = "Download Fee Book" }) <i class="fa fa-download"></i> </small> </h5>
+                                    <h5 class="box-title pull-right"> <small> <a href="#" title="Download Fee Book">Download Fee Book </a><i class="fa fa-download"></i> </small> </h5>
+                                </div>*@
+                            <div class="box-body" style="overflow-y:scroll;">
+                                <table class="table table-bordered table-hover table-responsive" id="tblfeedue">
+                                    <thead>
+                                        <tr>
+                                            <th>Sno</th>
+                                            @*<th>Due Date</th>*@
+                                            <th>Duration</th>
+                                            <th>Payable</th>
+                                            <th>Paid Amount</th>
+                                            <th>Balance</th>
+                                            <th>Select</th>
+                                            @*<th>Action</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.feeDueList != null)
+                                        {
+                                            for (int i = 0; i < Model.feeDueList.Count; i++)
+                                            {
+                                                <tr>
+
+                                                    <td id="feeduelist_sno_@i">  @Html.DisplayFor(r => Model.feeDueList[i].sno)</td>
+                                                    @*<td id="feeduelist_duedate_@i">@Html.HiddenFor(r => Model.feeDueList[i].DueDate)</td>*@
+                                                    <td id="feeduelist_duration_@i">@Html.DisplayFor(r => Model.feeDueList[i].Duration)</td>
+                                                    <td>
+                                                        @Html.HiddenFor(r => Model.feeDueList[i].Installment)
+                                                        @Html.DisplayFor(r => Model.feeDueList[i].Payable)
+                                                    </td>
+                                                    <td id="feeduelist_paidamount_@i">@Html.DisplayFor(r => Model.feeDueList[i].PaidAmount)</td>
+                                                    <td id="feeduelist_balance_@i">@Html.DisplayFor(r => Model.feeDueList[i].Balance)</td>
+
+                                                    @*<td align="center">@Html.CheckBoxFor(r => Model.feeDueList[i].isSelected, htmlAttributes: new { disabled = "disabled",onchange = "getInstallment(" + i + ")" })</td>*@
+
+                                                    @if (Model.feeDueList[i].isSelected)
+                                                    {
+                                                        <td align="center">@Html.CheckBoxFor(r => Model.feeDueList[i].isSelected, htmlAttributes: new { disabled = "disabled", onchange = "getInstallment(" + i + ")" })</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td align="center">@Html.CheckBoxFor(r => Model.feeDueList[i].isSelected, htmlAttributes: new { onchange = "getInstallment(" + i + ")" })</td>
+                                                    }
+
+                                                </tr>
+
+
+
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                                <div class="pull-right" style="color:red">
+                                    <strong> Please select till you want to pay in advance..</strong>
+                                </div>
+
+                            </div>
+                            <div class="box-footer">
+
+                                <h4 class="box-title pull-left"><strong> Paid Amount : </strong></h4>
+                                <h4 class="box-title pull-left"><strong id="paidamount"> @Html.DisplayFor(r => @totalPayableAmount)</strong></h4>
+
+                                <button type="button" id="btnOnlinepayment" class="btn btn-success pull-right" style="cursor:pointer" onclick="btnPayNow()">
+                                    Make Payment  <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
+
+                                @*<h5 class="box-title pull-right">  @Html.ActionLink("Make Payment", "BillingInfo", "StudentFeeDetails", new { DueDate = "10/12/2021", erpno = Model.ERP, paidamt = Model.paidamt }, htmlAttributes: new { @class = "btn btn-success pull-right", title = "Make Payment" })   </h5>*@
+
+
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <div class="box-header with-border">
+                                <h5 class="box-title pull-right">
+
+                                    <button type="submit" id="btnOnlinepayment" class="btn btn-success pull-right" style="cursor:pointer">
+                                        Download Selected  
+                                    </button>
+                                    @*@Html.ActionLink("Download Selected", "DownloadReceipt", "StudentFeeDetails", new { TransRefNo = transRefNo, Mode = "CONSOLIDATE", erpno = Session["UserID"].ToString() }, htmlAttributes: new { @class = "btn btn-success", title = "Download Consolidate" })*@
+                                </h5>
+                            </div>
+                            <div class="box-body" style="overflow-y:scroll;">
+                                <table class="table table-bordered table-hover table-responsive" id="tblfeepaid">
+                                    <thead>
+                                        <tr>
+                                            <th>Sno</th>
+                                            <th>Duration</th>
+                                            <th>Payable</th>
+                                            <th>Paid Amount</th>
+                                            <th>Balance</th>
+                                            <th>Receipts</th>
+                                            <th>Select</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.feePaidList != null)
+                                        {
+                                            for (int i = 0; i < Model.feePaidList.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.HiddenFor(r => Model.feePaidList[i].transRefNo)
+                                                        @Html.DisplayFor(r => Model.feePaidList[i].sno)
+                                                    </td>
+
+                                                    @*<td>@Html.DisplayFor(r => Model.feePaidList[i].DueDate)</td>*@
+                                                    <td>@Html.DisplayFor(r => Model.feePaidList[i].Duration)</td>
+                                                    <td>@Html.DisplayFor(r => Model.feePaidList[i].Payable)</td>
+                                                    <td>@Html.DisplayFor(r => Model.feePaidList[i].PaidAmount)</td>
+                                                    <td>@Html.DisplayFor(r => Model.feePaidList[i].Balance)</td>
+                                                    <td>
+                                                        @if (!string.IsNullOrEmpty(Model.feePaidList[i].ReceiptNos))
+                                                        {
+                                                            List<string> recptno = Model.feePaidList[i].ReceiptNos.Split(',').ToList();
+                                                            for (int j = 0; j < recptno.Count; j++)
+                                                            {
+                                                                //@Html.ActionLink(@recptno[j], "GetStudentFeeReceipt", "StudentFeeDetails", new { TransRefNo = @recptno[j], Mode = "RECEIPT", erpno = Model.ERP, MonthName = Model.feePaidList[i].Duration }, htmlAttributes: new { @class = "pull-right badge bg-green", title = "Download Receipt..!" })
+                                                                <button type="button" class="badge bg-green pull-right">
+                                                                    @recptno[j]
+                                                                </button>
+
+                                                                <br />
+                                                            }
+
+                                                        }
+                                                    </td>
+
+                                                    <td align="center">@Html.CheckBoxFor(r => Model.feePaidList[i].isSelected, htmlAttributes: new { onchange = "setSelectedInstallment()" })</td>
+
+                                                </tr>
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    }
+    </section>
+
+
+<script>
+    function GetStudentFeeDetails(dueDate) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../StudentFeeDetails/_FeeDetails",
+            data: { DueDate: dueDate },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenMessegeModal(response, 'Primary', 'lg', 'Receipt Details')
+
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+
+    }
+
+    @*function DownloadReceipt(abc) {
+        var recpt = "";
+        $('#tblfeepaid > tbody > tr').each(function (i) {
+            if ($('#feePaidList_' + i + '__isSelected').is(':checked') == true) {
+
+                recpt = recpt + ',' + $('#feePaidList_' + i + '__transRefNo').val();
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../StudentFeeDetails/DownloadReceipt",
+            data: {
+                TransRefNo: recpt,
+                Mode: "RECEIPT",
+                erpno: '@Session["UserID"].ToString()' 
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                //OpenMessegeModal(response, 'Primary', 'lg', 'Receipt Details')
+
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+
+    }*@
+
+    function getInstallment(index) {
+
+
+        $('#tblfeedue > tbody > tr').each(function (i) {
+            if (i<= index) {
+                if (index == @duedatesindex-1 && $('#feeDueList_' + i + '__isSelected').is(':checked') == false) {
+                    $('#feeDueList_' + i + '__isSelected').prop("checked", false);
+                }
+                else {
+
+                    if (i == index) {
+                        console.log($('#feeDueList_' + i + '__isSelected').is(':checked'));
+                        if ($('#feeDueList_' + i + '__isSelected').is(':checked') == false)
+                        {
+                            $('#feeDueList_' + i + '__isSelected').prop("checked", false);
+
+                        }
+                        else {
+                            $('#feeDueList_' + i + '__isSelected').prop("checked", true);
+                        }
+                    }
+                    else {
+                        $('#feeDueList_' + i + '__isSelected').prop("checked", true);
+                    }
+                }
+            }
+            else {
+                $('#feeDueList_' + i + '__isSelected').prop("checked", false);
+            }
+
+        });
+        getTotalPaid();
+
+    }
+
+    function getTotalPaid() {
+        var paidamount = 0;
+        var duedates = "";
+
+        $('#tblfeedue > tbody > tr').each(function (i) {
+            if ($('#feeDueList_' + i + '__isSelected').is(':checked') == true) {
+                paidamount = paidamount + parseInt($('#feeduelist_balance_' + i).html());
+                //duedates = $('#feeduelist_duedate_' + i).html();
+                duedates = duedates + ',' + $('#feeDueList_' + i + '__Installment').val();
+
+            }
+        });
+        $('#paidamount').html(paidamount);
+        $('#hdnpaidamt').val(paidamount);
+        $('#hdndueDates').val(duedates);
+    }
+
+
+    @*function setSelectedInstallment() {
+        var recpt = "";
+        $('#tblfeepaid > tbody > tr').each(function (i) {
+            if ($('#feePaidList_' + i + '__isSelected').is(':checked') == true) {
+
+                recpt = recpt + ',' + $('#feePaidList_' + i + '__transRefNo').val();
+            }
+        });
+
+        $('#hdnRefNo').val(recpt);
+        console.log(recpt);
+        console.log('@transRefNo');
+    }*@
+
+
+    
+
+    function btnPayNow() {
+        //window.open("../StudentFeeDetails/BillingInfo");
+        window.open("../StudentFeeDetails/BillingInfo_V1?ERPNo=" + '@Model.ERP' + "&DueDate=" + $('#hdndueDates').val());
+    }
+
+
+
+    function DownloadReceipt() {
+        var recpt = "";
+        $('#tblfeepaid > tbody > tr').each(function (i) {
+            if ($('#feePaidList_' + i + '__isSelected').is(':checked') == true) {
+
+                recpt = recpt + ',' + $('#feePaidList_' + i + '__transRefNo').val();
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../StudentFeeDetails/DownloadReceipt",
+            data: {
+                TransRefNo: recpt,
+                Mode: "RECEIPT",
+                erpno: '@Session["UserID"].ToString()' 
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    //OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                }
+                else {
+                    //OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val(), 'Info');
+                    //AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    //AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+
+
+
+
+        
+    }
+
+
+</script>

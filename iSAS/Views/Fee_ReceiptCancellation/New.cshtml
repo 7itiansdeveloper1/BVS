@@ -1,0 +1,207 @@
+﻿@{ 
+    string today = DateTime.Now.ToShortDateString().Replace("-", "/");
+}
+<section class="content-header">
+    <h1>
+        Receipt Cancellation/Dishonour
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">Fee</a></li>
+        <li><a href="#">Receipt Cancellation/Dishonour</a></li>
+    </ol>
+</section>
+<section class="content">
+    @Html.Hidden("hddnQueryFor", "GetReceiptList")
+
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">Receipts</h5>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="">From Date</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBox("FromDate", today, htmlAttributes: new { @class = "form-control pull-right date", autocomplete = "off" })
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="">To Date</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBox("ToDate", today, htmlAttributes: new { @class = "form-control pull-right date", autocomplete = "off" })
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <h1>
+                        <button title="Search By Date" class="btn btn-success btn-sm" type="button" onclick="GetReceiptDetails('GetReceiptList')">
+                            <i class="fa fa-search btnDefaultColor"></i>
+                        </button>
+                    </h1>
+                </div>
+                <div class="col-md-5">
+                    &nbsp;
+                </div>
+                <div class="col-md-2">
+                    <h1>
+                        <button title="Search All Receipts" class="btn btn-primary btn-sm pull-right" type="button" onclick="GetReceiptDetails('GeAlltReceiptList')">
+                            <i class="fa fa-search"> Get All Receipts</i>
+                        </button>
+                    </h1>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="ReceiptDetailsMainDiv">
+                        @{ Html.RenderAction("LandingPage", "Fee_ReceiptCancellation", new { fromDate = DateTime.Now.ToShortDateString().Replace("-", "/"), toDate = DateTime.Now.ToShortDateString().Replace("-", "/"), QueryFor = "GetReceiptList" }); }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+  
+
+    @using (Html.BeginForm("Fee_ReceiptCancellation_CRUD", "Fee_ReceiptCancellation", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div id="DishonurReceiptDetailsMainDiv">&nbsp;</div>
+    }
+</section>
+
+<script>
+    function GetReceiptDetails(QueryFor) {
+        $('#hddnQueryFor').val(QueryFor);
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_ReceiptCancellation/LandingPage",
+            data: { fromDate: $('#FromDate').val(), toDate: $('#ToDate').val(), QueryFor: QueryFor },
+            success: function (result) {
+                $('#ReceiptDetailsMainDiv').html(result);
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function CancelReceiptConfirm(ReceiptNo, ERPNo) {
+        
+        var params = [ReceiptNo, ERPNo];
+        AsyncConfirmYesNo("Confirmation", "Are you sure to cancel this receipt?", MyYesFunction, MyNoFunction, params);
+    }
+
+    function MyYesFunction(params) {
+        var ReceiptNo = params[0]; var ERPNo = params[1];
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_ReceiptCancellation/Fee_ReceiptCancellation_CRUD",
+            data: { CRUDMode: "CANCEL", Selected_ReceiptNo: ReceiptNo, Selected_ERPNo: ERPNo },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../Fee_ReceiptCancellation/New"; }, 3000);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+
+    function GetDishonurReceiptDetails(ReceiptNo, TransReferenceNo, ERPNo, Selected_StudentName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_ReceiptCancellation/_DishonurReceiptDetails",
+            data: { ReceiptNo: ReceiptNo, TransReferenceNo: TransReferenceNo, ERPNo: ERPNo, Selected_StudentName: Selected_StudentName },
+            success: function (result) {
+                $('#DishonurReceiptDetailsMainDiv').html(result);
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function ChecktoSelectAllDishList() {
+        if ($('#chkboxAllSelect').is(':checked')) {
+            $('.chkboxDish').prop('checked', true);
+        } else {
+            $('.chkboxDish').prop('checked', false);
+        }
+    }
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var selectedCount = 0;
+        $('#tblDisDetails > tbody').each(function (i) {
+            if ($('#ReceiptDetail_OfDishList_' + i + '__Selected').is(':checked')) {
+                selectedCount++;
+            }
+        });
+
+        if (parseInt(selectedCount) == 0) {
+            OpenMessegeAutoHideDiv('No student selected to dishonor..!', 'Warning');
+            return false;
+        }
+
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                setTimeout(function () { window.location = "../Fee_ReceiptCancellation/New"; }, 3000);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+</script>

@@ -1,0 +1,51 @@
+﻿
+
+<section class="content-header">
+    <h1>
+        Generate Barcode
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="@Url.Action("New", "Library_Setup")">Library</a></li>
+        <li class="active">Generate Barcode</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-success">
+        <div class="box-body">
+            @using (Html.BeginForm("GenerateBarcode_PrintPage", "Library_GenerateBarcode", FormMethod.Post, htmlAttributes:new { target = "_blank"}))
+            {
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.Label("From Acc No")<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBox("fromaccno", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessage("fromaccno", null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.Label("To Acc No")<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBox("toaccno", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessage("toaccno", null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label>&nbsp;</label> <br />
+                            <input type="submit" class="btn btn-success btn-sm" value="Generate Barcode" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

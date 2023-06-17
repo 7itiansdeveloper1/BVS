@@ -1,0 +1,36 @@
+﻿@model List<ISas.Entities.Academic.Academic_DirectoryMasterModels>
+<table id="example1" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%;">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name/Department</th>
+            <th>Contact</th>
+            <th>Email-Id</th>
+            <th>Is Active</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int count = 1;
+            for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(r => count)</td>
+                    <td>@Html.DisplayFor(r => Model[i].Name)</td>
+                    <td>@Html.DisplayFor(r => Model[i].Contact)</td>
+                    <td>@Html.DisplayFor(r => Model[i].EmailId)</td>
+                    <td>@Html.DisplayFor(r => Model[i].IsActive)</td>
+                    <td>
+                        <a href="#" title="Edit Directory" class="fa fa-edit btnDefaultColor" onclick="EditDirectory('@Model[i].DirectoryId')"></a>
+                        <a href="#" title="Delete Directory" class="fa fa-trash btnDefaultColor" onclick="DeleteDirectoryConfirm('@Model[i].DirectoryId')"></a>
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $('#example1').DataTable({});
+</script>

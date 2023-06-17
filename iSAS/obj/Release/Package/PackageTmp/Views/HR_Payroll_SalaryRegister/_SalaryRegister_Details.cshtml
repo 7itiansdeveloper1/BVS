@@ -1,0 +1,182 @@
+﻿@model ISas.Entities.HR_Payroll_Entities.HR_Payroll_SalaryRegisterModels
+
+@{
+    string reportName = "Salary Register";
+}
+
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+</div>
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h5 class="box-title pull-right">
+            <label class="label label-info"> <span>Count : <span class="text-primary">@Html.DisplayFor(r => Model.PayBandEmpList.Count)</span> </span></label>
+
+            <input type="button" value="Calculate Selected" onclick="DoAjaxPostAndMore(this)" class="btn btn-success btn-xs" />
+        </h5>
+    </div>
+    <div class="box-body">
+        <table class="table table-bordered table-striped  dt-responsive nowrap">
+            <thead>
+                <tr>
+                    <th>@Html.CheckBox("chkBoxSelectAllEmp", false, htmlAttributes: new { onchange = "Fun_CheckToSelectAllEmp()" }) </th>
+                    <th>Staff Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.PayBandEmpList.Count > 0)
+                {
+                    for (int i = 0; i < Model.PayBandEmpList.Count; i++)
+                    {
+                        <tr>
+                            <td>@Html.CheckBoxFor(r => Model.PayBandEmpList[i].Selected, htmlAttributes: new { @class = "chkBoxSelectEmp" }) </td>
+                            <td>
+                                @Html.DisplayFor(r => Model.PayBandEmpList[i].StaffName)
+                                @Html.HiddenFor(r => Model.PayBandEmpList[i].StaffId)
+                                @Html.HiddenFor(r => Model.PayBandEmpList[i].StaffName)
+                            </td>
+                            <td>
+                                @if (Model.PayBandEmpList[i].IsSalaryCalculate)
+                                {
+                                    <button disabled type="button" class="btn btn-success btn-xs" title="Calculate Salary">
+                                        <i class="fa fa-calculator"></i>
+                                    </button>
+                                    <button onclick="$('.chkBoxSelectEmp').prop('checked', false);$('#PayBandEmpList_'+@i+'__Selected').prop('checked', true);DoAjaxPostAndMore(this);" type="button" class="btn btn-warning btn-xs" title="Re-Calculate Salary">
+                                        Re-<i class="fa fa-calculator"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button onclick="$('.chkBoxSelectEmp').prop('checked', false);$('#PayBandEmpList_'+@i+'__Selected').prop('checked', true);DoAjaxPostAndMore(this);" type="button" class="btn btn-success btn-xs" title="Calculate Salary">
+                                        <i class="fa fa-calculator"></i>
+                                    </button>
+                                    <button disabled type="button" class="btn btn-warning btn-xs" title="Re-Calculate Salary">
+                                        Re-<i class="fa fa-calculator"></i>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h5 class="box-title">Salary Register</h5>
+        @*<h5 class="box-title pull-right">
+            <button title="Print" type="button" class="btn btn-success btn-xs" onclick="PrintSalaryRegister()">
+                <i class="fa fa-print"></i>
+            </button>
+        </h5>*@
+    </div>
+    <div class="box-body">
+        <div id="SalaryRegisterDetailsMainDiv">
+            <table id="example1" class="table table-responsive table-bordered table-condensed nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>S. No</th>
+                        <th>Staff Name</th>
+                        @for (int i = 0; i < Model.HeadNameList.Count; i++)
+                        {
+                            <th>
+                                @Html.HiddenFor(r => Model.HeadNameList[i])
+                                @Html.DisplayFor(r => Model.HeadNameList[i])
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.SalaryRegisterList.Count > 0)
+                    {
+                        int count = 1;
+                        for (int i = 0; i < Model.SalaryRegisterList.Count; i++)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(r => count)</td>
+                                <td>
+                                    @Html.DisplayFor(r => Model.SalaryRegisterList[i].StaffName)
+                                    @Html.HiddenFor(r => Model.SalaryRegisterList[i].StaffID)
+                                    @Html.HiddenFor(r => Model.SalaryRegisterList[i].StaffName)
+                                </td>
+                                @for (int j = 0; j < Model.SalaryRegisterList[i].ValuesList.Count; j++)
+                                {
+                                    <td>
+                                        @Html.DisplayFor(r => Model.SalaryRegisterList[i].ValuesList[j])
+                                    </td>
+                                }
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>

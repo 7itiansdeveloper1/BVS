@@ -1,0 +1,110 @@
+﻿@model  ISas.Entities.StudentAttendanceDetailsModel
+@{
+    ViewBag.Title = "_StudentAttendanceSummary";
+    
+    int currentMonth = DateTime.Now.Month;
+    int currentYear = DateTime.Now.Year;
+
+    if (!string.IsNullOrEmpty(Model.AttenDate))
+    {
+        List<int> dateDetails = Model.AttenDate.Split('/').Select(Int32.Parse).ToList();
+        if (dateDetails.Count == 3)
+        {
+            currentMonth = dateDetails[1];
+            currentYear = dateDetails[2];
+        }
+    }
+}
+
+
+<section class="content-header">
+    <h1>
+        Monthly Attendance Summary
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Studence Attendance</li>
+        <li><a href="@Url.Action("AttendanceRegister_New", "AttendanceRegister")">Attendance Register</a> </li>
+        <li class="active">Monthly Attendance Summary</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-widget" id="attnDisplayDiv">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2 class="text-primary"><strong>@Html.DisplayFor(r => Model.Student) <small>Class :  @Html.DisplayFor(r => Model.ClassName), Roll No : @Html.DisplayFor(r => Model.RollNo) </small> </strong> </h2>
+                </div>
+                <div class="col-md-4 no-print">
+                    <a onclick="window.print()" class="btn btn-default pull-right"><i class="fa fa-print"></i> Print</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-condensed table-bordered">
+                        <tr>
+                            <th colspan="2" class="text-primary text-center" style="font-size:large;">Attendance Statistics</th>
+                        </tr>
+                        <tr>
+                            <th>Current Attendance</th>
+                            <th>@Html.DisplayFor(r => Model.CurrentMonthAttendance) / @Html.DisplayFor(r => Model.TotalNoofOpenDay) </th>
+                        </tr>
+                        <tr>
+                            <th>Previous Attendance</th>
+                            <th>@Html.DisplayFor(r => Model.PrviousMonthAttendance) / @Html.DisplayFor(r => Model.PreviousMonthOpenDay) </th>
+                        </tr>
+                        <tr>
+                            <th>Total Attendance</th>
+                            <th>@Html.DisplayFor(r => Model.TotalAttendance) / @Html.DisplayFor(r => Model.TotalNoofOpenDay) </th>
+                        </tr>
+                        <tr>
+                            <th>Percentage (%)</th>
+                            <th>@Html.DisplayFor(r => Model.AttendancePercentage)</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-md-6" style="border-left:1px solid #808080;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-widget">
+                                @{ Html.RenderAction("_StudentAttenMonthCalenderPartial_ForPrint", "Dashboard", new { month = currentMonth, year = currentYear, userId = Model.ERPNo });}
+                                <div class="box-footer text-center">
+                                    <ul class="products-list product-list-in-box">
+                                        <li class="item">
+                                            <table class="table-condensed table-responsive table-bordered" align="center" style="width:100%;">
+                                                <tr>
+                                                    <td class="WO">&nbsp;</td>
+                                                    <td class="text-left">WO</td>
+                                                    <td class="HD" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Half Day</td>
+                                                    <td class="P" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Present</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="HL" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Holiday</td>
+                                                    <td class="A" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Absent</td>
+                                                    <td class="L" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Leave</td>
+                                                </tr>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+

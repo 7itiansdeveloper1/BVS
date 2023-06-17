@@ -1,0 +1,163 @@
+﻿@model ISas.Entities.Exam_MarksVerificationModels
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>
+        Marks  Verification
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>CCE Exam Module</li>
+        <li class="active">Marks  Verification</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.ExamId)</label>
+                        @Html.DropDownListFor(m => m.ExamId, Model.ExamList, "-- Select Exam --", new { @class = "form-control select2", style = "width:100%;", onchange = "getClassList()" })
+                        @Html.ValidationMessageFor(r => r.ExamId, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.ClassId)</label>
+                        @Html.DropDownListFor(m => m.ClassId, new SelectList(string.Empty, "", ""), new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionList()" })
+                        @Html.ValidationMessageFor(r => r.ClassId, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.SectionId)</label>
+                        @Html.DropDownListFor(m => m.SectionId, new SelectList(string.Empty, "", ""), new { @class = "form-control select2", style = "width:100%;" })
+                        @Html.ValidationMessageFor(r => r.SectionId, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Subject Type</label>
+                        @Html.DropDownListFor(m => m.Category, new SelectList(Model.SubjectList, "Value", "Text"), "---Select Subject Type ---", new { @class = "form-control select2", style = "width:100%;" , onchange = "getStudentWiseMarksList()" })
+                        @Html.ValidationMessageFor(r => r.Category, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divMarkList">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    function getClassList() {
+        $.ajax({
+            url: '../Exam_MarksVerification/GetDropDownListByMode',
+            data: { ExamId: $('#ExamId').val(), Mode : 'GetClasses' },
+            type: 'get',
+            success: function (data) {
+                var $ddlClass = $('#ClassId');
+                $ddlClass.empty();
+                $('#SectionId').empty();
+                $ddlClass.append($("<option />").text("--- Select Class ---"));
+                $.each(data, function () {
+                    $ddlClass.append($("<option />").val(this.Value).text(this.Text));
+                });
+            },
+        })
+    }
+
+    function getSectionList() {
+        $.ajax({
+            url: '../Exam_MarksVerification/GetDropDownListByMode',
+            data: { ClassId: $('#ClassId').val(), ExamId: $('#ExamId').val(), Mode: 'GetSections' },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SectionId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Section ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.Value).text(this.Text));
+                })
+            })
+        });
+    }
+
+    //function getSubjectList() {
+    //    $.ajax({
+    //        url: '../MarksEntryStudentWise/BindSubjectddl',
+    //        beforeSend: function () {
+    //            spinnerShow();
+    //        },
+    //        data: { classId: $('#ClassId').val(), sectionId: $('#SectionId').val(), examId: $('#ExamId').val() },
+    //        type: 'get',
+    //        error: function (xhr, status, error) {
+    //            OpenMessegeModal($('#ErrorMsgOnJasonFailed').val());
+    //        },
+    //        success: (function (data) {
+    //            var $ddlSubject = $('#SubjectId');
+    //            $ddlSubject.empty();
+    //            $('#ErpNo_Id').empty();
+    //            $ddlSubject.append($("<option />").text("--- Select Subject ---"));
+    //            $.each(data.subejctList, function () {
+    //                $ddlSubject.append($("<option />").val(this.Value).text(this.Text));
+    //            })
+
+
+    //            var $ddlStudent = $('#ErpNo_Id');
+    //            $ddlStudent.empty();
+    //            $ddlStudent.append($("<option />").text("--- Select Student ---"));
+    //            $.each(data.studentList, function () {
+    //                $ddlStudent.append($("<option />").val(this.Value).text(this.Text));
+    //            })
+    //        }),
+    //        complete: function () {
+    //            spinnerHide();
+    //        }
+    //    })
+    //}
+
+
+    function getStudentWiseMarksList() {
+        $.ajax({
+            url: '../Exam_MarksVerification/_studentWiseMarksDetails',
+            beforeSend: function () {
+                spinnerShow();
+            },
+            data: {
+                ClassId: $('#ClassId').val(), SectionId: $('#SectionId').val(), ExamId: $('#ExamId').val(),
+                Category: $('#Category').val(), Mode: 'GetExamSummary',
+            },
+            type: 'get',
+            success: (function (data) {
+                $('#divMarkList').empty();
+                $('#divMarkList').html(data);
+            }),
+            complete: function () {
+                spinnerHide();
+            }
+        })
+    }
+</script>

@@ -1,0 +1,162 @@
+﻿@model ISas.Entities.Exam_Entities.Exam_ClassSubjectSetup
+
+
+<section class="content-header">
+    <h1>
+        Class Subject Setup
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Examination</li>
+        <li class="active">Subject Setup</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Exam_ClassSubjectSetup_CRUD", "Exam_ClassSubjectSetup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.Hidden("hddnRowLenght")
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.classSectionId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.classSectionId, new SelectList(Model.classList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "ClassSubjectList()" })
+                                @Html.ValidationMessageFor(r => Model.classSectionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.subjectId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.subjectId, new SelectList(Model.subjectList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;",onchange="getAssessmentList();" })
+                                @Html.ValidationMessageFor(r => Model.subjectId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.assessmentsIds)</label>
+                            <div class="select">
+                                @Html.ListBoxFor(r => Model.assessmentsIds, new SelectList(string.Empty, "", ""), htmlAttributes: new { @class = "form-control multiSelectWithSelectOptGrp", multiple = true })
+                                @Html.ValidationMessageFor(r => Model.assessmentsIds, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+    <div class="" id="bankClassSubjectDiv">
+    </div>
+</section>
+
+<script>
+    function ClassSubjectList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Exam_ClassSubjectSetup/LandingPage",
+            data: { classsectionid: $('#classSectionId').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#bankClassSubjectDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function getAssessmentList1() {
+        $.ajax({
+            url: '../Exam_ClassSubjectSetup/GetAssessmentList',
+            data: { classsectionid: $('#classSectionId').val() },
+            type: 'get',
+            success: (function (data) {
+                //alert(data);
+                var $ddlAssessment = $('#assessmentsIds');
+                $ddlAssessment.empty();
+                $ddlAssessment.append($("<option/>").val(null).text("---Select Assessment---"));
+                $.each(data, function () {
+                    
+                    $ddlAssessment.append($("<option />").val(this.AssessmentId).text(this.AssessmentName));
+                });
+            })
+        })
+    }
+    function getAssessmentList(){
+        $.ajax({
+            url: '../Exam_ClassSubjectSetup/GetAssessmentList',
+            type: 'GET',
+            data: {
+                classsectionid: $('#classSectionId').val(),
+                subjectid: $('#subjectId').val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#assessmentsIds').empty();
+                $('#assessmentsIds').val(null);
+                $('#assessmentsIds').prop('disabled', false);
+                var dataObj = data;
+                var optionHtml = "";
+                var selecetdOption = [];
+                for (var i = 0; i < dataObj.length; i++) {
+
+                    optionHtml += '<option value="' + dataObj[i].Value + '">' + dataObj[i].Text + '</option>';
+                    if (dataObj[i].Selected) {
+                        selecetdOption.push(dataObj[i].Value)
+                    }
+                }
+                
+                $("#assessmentsIds").html(optionHtml);
+                $('#assessmentsIds').val(selecetdOption);
+                $("#assessmentsIds").multiselect("rebuild");
+            }
+        });
+    }
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    ClassSubjectList();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

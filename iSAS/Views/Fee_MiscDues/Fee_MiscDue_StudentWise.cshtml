@@ -1,0 +1,163 @@
+﻿@model ISas.Entities.FeesEntities.Fee_MiscDueModel
+
+
+@using (Html.BeginForm("Fee_MiscDues_StudentWise_CRUD", "Fee_MiscDues", FormMethod.Post, htmlAttributes: new { }))
+{
+    @Html.HiddenFor(r => Model.ERPNos)
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            @{Html.RenderAction("_StudentSearchPartial", "Common"); }
+        </div>
+        <div class="col-md-3" style="display:none">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <label for="">@Html.LabelFor(r => r.HeadId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(r => r.HeadId, Model.HeadList,
+                                "--Select Head--"   , htmlAttributes: new { @class = "form-control select2", style ="width:100%;", onchange = "getStudentDues()"})
+                                @Html.ValidationMessageFor(r => r.HeadId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <label for="">@Html.LabelFor(r => r.Amount)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(r => r.Amount, htmlAttributes: new { type = "number", @class = "form-control", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => r.Amount, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <br />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="button" class="btn btn-success" value="Apply All" onclick="dueAmountApplyAll()" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="studentDuesDetailsDiv"></div>
+        </div>
+    </div>
+
+    <div class="row pull-right">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <input type="button" onclick="CommonAjaxPost(this);" value="SAVE ALL" class="btn btn-success" />
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $("input[type='text']").on("click", function () {
+            $(this).select();
+        });
+        $('#rw_space').css('display', 'none');
+        $('#rwFee_Mobile').css('display', 'none');
+
+        if ('@ViewBag.erpNo' != null && '@ViewBag.erpNo' != "") {
+            $('#ERPNo').val('@ViewBag.erpNo');
+            checkToCallFunction($('#ERPNo').val(), '');
+            getStudentDues();
+        }
+        //CheckToDisableFeild();
+    });
+
+    function dueAmountApplyAll() {
+        if ($('#Amount').val() > 0) {
+            $('.clsDueAmount').val($('#Amount').val());
+        } else {
+            $('.clsDueAmount').val(0);
+        }
+    }
+
+    function EmptyValForNewStudent() {
+        $('#Amount').val(0);
+        $('#HeadId').val(null);
+        $('#studentDuesDetailsDiv').html(null);
+    }
+
+    function onStudentChangeFunction() {
+        $('#ERPNos').val($('#ERPNo').val());
+        //getHeadList();
+    }
+
+    //function getHeadList() {
+    //    var headHtml = '<option value="">--Select Head--</option>';
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "../Fee_MiscDues/getStudentDueHeadList",
+    //        data: { erpNo: $('#ERPNo').val() },
+    //        success: function (result) {
+    //            for (var i = 0; i < result.length; i++) {
+    //                headHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+    //            }
+    //            $('#HeadId').html(headHtml);
+    //        },
+    //    });
+    //}
+
+    function getStudentDues() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_MiscDues/_studentHeadWiseDuesDetails",
+            data: { erpNo: $('#ERPNo').val(), headId: $('#HeadId').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#studentDuesDetailsDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+     function removeDueConfirmation(selectedRow) {
+         AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Class?", MyYesFunction, MyNoFunction, selectedRow);
+    }
+
+    function MyYesFunction(selectedRow) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_MiscDues/Fee_MiscDues_StudentWise_Cancel",
+            data: { erpNo: $('#ERPNo').val(), headId: $('#HeadId').val(), dueDate: $('#StudentDuesList_' + selectedRow + '__DueDate').val(), invRefNo: $('#StudentDuesList_' + selectedRow + '__TransRefNo').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                getStudentDues();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

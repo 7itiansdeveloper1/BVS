@@ -1,0 +1,116 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.FeesEntities.Fee_FeeStructureMasterModels>
+
+<!-- /.box -->
+<div class="box box-widget">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Fee Structure List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Structure</th>
+                    <th>No of Installment</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].StructName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].Installment)</td>
+                            <td class="text-center" style="min-width:120px;max-width:120px;">
+                                @if (Model[i].IsDeletetable)
+                                {
+                                    <a href="#" onclick="DeleteStrectureConfirm('@Model[i].StructId')" title="Delete Strecture" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <a href="#" title="Delete Strecture" class="fa fa-trash btnDefaultColorFaded"></a>
+                                }
+
+                                @Html.EncodedActionLink(" ", "Updation", "Fee_FeeStructureMaster", new { StructId = Model[i].StructId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Structure" })
+
+
+                                @if (Model[i].InstallmentSetup)
+                                {
+                                    @Html.ActionLink(" ", "New", "Fee_InstallmentSetup", new { StructId = Model[i].StructId, StrectureName = Model[i].StructName }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Installment Setup" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(" ", "New", "Fee_InstallmentSetup", new { }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColorFaded", title = "Installment Setup" })
+                                }
+
+                                @if (Model[i].DueSetup)
+                                {
+                                    @Html.ActionLink(" ", "New", "Fee_DueSetup", new { StructId = Model[i].StructId, StructName = Model[i].StructName }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Due Setup" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(" ", "New", "Fee_DueSetup", new { }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColorFaded", title = "Installment Setup" })
+                                }
+
+                                @if (Model[i].FineSetup)
+                                {
+                                    @Html.EncodedActionLink(" ", "New", "Fee_FinePolicy", new { StructId = Model[i].StructId, StructName = Model[i].StructName }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Fine Setup"})
+                                }
+                                else
+                                {
+                                    @Html.EncodedActionLink(" ", "New", "Fee_FinePolicy", new { }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColorFaded", title = "Installment Setup" })
+                                }
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteStrectureConfirm(StructId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this structure?", MyYesFunction, MyNoFunction, StructId);
+    }
+
+    function MyYesFunction(StructId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_FeeStructureMaster/Fee_FeeStructureMaster_Delete",
+            data: { StructId: StructId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color );
+                setTimeout(function () { window.location = "../Fee_FeeStructureMaster/New"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

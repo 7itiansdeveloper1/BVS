@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{524FB45E-69FD-46C3-AB39-F8036A94AA59}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ISas.Entities</RootNamespace>
+    <AssemblyName>iSAS.Entities</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Academic\Academic_BankMasterModels.cs" />
+    <Compile Include="Academic\Academic_ClassSetupModels.cs" />
+    <Compile Include="Academic\Academic_DepartmentMasterModels.cs" />
+    <Compile Include="Academic\Academic_DesignationMasterModels.cs" />
+    <Compile Include="Academic\Academic_DirectoryMasterModels.cs" />
+    <Compile Include="Academic\Academic_DocumentMappingModel.cs" />
+    <Compile Include="Academic\Academic_DocumentMasterModel.cs" />
+    <Compile Include="Academic\Academic_DynamicReportWizardModels.cs" />
+    <Compile Include="Academic\Academic_ERPBillModel.cs" />
+    <Compile Include="Academic\Academic_FOD.cs" />
+    <Compile Include="Academic\Academic_HolidayAllocationModels.cs" />
+    <Compile Include="Academic\Academic_HolidayDeclarationModels.cs" />
+    <Compile Include="Academic\Academic_HolidayMasterModels.cs" />
+    <Compile Include="Academic\Academic_HomeWorkMasterModels.cs" />
+    <Compile Include="Academic\Academic_HouseMasterModels.cs" />
+    <Compile Include="Academic\Academic_ProfessionMasterModels.cs" />
+    <Compile Include="Academic\Academic_PTMOpendDayEntities.cs" />
+    <Compile Include="Academic\Academic_QualificationMasterModels.cs" />
+    <Compile Include="Academic\Academic_SchoolSetupModels.cs" />
+    <Compile Include="Academic\Academic_SectionMasterModels.cs" />
+    <Compile Include="Academic\Academic_SectionSetupModels.cs" />
+    <Compile Include="Academic\Academic_SessionMasterModels.cs" />
+    <Compile Include="Academic\Academic_SyllabusMasterModels.cs" />
+    <Compile Include="Academic\Academic_WingSetupModels.cs" />
+    <Compile Include="CommonEntities\AlertTransactionEntities.cs" />
+    <Compile Include="CommonEntities\CommonEntities.cs" />
+    <Compile Include="CommonEntities\Common_AttachemntRefrence.cs" />
+    <Compile Include="CommonEntities\CompanyInfoEntities.cs" />
+    <Compile Include="CommonEntities\ReportHeaderEntities.cs" />
+    <Compile Include="DashboardEntities\CertificateModels.cs" />
+    <Compile Include="DashboardEntities\DashBoard_StaffStataticsModels.cs" />
+    <Compile Include="DashboardEntities\OnlineClassesModel.cs" />
+    <Compile Include="DashboardEntities\OnlineClass_Staff.cs" />
+    <Compile Include="DashboardEntities\StudentFeeModels.cs" />
+    <Compile Include="DashboardEntities\StudentHomeworkModels.cs" />
+    <Compile Include="DashboardEntities\ToDo_TaskEntities.cs" />
+    <Compile Include="Exam Entities\ExamReportcardTemplateModels.cs" />
+    <Compile Include="Exam Entities\Exam_AnswersheetModels.cs" />
+    <Compile Include="Exam Entities\Exam_ClassSubjectSetup.cs" />
+    <Compile Include="Exam Entities\Exam_DownloadResultModels.cs" />
+    <Compile Include="Exam Entities\Exam_LockingModels.cs" />
+    <Compile Include="Exam Entities\Exam_OnlineAssessmentModels.cs" />
+    <Compile Include="Exam Entities\Exam_QuestionMasterModels.cs" />
+    <Compile Include="Exam Entities\Exam_QuestionPaperModels.cs" />
+    <Compile Include="Exam Entities\Exam_ReportModels.cs" />
+    <Compile Include="Exam Entities\Exam_ResultView.cs" />
+    <Compile Include="Exam Entities\Exam_TargetModels.cs" />
+    <Compile Include="Exam Entities\Exam_TemplateSetupModels.cs" />
+    <Compile Include="Exam Entities\Exam_UploadAnswersheet.cs" />
+    <Compile Include="Examination Entities\Examination_AssessmentSetupModels.cs" />
+    <Compile Include="Examination Entities\Examination_ChildSubjectSetupModels.cs" />
+    <Compile Include="Examination Entities\Examination_MarksEntryModels.cs" />
+    <Compile Include="Examination Entities\Examination_RemarksCenterModels.cs" />
+    <Compile Include="Examination Entities\Examination_ProfileEntryModels.cs" />
+    <Compile Include="Examination Entities\Examination_RemarksEntryModels.cs" />
+    <Compile Include="Examination Entities\Examination_ReportCardModels.cs" />
+    <Compile Include="Examination Entities\Examination_SubjectMasterModels.cs" />
+    <Compile Include="FeesEntities\ExcelUploadModel.cs" />
+    <Compile Include="FeesEntities\Fee_ExcelUploadModel.cs" />
+    <Compile Include="FeesEntities\Fee_FeeBillReportModels.cs" />
+    <Compile Include="FeesEntities\Fee_InstallmentSetupModels.cs" />
+    <Compile Include="FeesEntities\Fee_MiscDueModel.cs" />
+    <Compile Include="FeesEntities\Fee_OnlineSettlementEntities.cs" />
+    <Compile Include="FeesEntities\Fee_OnlineTransactionModel.cs" />
+    <Compile Include="FeesEntities\Fee_PaymentGatewayMasterModel.cs" />
+    <Compile Include="FeesEntities\Fee_ReportHtmlModel.cs" />
+    <Compile Include="FeesEntities\Fee_StudentLedgerModel.cs" />
+    <Compile Include="FeesEntities\Fee_TranModels.cs" />
+    <Compile Include="FeesEntities\onlinePayment.cs" />
+    <Compile Include="FeesEntities\paytmEntities.cs" />
+    <Compile Include="LibraryEntities\eLibraryModels.cs" />
+    <Compile Include="LibraryEntities\Library_FineSetupModels.cs" />
+    <Compile Include="LibraryEntities\Library_ReportModel.cs" />
+    <Compile Include="StaffEntities\Staff_AttendanceRegisterModels.cs" />
+    <Compile Include="StaffEntities\Staff_DocumentUploadModels.cs" />
+    <Compile Include="Student Entities\AttendanceRegister.cs" />
+    <Compile Include="DashboardEntities\Common_NECN_Models.cs" />
+    <Compile Include="DashboardEntities\DashboardModels.cs" />
+    <Compile Include="DashboardEntities\DashBoard_ParentRequestMasterModel.cs" />
+    <Compile Include="DashboardEntities\DashBoard_StudentStataticsModels.cs" />
+    <Compile Include="DashboardEntities\StudentProfile.cs" />
+    <Compile Include="Exam Entities\Exam_MarksVerificationModels.cs" />
+    <Compile Include="Exam Entities\Exam_Remark.cs" />
+    <Compile Include="Exam Entities\Exam_Achievement.cs" />
+    <Compile Include="Exam Entities\Exam_StudentProfileModels.cs" />
+    <Compile Include="FeesEntities\Fee_ConcessionModels.cs" />
+    <Compile Include="FeesEntities\Fee_ConcessionPolicyModels.cs" />
+    <Compile Include="FeesEntities\Fee_DefaulterDetailsModels.cs" />
+    <Compile Include="FeesEntities\Fee_DueSetupModels.cs" />
+    <Compile Include="FeesEntities\Fee_FeeHeadMasterModels.cs" />
+    <Compile Include="FeesEntities\Fee_FeeStructureMasterModels.cs" />
+    <Compile Include="FeesEntities\Fee_FinePolicyModels.cs" />
+    <Compile Include="FeesEntities\Fee_InvoiceCreationModels.cs" />
+    <Compile Include="FeesEntities\Fee_ReceiptCancellationModels.cs" />
+    <Compile Include="FeesEntities\Fee_ReceiptHeaderMasterModels.cs" />
+    <Compile Include="FeesEntities\Fee_ReportModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_AttendanceProcessModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_CTC_SetupModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_FinalCTSModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_LeaveMasterModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_LeaveRegisterModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_PayBandMasterModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_SalaryHeadModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_SalaryRegisterModels.cs" />
+    <Compile Include="HR_Payroll Entities\HR_Payroll_StaffEnrollmentModels.cs" />
+    <Compile Include="LibraryEntities\Library_AuthorMasterModels.cs" />
+    <Compile Include="LibraryEntities\Library_BookMasterModels.cs" />
+    <Compile Include="LibraryEntities\Library_BookTitleMasterModels.cs" />
+    <Compile Include="LibraryEntities\Library_PublisherMasterModels.cs" />
+    <Compile Include="LibraryEntities\Library_SetupModels.cs" />
+    <Compile Include="LibraryEntities\Library_SubjectMasterModels.cs" />
+    <Compile Include="LibraryEntities\Library_SupplierMasterModels.cs" />
+    <Compile Include="LibraryEntities\Library_TransactionModels.cs" />
+    <Compile Include="Exam Entities\MarksEntryStudentWiseModel.cs" />
+    <Compile Include="RegistrationEntities\School_AdmissionCategoryMaster.cs" />
+    <Compile Include="RegistrationEntities\School_AreaMaster.cs" />
+    <Compile Include="RegistrationEntities\School_CityMaster.cs" />
+    <Compile Include="RegistrationEntities\School_ClassMaster.cs" />
+    <Compile Include="RegistrationEntities\School_CountryMaster.cs" />
+    <Compile Include="RegistrationEntities\School_DocumentMaster.cs" />
+    <Compile Include="RegistrationEntities\School_StateMaster.cs" />
+    <Compile Include="RegistrationEntities\Student_AdmissionMaster.cs" />
+    <Compile Include="SMSManagement\SMSTempleteModel.cs" />
+    <Compile Include="SMSManagement\SMS_ManagementModels.cs" />
+    <Compile Include="SMSManagement\SMS_ReportModels.cs" />
+    <Compile Include="StaffEntities\Staff_AttendanceReportsModels.cs" />
+    <Compile Include="StaffEntities\Staff_ReportsModels.cs" />
+    <Compile Include="StaffEntities\Staff_StaffDetailMasterModel.cs" />
+    <Compile Include="Student Entities\MyClassModels.cs" />
+    <Compile Include="Student Entities\SiblingAllotmentModels.cs" />
+    <Compile Include="Student Entities\Student_CertificateModels.cs" />
+    <Compile Include="Student Entities\Student_IdentityCardModdel.cs" />
+    <Compile Include="Student Entities\Student_ImagesModels.cs" />
+    <Compile Include="Student Entities\Student_AttendanceReportModels.cs" />
+    <Compile Include="Student Entities\Student_NSOModel.cs" />
+    <Compile Include="Student Entities\Student_PhotoUpload.cs" />
+    <Compile Include="Student Entities\Student_OptioanlSubject.cs" />
+    <Compile Include="Student Entities\StudentUpdation.cs" />
+    <Compile Include="Exam Entities\Exam.cs" />
+    <Compile Include="Menu.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Student Entities\PTMAttendance.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="Student Entities\Student.cs" />
+    <Compile Include="Student Entities\StudentAttendance.cs" />
+    <Compile Include="Student Entities\StudentClass.cs" />
+    <Compile Include="Student Entities\StudentSection.cs" />
+    <Compile Include="RegistrationEntities\Student_RegistrationMaster.cs" />
+    <Compile Include="Student Entities\Student_TC.cs" />
+    <Compile Include="Test\TestModel.cs" />
+    <Compile Include="TimeTable Entities\TimeTable_AdjustmentModels.cs" />
+    <Compile Include="TimeTable Entities\TimeTable_PeriodMatrixModels.cs" />
+    <Compile Include="TimeTable Entities\TimeTable_PeriodTimingSetupModels.cs" />
+    <Compile Include="TimeTable Entities\TimeTable_SetupModels.cs" />
+    <Compile Include="TimeTable Entities\TimeTable_StaffWorkLoadSetupModels.cs" />
+    <Compile Include="TimeTable Entities\TimeTable_SubjectMasterModel.cs" />
+    <Compile Include="TransportEntities\AvailTransportModel.cs" />
+    <Compile Include="TransportEntities\Transport_ReportModels.cs" />
+    <Compile Include="TransportEntities\Transport_RouteMasterModels.cs" />
+    <Compile Include="TransportEntities\Transport_StopSetupModels.cs" />
+    <Compile Include="TransportEntities\Transport_VehicleSetupModels.cs" />
+    <Compile Include="UserEntities\StudentRoleModels.cs" />
+    <Compile Include="UserEntities\UserCreationModels.cs" />
+    <Compile Include="UserEntities\UserPermissionModels.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

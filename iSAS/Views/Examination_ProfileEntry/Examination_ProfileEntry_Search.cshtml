@@ -1,0 +1,186 @@
+﻿@model ISas.Entities.Examination_Entities.Examination_ProfileEntryModels
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>
+        Profile Entry
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Examination</li>
+        <li class="active">Profile Entry</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("Examination_ProfileEntry_CRUD", "Examination_ProfileEntry", FormMethod.Post))
+    {
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Term</label>
+                            @Html.DropDownListFor(m => m.ExamId, Model.ExamList, "-- Select Exam --", new { @class = "form-control select2", style = "width:100%;", onchange = "getClassList()" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Class</label>
+                            @Html.DropDownListFor(m => m.ClassId, new SelectList(string.Empty, "", ""), "--- Select Class ---", new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionList()" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Section</label>
+                            @Html.DropDownListFor(m => m.SectionId, new SelectList(string.Empty, "", ""), "--- Select Section ---", new { @class = "form-control select2", style = "width:100%;", onchange = "getStudentList()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Max Stud. Attn.</label>
+                            @Html.TextBox("MaxStudAttn", null, new { @class = "form-control", onkeypress = "return NumericOnly(event)", maxlength = "3" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Max PTM. Attn.</label>
+                            @Html.TextBox("MaxPTMAttn", null, new { @class = "form-control", onkeypress = "return NumericOnly(event)", maxlength = "2" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <label>&nbsp;</label><br />
+                        <input type="button" value="Apply All" class="btn btn-primary" onclick="applyAllMaxAttn()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-widget">
+            <div class="box-header with-border">
+                <h5 class="box-title">Student Details</h5>
+                <div class="pull-right">
+                    <button class="btn btn-success" id="savebutton" type="button" onclick="validateAndSubmitForm(this)">SAVE</button>
+                    <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div id="divMarkList">
+                    @Html.Partial("_ProfileEntry_StudentDetails")
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="validateAndSubmitForm(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function validateAndSubmitForm(evt) {
+        var isFormValid = true;
+        $('#example1 > tbody > tr').each(function (i) {
+            var studAttn = parseInt($('#StudentDetails_' + i + '__Attendance').val());
+            var maxStudAttn = parseInt($('#StudentDetails_' + i + '__Attendance1').val());
+
+            var ptmdAttn = parseInt($('#StudentDetails_' + i + '__PTMAttendance').val());
+            var maxPTMAttn = parseInt($('#StudentDetails_' + i + '__PTMAttendance1').val());
+
+            if (parseInt(studAttn) > 0 && parseInt(maxStudAttn) > 0) {
+                if (studAttn > maxStudAttn) {
+                    isFormValid = false;
+                    $('#StudentDetails_' + i + '__Attendance').css('border-color', 'red');
+                } else {
+                    $('#StudentDetails_' + i + '__Attendance').css('border-color', '');
+                }
+            }
+
+            if (parseInt(ptmdAttn) > 0 && parseInt(maxPTMAttn) > 0) {
+                if (ptmdAttn > maxPTMAttn) {
+                    isFormValid = false;
+                    $('#StudentDetails_' + i + '__PTMAttendance').css('border-color', 'red');
+                } else {
+                    $('#StudentDetails_' + i + '__PTMAttendance').css('border-color', '');
+                }
+            }
+        });
+
+        if (isFormValid) {
+            CommonAjaxPost(evt)
+        } else {
+            OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+        }
+    }
+
+    function applyAllMaxAttn() {
+        $('.maxAttn').val($('#MaxStudAttn').val());
+        $('.maxPTMAttn').val($('#MaxPTMAttn').val());
+    }
+
+
+    function getClassList() {
+        $.ajax({
+            url: '../Examination_ProfileEntry/GetProfileEntryDropDowns',
+            data: { Mode: 'GetClassList', ExamId: $('#ExamId').val()},
+            type: 'get',
+            success: function (data) {
+                var $ddlClass = $('#ClassId');
+                $ddlClass.empty();
+                $('#SectionId').empty();
+                $('#SectionId').append($("<option />").text("--- Select Section ---"));
+
+                $ddlClass.append($("<option />").text("--- Select Class ---"));
+                $.each(data, function () {
+                    $ddlClass.append($("<option />").val(this.Value).text(this.Text));
+                });
+            },
+        })
+    }
+
+    function getSectionList() {
+        $.ajax({
+            url: '../Examination_ProfileEntry/GetProfileEntryDropDowns',
+            data: { ClassId: $('#ClassId').val(), Mode: 'GetSectionList', ExamId: $('#ExamId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SectionId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Section ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.Value).text(this.Text));
+                })
+            })
+        });
+    }
+
+    function getStudentList() {
+        $.ajax({
+            url: '../Examination_ProfileEntry/_ProfileEntry_StudentDetails',
+            data: {
+                ClassId: $('#ClassId').val(), SectionId: $('#SectionId').val(), ExamId: $('#ExamId').val(),
+            },
+            type: 'get',
+            success: (function (data) {
+                $('#divMarkList').empty();
+                $('#divMarkList').html(data);
+            })
+        })
+    }
+</script>

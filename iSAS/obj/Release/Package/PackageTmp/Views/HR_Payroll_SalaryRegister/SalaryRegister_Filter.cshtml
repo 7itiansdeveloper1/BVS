@@ -1,0 +1,155 @@
+﻿@model ISas.Entities.HR_Payroll_Entities.HR_Payroll_SalaryRegisterModels
+<section class="content-header">
+    <h1>
+        Salary Register
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>HR & Payroll</li>
+        <li class="active">Salary Register</li>
+    </ol>
+</section>
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content">
+    @using (Html.BeginForm("HR_Payroll_SalaryRegister_CRUD", "HR_Payroll_SalaryRegister", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-primary">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PayBandID)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.PayBandID, new SelectList(Model.PayBandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "$('#Value').val(''); $('.table_row_HeadList').removeClass('selected');" })
+                                @Html.ValidationMessageFor(r => Model.PayBandID, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.AttenMonthID)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.AttenMonthID, new SelectList(Model.MonthList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "$('#Value').val(''); $('.table_row_HeadList').removeClass('selected');" })
+                                @Html.ValidationMessageFor(r => Model.AttenMonthID, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <br />
+                            <h5>
+                                <button type="button" class="btn btn-success btnDefaultColor" onclick="GetPayBandEmployeeDetails()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+        <div id="payBandEmpDetailsMainDiv"></div>
+    }
+</section>
+
+
+<script>
+    //function PrintSalaryRegister() {
+    //    var html = $('#tblPrintHeader').html();
+    //    html += $('#SalaryRegisterDetailsMainDiv').html();
+    //    var w = window.open();
+    //    $(w.document.body).html(html);
+    //    w.print();
+    //    //w.close();
+    //}
+
+    function Fun_CheckToSelectAllEmp() {
+        if ($('#chkBoxSelectAllEmp').is(':checked')) {
+            $('.chkBoxSelectEmp').prop('checked', true);
+        } else {
+            $('.chkBoxSelectEmp').prop('checked', false);
+        }
+    }
+
+    function GetPayBandEmployeeDetails() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../HR_Payroll_SalaryRegister/_SalaryRegister_Details',
+            data: { PayBandId: $('#PayBandID').val(), MonthDate: $('#AttenMonthID').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#payBandEmpDetailsMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var selectedEmpCount = 0;
+        $('#example1 > tbody > tr').each(function (i) {
+            if ($('#PayBandEmpList_' + i + '__Selected').is(':checked')) {
+                selectedEmpCount++;
+            }
+        });
+
+        if (parseInt(selectedEmpCount) == 0) {
+            OpenMessegeAutoHideDiv('No Employee is Selected..!', 'Info');
+            return false;
+        }
+
+        $('#btnSave').attr('disabled', true);
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    GetPayBandEmployeeDetails();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

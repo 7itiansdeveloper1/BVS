@@ -1,0 +1,294 @@
+﻿@model ISas.Entities.FeesEntities.Fee_InvoiceCreationModels
+
+<section class="content-header">
+    <h1>
+        Create Invoice
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">Fee</a></li>
+        <li class="active">Create Invoice</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Fee_InvoiceCreation_CRUD", "Fee_InvoiceCreation", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.IsSingleSave)
+        @Html.HiddenFor(r => Model.SelectERPNoId)
+        @Html.Hidden("FeeStrectureCount", 0)
+
+        <div class="box box-widget">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ClassId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ClassId, Model.ClassList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionListByClass('ClassId', 'SectionId');$('#FeeCategoryId').val(null).change();" })
+                                @Html.ValidationMessageFor(r => Model.ClassId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SectionId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SectionId, Model.SectionList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getInvoiceDetailsList()" })
+                                @Html.ValidationMessageFor(r => Model.SectionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FeeCategoryId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.FeeCategoryId, Model.FeeCategoryList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getFeeStrectureDetailsList()" })
+                                @Html.ValidationMessageFor(r => Model.FeeCategoryId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-primary  collapsed-box">
+            <div class="box-header with-border">
+                <h5 class="box-title">Fee Structure Details</h5>
+                <h5 class="box-title pull-right" style="padding-right:5%;">Total :- <label class="text-danger" id="lblFeeStructTotal">0</label></h5>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    @*<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>*@
+                </div>
+            </div>
+            <div class="box-body">
+                <div id="feeStrectureDetailsMainDiv">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Fee Invoice Details</h5>
+                <div class="pull-right box-title">
+                    <input type="button" value="APPLY ALL" class="btn btn-success btn-sm" onclick="SaveInvoiceConfirm(this);" />
+                </div>
+            </div>
+            <div class="box-body">
+                <div id="invoiceDetailsMainDiv">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+
+    }
+</section>
+
+<script>
+    $(document).ready(function () {
+        if ('@Model.SectionId' != null && '@Model.SectionId' != "") {
+            getInvoiceDetailsList();
+        }
+    });
+
+    function SaveInvoiceConfirm(evt) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to create invoice ?", MyYesFunction, MyNoFunction, evt);
+    }
+
+    function MyYesFunction(evt) {
+        DoAjaxPostAndMore(evt);
+    }
+
+
+    function SaveInvoiceConfirm_Single(i) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to create invoice ?", YES_SaveInvoiceConfirm_Single, MyNoFunction, i);
+    }
+
+    function YES_SaveInvoiceConfirm_Single(i) {
+        //if (parseInt($('#FeeStrectureCount').val()) > 0) {
+
+            $.ajax({
+                type: "POST",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_InvoiceCreation/Fee_InvoiceCreation_CRUD",
+                data: { SelectERPNoId: $('#FeeInvoiceList_' + i + '__ERPNo').val(), IsSingleSave: true, FeeCategoryId: $('#FeeCategoryId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                    getInvoiceDetailsList();
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        //}
+        //else {
+        //    OpenMessegeAutoHideDiv('No dues are available for this structure ..!', 'Info');
+        //}
+    }
+
+
+
+    function Pre_SaveInvoiceConfirm_Single(i) {
+        if (parseInt($('#FeeStrectureCount').val()) > 0) {
+            $.ajax({
+                type: "POST",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_InvoiceCreation/Fee_InvoiceCreation_CRUD",
+                data: { SelectERPNoId: $('#FeeInvoiceList_' + i + '__ERPNo').val(), IsSingleSave: true, FeeCategoryId: $('#FeeCategoryId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                    getInvoiceDetailsList();
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            OpenMessegeAutoHideDiv('No dues are available for this structure ..!', 'Info');
+        }
+    }
+
+
+
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+
+        if ($('#ClassId').val() != null && $('#ClassId').val() != '' &&
+            $('#SectionId').val() != null && $('#SectionId').val() != ''
+            // && $('#FeeCategoryId').val() != null && $('#FeeCategoryId').val() != ''
+        )
+
+        {
+
+            //if (parseInt($('#FeeStrectureCount').val()) > 0) {
+
+                var $form = $(btnClicked).parents('form');
+                $.ajax({
+                    type: "POST",
+                    beforeSend: function () {
+                        spinnerShow();
+                    },
+                    url: $form.attr('action'),
+                    data: $form.serialize(),
+                    error: function (xhr, status, error) {
+                        OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                    },
+                    success: function (response) {
+                        if (response.status == 'success') {
+                            OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                            getInvoiceDetailsList();
+                        }
+                        else {
+                            AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                            AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                        }
+                    },
+                    complete: function () {
+                        spinnerHide();
+                    }
+                });
+            //}
+            //else {
+            //    OpenMessegeAutoHideDiv('No dues are available for this structure ..!', 'Info');
+            //}
+        }
+
+        else {
+            //OpenMessegeAutoHideDiv('Please select fee structure ..!', 'Info');
+            OpenMessegeAutoHideDiv('Please select class section..!', 'Info');
+        }
+        return false;
+    }
+
+    function getInvoiceDetailsList() {
+        if ($('#ClassId').val() != null && $('#ClassId').val() != '' &&
+            $('#SectionId').val() != null && $('#SectionId').val() != '') {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_InvoiceCreation/_InvoiceDetails",
+                data: { ClassId: $('#ClassId').val(), SectionId: $('#SectionId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    $('#invoiceDetailsMainDiv').html(response);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            $('#invoiceDetailsMainDiv').html('');
+        }
+    }
+
+    function getFeeStrectureDetailsList() {
+        if ($('#ClassId').val() != null && $('#ClassId').val() != '' &&
+            $('#SectionId').val() != null && $('#SectionId').val() != ''
+            && $('#FeeCategoryId').val() != null && $('#FeeCategoryId').val() != '') {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_InvoiceCreation/_FeeStrectureDetails",
+                data: { ClassId: $('#ClassId').val(), SectionId: $('#SectionId').val(), StructId: $('#FeeCategoryId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    $('#feeStrectureDetailsMainDiv').html(response);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            $('#feeStrectureDetailsMainDiv').html('');
+            $('#invoiceDetailsMainDiv').html('');
+            $('#lblFeeStructTotal').html('0');
+        }
+    }
+    function onclick_editInvoice(ERPNo, studentName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_InvoiceCreation/CancelInvoice_InvoiceList",
+            data: { ERPNo: ERPNo },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenModalWithSave(response, 'Edit Invoice For : ' + studentName)
+                //$('#feeStrectureDetailsMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

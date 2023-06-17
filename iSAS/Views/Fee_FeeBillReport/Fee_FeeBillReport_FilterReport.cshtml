@@ -1,0 +1,123 @@
+﻿@model ISas.Entities.FeesEntities.Fee_FeeBillReportModels
+<section class="content-header">
+    <h1>
+        Fee Bill Report
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">Fee</a></li>
+        <li class="active">Fee Bill Report</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Fee_FeeBillReport_Html", "Fee_FeeBillReport", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-widget">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ClassSectionId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ClassSectionId, Model.ClassWithSectionList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getFeeStrectureListByClassSectionId('ClassSectionId', 'StrectureId'); emptyInstallmentDropdown();" })
+                                @Html.ValidationMessageFor(r => Model.ClassSectionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.StrectureId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.StrectureId, Model.StrectureList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getInstallmentListByStrectureId('StrectureId', 'InstallmentId'); getStudentList(); " })
+                                @Html.ValidationMessageFor(r => Model.StrectureId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.InstallmentId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.InstallmentId, Model.InstallmentList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;"})
+                                @Html.ValidationMessageFor(r => Model.InstallmentId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Fee Invoice Details</h5>
+                <div class="pull-right box-title">
+                    <input type="submit" value="PRINT ALL" class="btn btn-primary btn-sm" onclick="return ValidateForm();" />
+                </div>
+            </div>
+            <div class="box-body">
+                <div id="studentDetailsMainDiv">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function emptyInstallmentDropdown() {
+        $('#InstallmentId').val(null);
+        $('#InstallmentId').html('<option value="">--Select--</option>');
+        $('#studentDetailsMainDiv').html('');
+    }
+    function ValidateForm() {
+        var selectedRowCount = 0;
+        $('#tblStudDetails > tbody > tr').each(function (i) {
+            if ($('#StudentList_' + i + '__Selected').is(':checked')) {
+                selectedRowCount++;
+            } 
+        });
+        if (selectedRowCount > 0) {
+            return true;
+        } else {
+            OpenMessegeAutoHideDiv('Select at least one student..!', 'Info');
+            return false;
+        }
+    }
+    function getStudentList() {
+        if ($('#ClassSectionId').val() != null && $('#ClassSectionId').val() != '' &&
+            $('#StrectureId').val() != null && $('#StrectureId').val() != '') {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_FeeBillReport/_FeeBillReport_StudentDetails",
+                data: { ClassSecId: $('#ClassSectionId').val(), StrectureId: $('#StrectureId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    $('#studentDetailsMainDiv').html(response);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            $('#studentDetailsMainDiv').html('');
+        }
+    }
+    function fun_chekctoSelectAllStud() {
+        if ($('#chkBoxAllStud').is(':checked')) {
+            $('.clsStud').prop('checked', true);
+        } else {
+            $('.clsStud').prop('checked', false);
+        }
+    }
+
+    function print_FeeBillReport_SingleStudent(erpNo) {
+        window.open("/Fee_FeeBillReport/Fee_FeeBillReport_Html?Selected_ERPNos=" + erpNo + "&&ClassSectionId=" + $('#ClassSectionId').val() + "&&StrectureId=" + $('#StrectureId').val() + "&&InstallmentId=" + $('#InstallmentId').val() );
+    }
+</script>

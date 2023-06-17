@@ -1,0 +1,399 @@
+﻿@model ISas.Entities.FeesEntities.Fee_MiscDueModel
+@using ISas.Web.Models;
+@{
+    ViewBag.Title = "Misc Dues";
+}
+
+
+@using (Html.BeginForm("Fee_MiscDues_CRUD", "Fee_MiscDues", FormMethod.Post, htmlAttributes: new { }))
+{
+    @Html.Hidden("hddnRowLenght")
+    @Html.HiddenFor(r => Model.Selected_TransRefNo)
+
+    <div class="box box-widget">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label for="">@Html.LabelFor(r => Model.HeadId)</label>
+                    <div class="select">
+                        @Html.DropDownListFor(m => m.HeadId, new SelectList(Model.HeadList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                        @Html.ValidationMessageFor(r => Model.HeadId, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label for="">@Html.LabelFor(r => Model.ClassId_ForClassWise)</label>
+                    <div class="select">
+                        @Html.DropDownListFor(m => m.ClassId_ForClassWise, new SelectList(Model.ClassList, "Value", "Text"), "--Select Class--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionList()" })
+                        @Html.ValidationMessageFor(r => Model.ClassId_ForClassWise, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label for="">@Html.LabelFor(r => Model.SectionId_ForClassWise)</label>
+                    <div class="select">
+                        @Html.DropDownListFor(m => m.SectionId_ForClassWise, new SelectList(Model.SectionList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getStructureList()" })
+                        @Html.ValidationMessageFor(r => Model.SectionId_ForClassWise, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label for="">@Html.LabelFor(r => Model.StrectureId)</label>
+                    <div class="select">
+                        @Html.DropDownListFor(m => m.StrectureId, new SelectList(Model.StrectureList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getInstallmentList()" })
+                        @Html.ValidationMessageFor(r => Model.StrectureId, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label for="">@Html.LabelFor(r => Model.InstallmentId)</label>
+                    <div class="select">
+                        @Html.DropDownListFor(m => m.InstallmentId, new SelectList(Model.InstallmentList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getInstallmentDueList()" })
+                        @Html.ValidationMessageFor(r => Model.InstallmentId, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label for="">@Html.LabelFor(r => Model.Amount)</label>
+                    <div class="select">
+                        @Html.TextBoxFor(m => m.Amount, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(r => Model.Amount, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label>&nbsp;</label> <br />
+                    <div class="select">
+                        <input type="button" class="btn btn-success" value="Apply" onclick="DoAjaxPostAndMore(this)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h5 class="box-title">Miscelleneous Dues</h5>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="CreditListMainDiv">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function fun_checkToSelectAllMiscDue() {
+        if ($('#selectAllFeeDue').is(':checked')) {
+            $('.chkBoxMiscDue').prop('checked', true);
+        } else {
+            $('.chkBoxMiscDue').prop('checked', false);
+        }
+    }
+
+    function getSectionList() {
+        var sectionHtml = '<option value="">--Select--</option>';
+        $.ajax({
+            type: "GET",
+            url: "../Fee_MiscDues/getSectionList",
+            data: { ClassId: $('#ClassId_ForClassWise').val(), FeeHeadId: $('#HeadId').val() },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    sectionHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                }
+                $('#SectionId_ForClassWise').html(sectionHtml);
+            },
+        });
+    }
+    function getStructureList() {
+        var strectureHtml = '<option value="">--Select--</option>';
+        $.ajax({
+            type: "GET",
+            url: "../Fee_MiscDues/getStructureList",
+            data: { ClassId: $('#ClassId_ForClassWise').val(), SectionId: $('#SectionId_ForClassWise').val(), FeeHeadId: $('#HeadId').val()  },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    strectureHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                }
+                $('#StrectureId').html(strectureHtml);
+            },
+        });
+    }
+    function getInstallmentList() {
+        var installmentHtml = '<option value="">--Select--</option>';
+        $.ajax({
+            type: "GET",
+            url: "../Fee_MiscDues/getInstallmentList",
+            data: { ClassId: $('#ClassId_ForClassWise').val(), SectionId: $('#SectionId_ForClassWise').val(), StrectureId: $('#StrectureId').val(), FeeHeadId: $('#HeadId').val()  },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    installmentHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                }
+                $('#InstallmentId').html(installmentHtml);
+            },
+        });
+    }
+
+    @*$(document).ready(function () {
+        $('#rw_space').css('display', 'none');
+        $('#rwFee_Mobile').css('display', 'none');
+        $('#rw_space1').css('display', 'none');
+        $('#rw_FatherName').css('display', 'none');
+
+        if ('@ViewBag.erpNo' != null && '@ViewBag.erpNo' != "") {
+            $('#ERPNo').val('@ViewBag.erpNo');
+            checkToCallFunction($('#ERPNo').val(), '');
+        }
+    });*@
+
+    //function EmptyValForNewStudent() {
+    //    $('#CreditListMainDiv').html('');
+    //    var installmentHtml = '<option>--Select--</option>';
+    //    $('#InstallmentId').html(installmentHtml);
+    //}
+
+    //function onStudentChangeFunction() {
+    //    getInstallmentDropDownValues();
+    //    getInstallmentDueList();
+    //}
+    //function getInstallmentDropDownValues() {
+    //    var installmentHtml = '<option>--Select--</option>';
+    //    if ($('#StudentId').val() != null && $('#StudentId').val() != '') {
+
+    //        $.ajax({
+    //            type: "GET",
+    //            beforeSend: function () {
+    //                spinnerShow();
+    //            },
+    //            url: "../Fee_MiscDues/GetInstallmentList",
+    //            data: { SessionId: $('#SessionId').val(), ERPNo: $('#StudentId').val() },
+    //            error: function (xhr, status, error) {
+    //                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+    //            },
+    //            success: function (result) {
+    //                for (var i = 0; i < result.length; i++) {
+    //                    installmentHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+    //                }
+    //                $('#InstallmentId').html(installmentHtml);
+    //            },
+    //            complete: function () {
+    //                spinnerHide();
+    //            }
+    //        });
+    //    } else {
+    //        $('#InstallmentId').html(installmentHtml);
+    //    }
+    //}
+    function getInstallmentDueList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_MiscDues/_MiscDueDetail",
+            data: { ClassId: $('#ClassId_ForClassWise').val(), SectionId: $('#SectionId_ForClassWise').val(), StrectureId: $('#StrectureId').val(), Installment: $("#InstallmentId option:selected").text(), FeeHeadId: $('#HeadId').val()   },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#CreditListMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    //function getInstallmentDueList() {
+    //    if ($('#StudentId').val() != null && $('#StudentId').val() != '') {
+    //        $.ajax({
+    //            type: "GET",
+    //            beforeSend: function () {
+    //                spinnerShow();
+    //            },
+    //            url: "../Fee_MiscDues/_MiscDueDetail",
+    //            data: { SessionId: $('#SessionId').val(), ERPNo: $('#StudentId').val() },
+    //            error: function (xhr, status, error) {
+    //                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+    //            },
+    //            success: function (response) {
+    //                $('#CreditListMainDiv').html(response);
+    //            },
+    //            complete: function () {
+    //                spinnerHide();
+    //            }
+    //        });
+    //    } else {
+    //        $('#CreditListMainDiv').html('');
+    //    }
+    //}
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        if ($('#InstallmentId').val() == '' || $('#InstallmentId').val() == null) {
+            OpenMessegeAutoHideDiv('Please select Installment Date first..!', 'Info');
+            return false;
+        }
+
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getInstallmentDueList();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    //function EnableEditableRow(selectedRow) {
+    //    var rowCount = $('#hddnRowLenght').val();
+    //    for (var i = 0; i < rowCount; i++) {
+    //        if (i == selectedRow) {
+    //            $('#Selected_TransRefNo').val($('#MiscDueList_' + selectedRow + '__TransRefNo').val());
+    //            $('#displayOnly_' + i).css('display', 'none');
+    //            $('#editable_' + i).removeAttr('style');
+    //        } else {
+    //            $('#displayOnly_' + i).removeAttr('style');
+    //            $('#editable_' + i).css('display', 'none');
+    //        }
+    //    }
+    //}
+
+    //function UpdateMiscDue(i) {
+    //    $.ajax({
+    //        type: "GET",
+    //        beforeSend: function () {
+    //            spinnerShow();
+    //        },
+    //        url: "../Fee_MiscDues/Fee_MiscDues_Update",
+    //        data: {
+    //            SessionId: $('#SessionId').val(), StudentId: $('#StudentId').val(),
+    //            InstallmentId: $('#MiscDueList_' + i + '__DisplayDueDate').val(),
+    //            HeadId: $('#MiscDueList_' + i + '__HeadId').val(),
+    //            Amount: $('#MiscDueList_' + i + '__Amount').val(),
+    //            Selected_TransRefNo: $('#MiscDueList_' + i + '__TransRefNo').val(),
+    //        },
+    //        error: function (xhr, status, error) {
+    //            OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+    //        },
+    //        success: function (result) {
+    //            OpenMessegeAutoHideDiv(result.Msg, result.Color);
+    //            getInstallmentDueList();
+    //        },
+    //        complete: function () {
+    //            spinnerHide();
+    //        }
+    //    });
+    //}
+
+
+    function EnterAmount_ToUpdateMiscDue(i, student) {
+        swal({
+            title: 'Enter new amount for ' + student,
+            input: 'number',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'SAVE',
+            showLoaderOnConfirm: true,
+            preConfirm: (value) => {
+                if (parseInt(value)) {
+                    return UpdateMiscDue(i, value)
+                } else {
+                    OpenMessegeAutoHideDiv('Enter numeric value only.!', 'info');
+                }
+            },
+            allowOutsideClick: () => !swal.isLoading()
+        }).then((result) => {
+            console.log(result);
+        })
+    }
+    function UpdateMiscDue(i, Amount) {
+        if (parseInt(Amount)) {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_MiscDues/Fee_MiscDues_Update",
+                data: {
+                    Selected_TransRefNo: $('#MiscDueStudentDetails_' + i + '__TransRefNo').val(),
+                    ERPNos: $('#MiscDueStudentDetails_' + i + '__ERPNo').val(),
+                    InstallmentId: $('#InstallmentId').val(),
+                    HeadId: $('#HeadId').val(),
+                    ClassId: $('#ClassId_ForClassWise').val(),
+                    SectionId: $('#SectionId_ForClassWise').val(),
+                    StrectureId: $('#StrectureId').val(),
+                    Amount: Amount,
+                },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                    getInstallmentDueList();
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+           // OpenMessegeAutoHideDiv('Enter numeric value only.!', 'info');
+        }
+    }
+    function CancelMiscDueConfirm(i, student) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to remove miscellaneous due from " + student + "", CancelMisDue, null, i);
+    }
+    function CancelMisDue(i) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_MiscDues/Fee_MiscDues_Cancel",
+            data: {
+                Selected_TransRefNo: $('#MiscDueStudentDetails_' + i + '__TransRefNo').val(),
+                ERPNos: $('#MiscDueStudentDetails_'+i+'__ERPNo').val(),
+                InstallmentId: $('#InstallmentId').val(),
+                HeadId: $('#HeadId').val(),
+                ClassId: $('#ClassId_ForClassWise').val(),
+                SectionId: $('#SectionId_ForClassWise').val(),
+                StrectureId: $('#StrectureId').val()
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                getInstallmentDueList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

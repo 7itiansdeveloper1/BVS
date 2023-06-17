@@ -1,0 +1,201 @@
+﻿@model ISas.Web.ViewModels.DailyAttendanceViewModel
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table" style="margin-bottom: 0px;margin-top:0px;border:1px solid black;width:100%;" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="border:1px solid black;"><label>Total Students</label></td>
+                        <td style="border:1px solid black;" align="right">@Model.TotalStudents</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid black;"><label>Present</label></td>
+                        <td style="border:1px solid black;" align="right">@Model.PresentStudents</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table" style="margin-bottom: 0px;margin-top:0px;border:1px solid black;width:100%;" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="border:1px solid black;"><label>Absent</label></td>
+                        <td style="border:1px solid black;" align="right">@Model.AbsentStudents</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid black;"><label>Leave</label></td>
+                        <td style="border:1px solid black;" align="right">@Model.StudentsOnLeave</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row text-danger">
+            <div class="col-md-12">
+                <h3>@Html.DisplayFor(r => Model.ClassTeacherName)</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-9">
+        &nbsp;
+    </div>
+    <div class="col-md-1">
+        <button type="button" id="btnFlipAttendance" onclick="flipAttendance()" class="btn btn-success pull-right" title="Filp Attendance">
+            <i class="fa fa-exchange pull-right"></i>
+        </button>
+    </div>
+    <div class="col-md-2">
+        @Html.DropDownList("applyAllLeaveType", new SelectList(Model.LeaveTypeList, "Text", "Text"), new { @class = "form-control select2 pull-right", style = "width:100%;", onchange = "fun_applyAllLeaveType()" })
+    </div>
+</div>
+
+@if (!Model.IsOffToday)
+{
+    <br />
+    @Html.Hidden("HddnFilpTo", value: "A")
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="table-responsive searchtable table_ev_od">
+                <table cellspacing="0" cellpadding="0" border="0" class="table table-bordered table-responsive" id="AttendanceTable">
+                    <thead>
+                        <tr>
+                            <th hidden>ERP No.</th>
+                            <th>Adm No.</th>
+                            <th>Roll No.</th>
+                            <th>Student Name</th>
+                            <th>Father Name</th>
+                            <th hidden>SMS No</th>
+                            <th>Morning</th>
+                            <th>Afternoon</th>
+                            <th>Leave Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in @Model.StudentAttendanceList)
+                        {
+                            <tr class="abc">
+                                <td hidden> @item.Student.StudentERPNo </td>
+                                <td> @item.Student.StudentAdmNo </td>
+                                <td> @item.Student.StudentRollNo </td>
+                                <td> @item.Student.StudentName </td>
+                                <td> @item.Student.FatherName </td>
+                                <td hidden> @item.Student.SmsMobileNo </td>
+                                @if (@item.StudentAttendanceDetails.MorningAttendnace.Trim() == "A")
+                                {
+                                    <td class="MA" style="color:red;"><b>@item.StudentAttendanceDetails.MorningAttendnace </b> </td>
+                                }
+                                else
+                                {
+                                    <td class="MA" style="color:green;"><b>@item.StudentAttendanceDetails.MorningAttendnace </b> </td>
+                                }
+                                @if (@item.StudentAttendanceDetails.AfternoonAttendnace.Trim() == "A")
+                                {
+                                    <td class="AA" style="color:red;"><b> @item.StudentAttendanceDetails.AfternoonAttendnace  </b> </td>
+                                }
+                                else
+                                {
+                                    <td class="AA" style="color:green;"><b> @item.StudentAttendanceDetails.AfternoonAttendnace  </b> </td>
+                                }
+                                <td>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.SelectedLeaveType, new SelectList(Model.LeaveTypeList, "Text", "Text", item.StudentAttendanceDetails.LeaveType), new { @class = "form-control select2 clsLeaveType", style = "width:100%;" })
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        if ('@Model.IsOffToday' == 'True' || '@Model.IsOffToday' == true) {
+            $('#savebutton').prop('disabled', true);
+        } else {
+            $('#savebutton').prop('disabled', false);
+        }
+    });
+
+    function fun_applyAllLeaveType() {
+        $('.clsLeaveType').val($('#applyAllLeaveType').val()).change();
+    }
+
+    $(function () {
+        $('.select2').select2()
+    })
+
+    function flipAttendance() {
+        var filipto = $('#HddnFilpTo').val();
+        var textcolor = "";
+        if (filipto == "A") {
+            textcolor = "red";
+            $('#HddnFilpTo').val("P");
+        } else {
+            textcolor = "green";
+            $('#HddnFilpTo').val("A");
+        }
+        $('#AttendanceTable tr:not(:first)').each(function () {
+            $(".MA").each(function (i, e) {
+                $(this).text(filipto);
+                $(this).css({ 'color': textcolor, 'font-weight': 'bold' });
+            });
+            $(".AA").each(function (i, e) {
+                $(this).text(filipto);
+                $(this).css({ 'color': textcolor, 'font-weight': 'bold' });
+            });
+        });
+    }
+
+    //$(function () {
+    //    $("#btnFlipAttendance").click(function () {
+    //        alert('calling');
+    //        return false;
+
+    //    });
+    //});
+    $(".MA").click(function () {
+
+        var $MA = $(this).text();
+        if ($MA.trim() == "P") {
+            $(this).text("A");
+            $(this).css({ 'color': 'red', 'font-weight': 'bold' });
+            $(this).next().text("A");
+            $(this).next().css({ 'color': 'red', 'font-weight': 'bold' });
+        }
+        else if ($MA.trim() == "A") {
+            $(this).text("L");
+            $(this).css({ 'color': 'blue', 'font-weight': 'bold' });
+            $(this).next().text("L");
+            $(this).next().css({ 'color': 'blue', 'font-weight': 'bold' });
+        }
+        else if ($MA.trim() == "L") {
+            $(this).text("P");
+            $(this).css({ 'color': 'green', 'font-weight': 'bold' });
+            $(this).next().text("P");
+            $(this).next().css({ 'color': 'green', 'font-weight': 'bold' });
+        }
+
+    });
+    $(".AA").click(function () {
+        //$(document).on('click', "#AttendanceTable tr", function () {
+        var $AA = $(this).text();
+        if ($AA.trim() == "P") {
+            $(this).text("A");
+            $(this).css({ 'color': 'red', 'font-weight': 'bold' });
+        }
+        else if ($AA.trim() == "A") {
+            $(this).text("L");
+            $(this).css({ 'color': 'blue', 'font-weight': 'bold' });
+        }
+        else if ($AA.trim() == "L") {
+            $(this).text("P");
+            $(this).css({ 'color': 'green', 'font-weight': 'bold' });
+        }
+    });
+
+</script>

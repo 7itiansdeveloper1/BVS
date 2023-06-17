@@ -1,0 +1,156 @@
+D:\Me\Project\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\Me\Project\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\Me\Project\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\Me\Project\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\Me\Project\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\Me\Project\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\Me\Project\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\Me\Project\iSAS\iSAS.Repository\bin\Debug\Dapper.dll
+D:\Me\Project\iSAS\iSAS.Repository\bin\Debug\Dapper.pdb
+D:\Me\Project\iSAS\iSAS.Repository\bin\Debug\Dapper.xml
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+F:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+F:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+F:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+F:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+F:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+F:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+F:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+F:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+F:\Work Data\iSAS\iSAS.Repository\bin\Debug\System.Web.Mvc.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\bin\Debug\System.Web.Mvc.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V2\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\iSAS_V3\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\MAHESHA\Projects\Live Projects Code\SVN PROJECTS\SELF WORKING\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\LIVECODE\ProjectBackUp\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\LIVECODE\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\LIVECODE\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\LIVECODE\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\LIVECODE\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\LIVECODE\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\LIVECODE\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\LIVECODE\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\LIVECODE\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+E:\WORK DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+E:\WORK DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+E:\WORK DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+E:\WORK DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+E:\WORK DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+E:\WORK DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+E:\WORK DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+E:\WORK DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+F:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+G:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+G:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+G:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+G:\Work Data\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+G:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+G:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+G:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+G:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+G:\Work Data\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS OLD\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojAssemblyReference.cache
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\bin\Debug\Newtonsoft.Json.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\bin\Debug\Newtonsoft.Json.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\bin\Debug\Newtonsoft.Json.xml
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojAssemblyReference.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\Dapper.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\System.Web.Razor.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\System.Web.WebPages.Razor.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\System.Web.WebPages.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\Microsoft.Web.Infrastructure.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\System.Web.WebPages.Deployment.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\Dapper.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\Dapper.xml
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.pdb
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.xml
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojAssemblyReference.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\ERP_SERVER_DATA\iSAS For BVS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.dll
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.pdb
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.xml
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojAssemblyReference.cache
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.dll
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.pdb
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.xml
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojAssemblyReference.cache
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb

@@ -1,0 +1,91 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.TransportEntities.Transport_RouteMasterModels>
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Route List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Route Name</th>
+                    <th>No Of Vehicle</th>
+                    <th>No Of Stop</th>
+                    <th>Strength</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>@Html.DisplayFor(r => Model[i].RouteName)</td>
+                            <td>@Html.DisplayFor(r => Model[i].NoofVehicle)</td>
+                            <td>@Html.DisplayFor(r => Model[i].NoofStop)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Strength)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteRouteConfirm('@Model[i].RouteId')" title="Delete Route" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span style="cursor:not-allowed;" disabled="disabled" title="Delete Route" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                @Html.EncodedActionLink(" ", "Updation", "Transport_RouteMaster", new { RouteId = Model[i].RouteId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Route" })
+                                @Html.ActionLink(" ", "New", "Transport_StopSetup", new { RouteId = Model[i].RouteId, RouteName = Model[i].RouteName }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Stop Setup"})
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteRouteConfirm(RouteId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this route?", MyYesFunction, MyNoFunction, RouteId);
+    }
+
+    function MyYesFunction(RouteId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Transport_RouteMaster/Transport_RouteMaster_Delete",
+            data: { RouteId: RouteId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../Transport_RouteMaster/New"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

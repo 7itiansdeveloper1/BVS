@@ -1,0 +1,223 @@
+﻿@model ISas.Entities.FeesEntities.Fee_OnlineTransactionModel
+<section class="content-header">
+    <h1>
+        Online Transactions
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li class="active">Online Transactions</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("FeeReceipt_CRUD", "Fee_OnlineTransaction", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <span class="box-title pull-right">
+                </span>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-default pull-right"  id="daterange-btn">
+                                    <span>
+                                        <i class="fa fa-calendar"></i> Selected Date
+                                    </span>
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-2">
+                        <div class="form-group ">
+                            <label for="">@Html.LabelFor(r => Model.selectedStatusId)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.selectedStatusId, Model.statusList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.selectedStatusId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <br />
+                            <h5>
+                                <button id="btnSearch" type="button" class="btn btn-success btnDefaultColor" onclick="getTransactionList()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.rectiptDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.rectiptDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.rectiptDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="box box-widget">
+                <div class="box-header with-border">
+                    <h5 class="box-title">Transaction Details</h5>
+                    <div class="pull-right">
+                        <button type="button" id="btnReceiptSelected" disabled="disabled" onclick="CreateReceiptConfirm(this,$('#rectiptDate').val())" class="btn btn-default"><i class="fa fa-print"></i> Create Receipt</button>
+                    </div>
+
+                </div>
+
+                <div class="box-body">
+                    <div id="OnlineTranactionListMainDiv">
+                        @{ Html.RenderAction("_onlineTrnasaction", "Fee_OnlineTransaction", new { fromdate = Model.fromDate, todate = Model.toDate, paymentstatus = Model.selectedStatusId });}
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+    }
+</section>
+
+
+<script>
+
+    function getTransactionList() {
+    debugger;
+        var daterange = $('#daterange-btn span').text().trim();
+        var paymentstatus = $("#selectedStatusId option:selected").text();
+        if (daterange == "Selected Date") {
+            OpenMessegeAutoHideDiv("Date range is not valid...!", 'warning');
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: '../Fee_OnlineTransaction/_onlineTrnasaction',
+                data: { daterange: daterange, paymentstatus: paymentstatus },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    $('#OnlineTranactionListMainDiv').html(response);
+                    var rowCount = $('#OnlineTranactionListMainDiv tr').length;
+                    if (rowCount > 0) {
+
+                    }
+
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        }
+
+        
+
+    }
+    
+    function CreateReceiptConfirm(evt, recptdate) {
+        if ($('#rectiptDate').val() == '') {
+            OpenMessegeAutoHideDiv('Invalid receipt date...!', 'Warning');
+        }
+        else {
+            AsyncConfirmYesNo("Confirmation", "Create Receipt on Date: " + recptdate + " ?", MyYesFunction, MyNoFunction, evt);
+        }
+
+    }
+    function MyYesFunction(evt) {
+        DoAjaxPostAndMore(evt);
+    }
+    function MyNoFunction() {
+    }
+    function DoAjaxPostAndMore(btnClicked) {
+        var selectedCount = 0;
+
+        $('#example1 > tbody > tr').each(function (i) {
+            if ($('#onlineTransctionsList_' + i + '__isSelected').is(':checked')) {
+                selectedCount++;
+            }
+        });
+
+        if (selectedCount > 0) {
+            var $form = $(btnClicked).parents('form');
+            $.ajax({
+                type: "POST",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    if (response.status == 'success') {
+                        OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                        window.location.reload();
+                    }
+                    else {
+                        AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                        AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                    }
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        }
+        else {
+            OpenMessegeAutoHideDiv('No recrod selected..!', 'Warning');
+        }
+    }
+
+
+</script>
+
+<script>
+    $(function () {
+        $('#daterange-btn').daterangepicker(
+            {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment()
+            },
+            function (start, end) {
+                $('#daterange-btn span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'))
+            }
+        )
+
+
+    });
+
+    
+</script>

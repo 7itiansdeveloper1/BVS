@@ -1,0 +1,175 @@
+﻿@model ISas.Entities.Academic.Academic_DepartmentMasterModels
+
+<section class="content-header">
+    <h1>
+        Department Master
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>School</li>
+        <li class="active">Department Master</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Academic_DepartmentMaster_CRUD", "Academic_DepartmentMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.DeptID)
+
+        @Html.Hidden("hddnRowLenght")
+
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.DeptName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.DeptName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.DeptName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+
+    <div class="" id="departmentMasterMainDiv">
+        @{ Html.RenderAction("LandingPage", "Academic_DepartmentMaster", new { }); }
+    </div>
+</section>
+
+<script>
+    function emptyDeptDetails() {
+        $('#DeptName').val("");
+    }
+    function getDepartmentDetails() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_DepartmentMaster/LandingPage",
+            data: {  },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#departmentMasterMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function EnableEditableRow(selectedRow) {
+        var rowCount = $('#hddnRowLenght').val();
+        for (var i = 0; i < rowCount; i++) {
+            if (i == selectedRow) {
+                $('.editableFeild_' + i).attr('readonly', false);
+                $('#btnEdit_' + i).css('display', 'none');
+                $('#btnSave_' + i).removeAttr('style');
+            } else {
+                $('.editableFeild_' + i).attr('readonly', true);
+                $('#btnSave_' + i).css('display', 'none');
+                $('#btnEdit_' + i).removeAttr('style');
+            }
+        }
+    }
+
+    function DeleteDepartmentConfirm(DeptId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Department?", MyYesFunction, MyNoFunction, DeptId);
+    }
+
+    function MyYesFunction(DeptId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_DepartmentMaster/Academic_DepartmentMaster_Delete",
+            data: { DeptId: DeptId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color );
+                getDepartmentDetails();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function UpdateDepartment(i) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Academic_DepartmentMaster/Academic_DepartmentMaster_CRUD',
+            data: { DeptID: $('#DeptID_' + i).val(), DeptName: $('#DeptName_' + i).val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getDepartmentDetails();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getDepartmentDetails();
+                    emptyDeptDetails();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

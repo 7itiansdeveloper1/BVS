@@ -1,0 +1,222 @@
+﻿@model ISas.Entities.Academic.Academic_HouseMasterModels
+@{
+    ViewBag.Title = "New";
+}
+
+
+<section class="content-header">
+    <h1>
+        House Master
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>School</li>
+        <li class="active">House Master</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Academic_HouseMaster_CRUD", "Academic_HouseMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.HouseId)
+        @Html.Hidden("hddnRowLenght")
+
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HouseName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HouseName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HouseName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HouseColor)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HouseColor, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HouseColor, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HouseInchargeName)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HouseInchargeName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HouseInchargeName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PrintOrder)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                <input type="number" class="form-control" id="PrintOrder" name="PrintOrder" />
+                                @Html.ValidationMessageFor(r => Model.PrintOrder, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-1">
+                        <br /> <div class="checkbox">
+                            @Html.CheckBoxFor(r => Model.Active) <label>@Html.LabelFor(r => Model.Active) </label>
+                            @Html.ValidationMessageFor(r => Model.Active, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+
+    <div class="" id="houseMstListMainDiv">
+        @{ Html.RenderAction("LandingPage", "Academic_HouseMaster", new { }); }
+    </div>
+</section>
+
+<script>
+    function emptyHouseDetails() {
+        $('#HouseName').val('');
+        $('#HouseColor').val('');
+        $('#HouseInchargeName').val('');
+        $('#PrintOrder').val(0);
+    }
+    function getHouseMstList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_HouseMaster/LandingPage",
+            data: {},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#houseMstListMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function EnableEditableRow(selectedRow) {
+        var rowCount = $('#hddnRowLenght').val();
+        for (var i = 0; i < rowCount; i++) {
+            if (i == selectedRow) {
+                $('.editableFeild_' + i).attr('readonly', false);
+                $('.editableFeild_Chk_' + i).attr('disabled', false);
+                $('#btnEdit_' + i).css('display', 'none');
+                $('#btnSave_' + i).removeAttr('style');
+
+
+            } else {
+                $('.editableFeild_' + i).attr('readonly', true);
+                $('.editableFeild_Chk_' + i).attr('disabled', true);
+                $('#btnSave_' + i).css('display', 'none');
+                $('#btnEdit_' + i).removeAttr('style');
+            }
+        }
+    }
+
+    function DeleteHouseConfirm(HouseId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this House?", MyYesFunction, MyNoFunction, HouseId);
+    }
+
+    function MyYesFunction(HouseId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_HouseMaster/Academic_HouseMaster_Delete",
+            data: { HouseId: HouseId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color );
+                getHouseMstList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function UpdateHouseMaster(i) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Academic_HouseMaster/Academic_HouseMaster_CRUD',
+            data: {
+                HouseId: $('#HouseId_' + i).val(), HouseName: $('#HouseName_' + i).val(), HouseColor: $('#HouseColor_' + i).val(), HouseInchargeName: $('#HouseInchargeName_' + i).val(),
+                PrintOrder: $('#PrintOrder_' + i).val(), Active: $('#Active_' + i).val()
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getHouseMstList();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getHouseMstList();
+                    emptyHouseDetails();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

@@ -1,0 +1,178 @@
+﻿@model ISas.Entities.Student_AttendanceReportModels
+@{
+    List<SelectListItem> statusList = new List<SelectListItem>();
+    statusList.Add(new SelectListItem { Text = "ACTIVE", Value = "ACTIVE", Selected = true });
+    statusList.Add(new SelectListItem { Text = "TC", Value = "TC" });
+    statusList.Add(new SelectListItem { Text = "NSO", Value = "NSO" });
+
+    List<SelectListGroup> classGroupList = Model.ClassSectionList.Select(r => r.ClassName).Distinct().Select(r => new SelectListGroup
+    {
+        Name = r,
+        Disabled = false
+    }).ToList();
+
+    List<SelectListItem> classSecList = Model.ClassSectionList.Select(r => new SelectListItem
+    {
+        Text = r.ClassSectionName,
+        Value = r.ClassSectionId
+    }).ToList();
+
+    for (int i = 0; i < classSecList.Count; i++)
+    {
+        string className = classSecList[i].Text.Substring(0, classSecList[i].Text.Length - 2);
+        classSecList[i].Group = classGroupList.Where(r => className == r.Name).FirstOrDefault();
+    }
+}
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>Reports</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Student Attendance</li>
+        <li>Reports</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        @*<div class="box-header with-border">
+            <span class="box-title pull-right" style="padding-left:1%;">
+                <a href="#" onclick="exportToExcel('tblStudentDetail')" title="Export to Excel" class="fa fa-file-excel-o btnDefaultColor"></a>
+            </span>
+            <span class="box-title pull-right">
+                <a href="#" onclick="getStudentAttnReport('YES')" title="Print" class="fa fa-print btnDefaultColor"></a>
+            </span>
+        </div>*@
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.FromDate)</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                            @Html.ValidationMessageFor(r => Model.FromDate, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.ToDate)</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                            @Html.ValidationMessageFor(r => Model.ToDate, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.ReportName)</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.ReportName, new SelectList(Model.ReportNameList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.ReportName, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.Status)</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.Status, new SelectList(statusList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.Status, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.ClassSectionIDs)</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.ClassSectionIDs, classSecList, htmlAttributes: new { @class = "form-control multiSelectWithSelectOptGrp", multiple = true, style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.ClassSectionIDs, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-1">
+                    <div class="form-group">
+                        <br />
+                        <div class="select">
+                            <h5>
+                                <button class="btn btn-success pull-right" onclick="getStudentAttnReport('NO')">
+                                    <i class="fa fa-search btnDefaultColor"></i>
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="studentReportMainDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function getStudentAttnReport(Print) {
+        var classSectionIDs = $('#ClassSectionIDs').val();
+        if (classSectionIDs == null || classSectionIDs == "") {
+        }
+        else {
+            classSectionIDs = classSectionIDs.toString();
+        }
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Student_AttendanceReport/_Student_AttendanceReport",
+            data: {
+                fromdate: $('#FromDate').val(), todate: $('#ToDate').val(),
+                ClassSectionId: classSectionIDs,
+                InActive: $('#Status').val(),
+                ReportName: $('#ReportName').val(),
+                Print: Print
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                if (Print == "NO") {
+                    $('#studentReportMainDiv').html(result);
+                } else {
+                    var w = window.open();
+                    $(w.document.body).html(result);
+                    w.print();
+                    //  w.close();
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

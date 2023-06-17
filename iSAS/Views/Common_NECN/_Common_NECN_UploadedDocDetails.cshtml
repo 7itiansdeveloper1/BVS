@@ -1,0 +1,119 @@
+﻿@model ISas.Entities.DashboardEntities.Common_NECN_MainModel
+@{
+    int count = 0;
+    if (Model != null && Model.UploadDocList != null && Model.UploadDocList.Count > 0)
+    {
+        count = Model.UploadDocList.Count;
+    }
+
+    var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+}
+
+@helper DisplayFixLengthText(string input, int inputLength)
+    {
+        if (input.Length <= inputLength)
+        {
+            @input
+        }
+        else
+        {
+            @input.Substring(0, inputLength)<text>...</text>
+        }
+}
+
+<div class="row">
+    @if (Model != null && Model.UploadDocList != null && Model.UploadDocList.Count > 0)
+    {
+        for (int i = 0; i < Model.UploadDocList.Count; i++)
+        {
+            string currentPath =  Model.UploadDocList[i].AttachPath;
+            string ext = Path.GetExtension(Model.UploadDocList[i].AttachPath).ToLower();
+
+            if (ext == ".pdf")
+            {
+                currentPath = "../Images/System/pdfImage.jpg";
+            }
+            else if (ext == ".txt")
+            {
+                currentPath = "../Images/System/textIcon.png";
+            }
+            else if (ext == ".xlsx" || ext == ".xls")
+            {
+                currentPath = "../Images/System/excelImage.png";
+
+            }
+            else if (ext == ".docx" || ext == ".doc")
+            {
+                currentPath = "../Images/System/wordImage.png";
+
+            }
+            else if (ext == ".ppt" || ext == ".pptx")
+            {
+                currentPath = "../Images/System/pptImage.png";
+            }
+
+            <div class="col-md-3" style="padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;">
+                @Html.HiddenFor(r => Model.UploadDocList[i].AttachPath)
+                @Html.HiddenFor(r => Model.UploadDocList[i].UploadID)
+                <span>
+                    <a href="~/@Model.UploadDocList[i].AttachPath" target="_blank" title="Click to view">
+                        <img class="example-image" style="width:100px;height:100px;" src=~/@currentPath />
+                    </a>
+                </span>
+                <br />
+                <span>
+                    @DisplayFixLengthText(@Model.UploadDocList[i].FileName, 10)   @Html.ActionLink(" ", "#", "#", htmlAttributes: new { @class = " glyphicon glyphicon-trash", onclick = "return ConfirmAndRemoveDoc(" + @i + ")", title = "Remove " + @Model.UploadDocList[i].FileName + "" })
+                </span>
+            </div>
+        }
+    }
+</div>
+
+<script>
+     function ConfirmAndRemoveDoc(evt) {
+         AsyncConfirmYesNo("Confirmation", "Are you sure to remove this document permentely ?", MyYesFunction, MyNoFunction, evt);
+         return false;
+        }
+
+        function MyYesFunction(i) {
+           $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../@controllerName/RemoveDocument",
+                data: { DocId: $('#UploadDocList_' + i + '__AttachPath').val(), UploadID: $('#UploadDocList_' + i + '__UploadID').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    if (result.status == "Failled") {
+                        OpenMessegeAutoHideDiv(result.Msg, 'Warning');
+                    } else {
+                        $('#UploadDocDetailsMainDiv').html(result);
+                    }
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+
+           return false;
+        }
+        function MyNoFunction() {
+            return false;
+        }
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        if ('@ViewBag.trnMsg' != '') {
+            OpenMessegeModal('@ViewBag.trnMsg');
+        }
+    });
+</script>
+
+
+
+

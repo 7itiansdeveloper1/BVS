@@ -1,0 +1,250 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Table0</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table><tr>
+        <td colspan="6">
+            <h3>
+                BAL VIKAS SCHOOL
+                <br>24 GTB Colony, Model Town, Panipat
+            </h3>
+        </td>
+    </tr><tr>
+        <td colspan="6"><strong> Report Name : Report Name :- Marks Details For (VI-C, English, PT4 (20))</strong></td>
+    </tr><tr>
+            <th style="border:1px solid black;">Adm No.</th>
+            <th style="border:1px solid black;">Roll No.</th>
+            <th style="border:1px solid black;">Student Name</th>
+                <th style="border:1px solid black;">Mark</th>
+                <th style="border:1px solid black;">Grade</th>
+        </tr><tr>
+                    <td style="border:1px solid black;"> 9149  </td>
+                    <td style="border:1px solid black;">1 </td>
+                    <td style="border:1px solid black;">AARUSHI ARORA  </td>
+                        <td style="border:1px solid black;">18.5 </td>
+                        <td style="border:1px solid black;">A1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10490  </td>
+                    <td style="border:1px solid black;">2 </td>
+                    <td style="border:1px solid black;">AKSHIT  </td>
+                        <td style="border:1px solid black;">14 </td>
+                        <td style="border:1px solid black;">B2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8757  </td>
+                    <td style="border:1px solid black;">3 </td>
+                    <td style="border:1px solid black;">ANANYA PHUTELA  </td>
+                        <td style="border:1px solid black;">11 </td>
+                        <td style="border:1px solid black;">C1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10254  </td>
+                    <td style="border:1px solid black;">4 </td>
+                    <td style="border:1px solid black;">ARPIT  </td>
+                        <td style="border:1px solid black;">7 </td>
+                        <td style="border:1px solid black;">D </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9644  </td>
+                    <td style="border:1px solid black;">5 </td>
+                    <td style="border:1px solid black;">BHAVYA GROVER  </td>
+                        <td style="border:1px solid black;">14.5 </td>
+                        <td style="border:1px solid black;">B1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8901  </td>
+                    <td style="border:1px solid black;">6 </td>
+                    <td style="border:1px solid black;">BIDUL CHOPRA  </td>
+                        <td style="border:1px solid black;">9.5 </td>
+                        <td style="border:1px solid black;">C2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8894  </td>
+                    <td style="border:1px solid black;">7 </td>
+                    <td style="border:1px solid black;">DIVISHA BATRA  </td>
+                        <td style="border:1px solid black;">17.5 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10386  </td>
+                    <td style="border:1px solid black;">8 </td>
+                    <td style="border:1px solid black;">KASHIKA AILAWADHI  </td>
+                        <td style="border:1px solid black;">17 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8999  </td>
+                    <td style="border:1px solid black;">9 </td>
+                    <td style="border:1px solid black;">KAVISH MIGLANI  </td>
+                        <td style="border:1px solid black;">16 </td>
+                        <td style="border:1px solid black;">B1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10489  </td>
+                    <td style="border:1px solid black;">10 </td>
+                    <td style="border:1px solid black;">KHUSHI ARORA  </td>
+                        <td style="border:1px solid black;">15.5 </td>
+                        <td style="border:1px solid black;">B1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10769  </td>
+                    <td style="border:1px solid black;">11 </td>
+                    <td style="border:1px solid black;">KHUSHI JAWA  </td>
+                        <td style="border:1px solid black;">14 </td>
+                        <td style="border:1px solid black;">B2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9411  </td>
+                    <td style="border:1px solid black;">12 </td>
+                    <td style="border:1px solid black;">KHYATI  </td>
+                        <td style="border:1px solid black;">11 </td>
+                        <td style="border:1px solid black;">C1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8997  </td>
+                    <td style="border:1px solid black;">13 </td>
+                    <td style="border:1px solid black;">KRISHNA GUPTA  </td>
+                        <td style="border:1px solid black;">17.5 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8774  </td>
+                    <td style="border:1px solid black;">14 </td>
+                    <td style="border:1px solid black;">LOVE KAMAL  </td>
+                        <td style="border:1px solid black;">13 </td>
+                        <td style="border:1px solid black;">B2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9360  </td>
+                    <td style="border:1px solid black;">15 </td>
+                    <td style="border:1px solid black;">MAAYRA BANSAL  </td>
+                        <td style="border:1px solid black;">18 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8805  </td>
+                    <td style="border:1px solid black;">16 </td>
+                    <td style="border:1px solid black;">MAHI JAIN  </td>
+                        <td style="border:1px solid black;">6.5 </td>
+                        <td style="border:1px solid black;">D </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9103  </td>
+                    <td style="border:1px solid black;">17 </td>
+                    <td style="border:1px solid black;">MAISHA ARORA  </td>
+                        <td style="border:1px solid black;">16.5 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9105  </td>
+                    <td style="border:1px solid black;">18 </td>
+                    <td style="border:1px solid black;">MANYA ARORA  </td>
+                        <td style="border:1px solid black;">15 </td>
+                        <td style="border:1px solid black;">B1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9078  </td>
+                    <td style="border:1px solid black;">19 </td>
+                    <td style="border:1px solid black;">MANNAT KHANNA  </td>
+                        <td style="border:1px solid black;">0 </td>
+                        <td style="border:1px solid black;">E </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8760  </td>
+                    <td style="border:1px solid black;">19 </td>
+                    <td style="border:1px solid black;">MAYANK KUMAR  </td>
+                        <td style="border:1px solid black;">18 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8786  </td>
+                    <td style="border:1px solid black;">20 </td>
+                    <td style="border:1px solid black;">NAITIK JOSHI  </td>
+                        <td style="border:1px solid black;">16.5 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8789  </td>
+                    <td style="border:1px solid black;">21 </td>
+                    <td style="border:1px solid black;">NAITIK THAKRAL  </td>
+                        <td style="border:1px solid black;">17.5 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8998  </td>
+                    <td style="border:1px solid black;">22 </td>
+                    <td style="border:1px solid black;">PARTH SETHI  </td>
+                        <td style="border:1px solid black;">3 </td>
+                        <td style="border:1px solid black;">E </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9005  </td>
+                    <td style="border:1px solid black;">23 </td>
+                    <td style="border:1px solid black;">PAVI JUNEJA  </td>
+                        <td style="border:1px solid black;">16.5 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10687  </td>
+                    <td style="border:1px solid black;">24 </td>
+                    <td style="border:1px solid black;">PIHU MALIK  </td>
+                        <td style="border:1px solid black;">8 </td>
+                        <td style="border:1px solid black;">D </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10438  </td>
+                    <td style="border:1px solid black;">25 </td>
+                    <td style="border:1px solid black;">PRATHAM CHHABRA  </td>
+                        <td style="border:1px solid black;">8 </td>
+                        <td style="border:1px solid black;">D </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8886  </td>
+                    <td style="border:1px solid black;">26 </td>
+                    <td style="border:1px solid black;">PRERAK BAREJA  </td>
+                        <td style="border:1px solid black;">0 </td>
+                        <td style="border:1px solid black;">E </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9933  </td>
+                    <td style="border:1px solid black;">27 </td>
+                    <td style="border:1px solid black;">PRIYANSHI KHURANA  </td>
+                        <td style="border:1px solid black;">18.5 </td>
+                        <td style="border:1px solid black;">A1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8756  </td>
+                    <td style="border:1px solid black;">28 </td>
+                    <td style="border:1px solid black;">RAGHAV NARANG  </td>
+                        <td style="border:1px solid black;">14 </td>
+                        <td style="border:1px solid black;">B2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8971  </td>
+                    <td style="border:1px solid black;">29 </td>
+                    <td style="border:1px solid black;">SAMAYRA CHOPRA  </td>
+                        <td style="border:1px solid black;">14.5 </td>
+                        <td style="border:1px solid black;">B1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8755  </td>
+                    <td style="border:1px solid black;">30 </td>
+                    <td style="border:1px solid black;">SARGAM MALHOTRA  </td>
+                        <td style="border:1px solid black;">17 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8759  </td>
+                    <td style="border:1px solid black;">31 </td>
+                    <td style="border:1px solid black;">SHAURYA GUPTA  </td>
+                        <td style="border:1px solid black;">14.5 </td>
+                        <td style="border:1px solid black;">B1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8858  </td>
+                    <td style="border:1px solid black;">32 </td>
+                    <td style="border:1px solid black;">SHIVI  </td>
+                        <td style="border:1px solid black;">13 </td>
+                        <td style="border:1px solid black;">B2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8795  </td>
+                    <td style="border:1px solid black;">33 </td>
+                    <td style="border:1px solid black;">SIDHAM JAIN  </td>
+                        <td style="border:1px solid black;">4.5 </td>
+                        <td style="border:1px solid black;">E </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9361  </td>
+                    <td style="border:1px solid black;">34 </td>
+                    <td style="border:1px solid black;">TEJAS SINGH CHHABRA  </td>
+                        <td style="border:1px solid black;">6 </td>
+                        <td style="border:1px solid black;">E </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 8762  </td>
+                    <td style="border:1px solid black;">35 </td>
+                    <td style="border:1px solid black;">UJJWAL DEWAN  </td>
+                        <td style="border:1px solid black;">18 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 10178  </td>
+                    <td style="border:1px solid black;">36 </td>
+                    <td style="border:1px solid black;">VASU CHOPRA  </td>
+                        <td style="border:1px solid black;">11.5 </td>
+                        <td style="border:1px solid black;">C1 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9935  </td>
+                    <td style="border:1px solid black;">37 </td>
+                    <td style="border:1px solid black;">VATSAL VISHAL BHATIA  </td>
+                        <td style="border:1px solid black;">16.5 </td>
+                        <td style="border:1px solid black;">A2 </td>
+                </tr><tr>
+                    <td style="border:1px solid black;"> 9146  </td>
+                    <td style="border:1px solid black;">38 </td>
+                    <td style="border:1px solid black;">VIBHOR BANSAL  </td>
+                        <td style="border:1px solid black;">12.5 </td>
+                        <td style="border:1px solid black;">B2 </td>
+                </tr></table></body></html>

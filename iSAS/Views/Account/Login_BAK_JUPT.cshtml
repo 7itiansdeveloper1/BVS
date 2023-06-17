@@ -1,0 +1,215 @@
+﻿@model ISas.Web.Models.Login
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SAS-School Automation System | Log in</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
+    <link href="~/bower_components/logincss/style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" />
+    <link href="~/bower_components/logincss/mdb.min.css" rel="stylesheet" />
+    <link href="~/bower_components/logincss/student.css" rel="stylesheet" />
+    <link href="~/bower_components/logincss/student-responsive.css" rel="stylesheet" />
+    <link href="~/bower_components/logincss/student-login.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/plugins/iCheck/square/blue.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=source+sans+pro:300,400,600,700,300italic,400italic,600italic">
+
+    @*<link href="~/bower_components/font-awesome/css/googleapisFont.css" rel="stylesheet" />*@
+    <!-- jQuery 3 -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- iCheck -->
+    <script src="../plugins/iCheck/icheck.min.js"></script>
+</head>
+
+<body class="login-page">
+    @*<form method="post" action="./sisStudentLogin.aspx?id=sFILXNHjXZY%3d" id="contactForm">*@
+
+        @using (Html.BeginForm())
+        {
+            @*<div class="aspNetHidden">
+                <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTIwNTczNDg5NjAPFhYeClNjaG9vbE5hbWUFGE1vdGhlcuKAmXMgR2xvYmFsIFNjaG9vbB4NU2Nob29sRW1haWxJZAUVaW5mb0Btb3RoZXJzZ2xvYmFsLmluHgpTY2hvb2xMb2dvBUx+L1dvcmtzaGVldC9NR1NQVi9DbGllbnRJbWFnZXMvTG9nby85MjM5OWZjNy1lN2E0LTQzMDYtOWY2MS1iNmJlNDE5NjY0MzcucG5nHgtQcm9kdWN0TmFtZQUMZUNvbm5lY3QtSzEyHgpSZXNlbGxlcklkBQIzNh4UU2hvd1N0dWRlbnRQcmludEJpbGwFAk5vHglTY2hvb2xVUkwFFHd3dy5tb3RoZXJzZ2xvYmFsLmluHhRTaG93U3R1ZGVudERhc2hib2FyZAUDWWVzHhJTY2hvb2xQcm9maWxlSW1hZ2UFTn4vV29ya3NoZWV0L01HU1BWL0NsaWVudEltYWdlcy9CYW5uZXIvZDljMTJiOWMtNmZkOC00ZmE0LWE1ZGMtMTBjOTY4MGEwNGQwLnBuZx4KU2Nob29sQ29kZQUFTUdTUFYeC1F1ZXJ5U3RyaW5nBQIzMhYCZg9kFhACAw8WAh4Dc3JjBUx+L1dvcmtzaGVldC9NR1NQVi9DbGllbnRJbWFnZXMvTG9nby85MjM5OWZjNy1lN2E0LTQzMDYtOWY2MS1iNmJlNDE5NjY0MzcucG5nZAIFDw8WAh4EVGV4dAUYTW90aGVy4oCZcyBHbG9iYWwgU2Nob29sZGQCBw8WAh8MBeUBR2l2ZSBhIG1pc3NlZCBjYWxsIG9uICA8YSBocmVmPSd0ZWw6ICs5ODk5MDU0NDIyJyB0YXJnZXQ9J190b3AnPjk4OTkwNTQ0MjI8L2E+IGZyb20geW91ciByZWdpc3RlcmVkIG1vYmlsZSBmb3IgSUQgLyBQYXNzd29yZCA8aHIvPjxzbWFsbD5PciBjYWxsIG91ciBQYXJlbnQgSGVscGxpbmUgOiA8YSBocmVmPSd0ZWw6ICs5NTk5NTEwMTIzJyB0YXJnZXQ9J190b3AnPjk1OTk1MTAxMjM8L2E+PHNtYWxsPmQCCQ9kFgYCBw8WAh4Fc3R5bGUFDWRpc3BsYXk6bm9uZTtkAgkPFgIfDQUbY29sb3I6I2RmNWQzNjtkaXNwbGF5Om5vbmU7ZAIPDxYCHw0FDWRpc3BsYXk6bm9uZTsWAgIFDxYCHw0FG2NvbG9yOiM5NjQ0NEU7ZGlzcGxheTpub25lO2QCCw8WAh4EaHJlZgUwc2lzRm9yZ2V0UGFzc3dvcmRGb3JTdHVkZW50LmFzcHg/aWQ9c0ZJTFhOSGpYWlk9ZAINDw8WBh4ISW1hZ2VVcmwFSn4vV29ya3NoZWV0L1Jlc2VsbGVyUGFuZWwvUHJvZFBpYy83ODM4YmM2NS1lODQ4LTQ5YmMtYTNkMC0wZDE2OGExZWI1N2UucG5nHg1BbHRlcm5hdGVUZXh0BQxlQ29ubmVjdC1LMTIeB1Rvb2xUaXAFDGVDb25uZWN0LUsxMmRkAg8PFgIfDAVHc3VwcG9ydEBqdXBzb2Z0LmNvbSBvciA5NTk5NTEwMTIzIEJldHdlZW4gMTA6MDAgQU0gLSA1OiAwMCBQTSAoTW9uLVNhdClkAhEPDxYEHgtOYXZpZ2F0ZVVybGUfDAUcSnVwc29mdCBUZWNobm9sb2dpZXMgUHZ0IEx0ZGRkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBQtjaGtSZW1lbWJlckLrGB/VbXVMfAP8if7wmrtmRaTZOu7FWCk2iu6yYrWn" />
+            </div>
+
+            <div class="aspNetHidden">
+
+                <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="F9B95AE4" />
+                <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAkJGG5BNLWUO376+sTej2nppvxcq3PXX/MyWAMHKwZXIWN6ZYJNGAQHn0c9zMgZU3B2NvjHOkq5wKoqN6Aim8WGMKtTyqevv9cjRp4Oh+9VMXDVWoSEvRCzmIlX0qynpXp6TedE/+6yQq+ioVXmajbnJXps88wCOemAvyjg9r39OvtF4jnP78IyOY8aktA+Wp7rbwkesMzod+pqnnQ+5itCX9dbunPN70rUPZ+UwOh5zw==" />
+            </div>*@
+
+
+            <input type="hidden" name="hdnresellerid" id="hdnresellerid" value="36" />
+
+            <div class="container" style="width: 750px; margin: auto;">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <img src= "~/@ViewBag.HeadDetails.LogoURL"  id="imgSchoolLogo" class="school-logo" />
+                    </div>
+                </div>
+                <div class="studentLogin card">
+                    <div class="card-body row">
+                        <div class="col-sm-6 padding-border-zero offset-white" style="padding-left: 0;">
+                            <div class="left text-center">
+                                <p class="pt-5 text-white">
+                                    <span id="SchoolNameDisplay">@ViewBag.HeadDetails.Header1</span>
+
+                                </p>
+                                <p class="pt-1">
+                                    Certainly, there is no purifier in this world like 'knowledge'
+
+                                    <hr /><small>Or call our Parent Helpline : <a href='tel: +91-9891659669' target='_top'>9891659669</a><small>
+                                </p>
+                                <div class="row mt-5">
+                                    <div class="col-sm-6 col-xs-6">
+                                        <!--a href="https://goo.gl/atYoOz" target="_blank">
+                                        <img src="assets/image/google-play.png" class="img-fluid" />
+                                    </a-->
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6">
+                                        <!--a href="https://goo.gl/5z9gYL" target="_blank">
+                                        <img src="assets/image/app-store-logo.png" class="img-fluid" />
+                                    </a-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 offset-white">
+
+
+                            @using (Html.BeginForm("Login", "Account", FormMethod.Post, htmlAttributes: new { style = "padding:0px 24px;", autocomplete = "off" }))
+                            {
+                                <div class="login-block">
+                                    <div id="LoginDiv">
+                                        <div class="login-heading">Login</div>
+
+                                        @Html.ValidationMessage("loginFailedError", htmlAttributes: new { @class = "text-danger" })
+                                        
+                                        @if (Model != null && Model.SessionList != null)
+                                        {
+                                         @Html.DropDownListFor(m => m.SelectedSessionId, Model.SessionList, new { @class = "form-control" })
+                                        }
+
+                                        <div class="form-group login-input" style="position: relative;">
+                                            <i class="fa fa-user overlay"></i>
+                                            @*<input name="txtUserName" type="text" maxlength="50" id="txtUserName" class="form-control text-input border-none" placeholder="User Name" name="name" onkeypress="return OnKeyPress(event);" />*@
+                                            @Html.TextBoxFor(m => m.username, new { @class = "form-control", autocomplete = "off", placeholder = "User Name" })
+                                        </div>
+
+
+                                        <div class="form-group login-input ">
+                                            <i class="fa fa-key overlay"></i>
+                                            @*<input name="txtPassword" type="password" maxlength="25" id="txtPassword" class="form-control text-input border-none" placeholder="********" onkeypress="return OnKeyPress(event);" />*@
+                                            @Html.PasswordFor(m => m.password, new { @class = "form-control", autocomplete = "off", placeholder = "Password" })
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input id="chkRemember" type="checkbox" name="chkRemember" />Remember me
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group login-input no-border">
+                                                    <small id="smErrorMsg" class="help-block" style="display:none;"></small>
+                                                    <small id="smNoOfAttempts" class="help-block" style="color:#df5d36;display:none;"></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-sm-6 col-xs-6">
+                                                @*<input type="submit" name="btn_Login" value="LOGIN" onclick="return validateLogin();" id="btn_Login" class="btn btn-success btn-md" />
+                                                <input type="submit" name="btn_Loging" value="LOGING" id="btn_Loging" class="btn btn-success" style="display: none;" />*@
+                                                @*<button class="btn btn-success btn-md" type="submit" >Login</button>*@
+                                                <button type="submit" class="bttn">Login</button>
+                                            </div>
+                                            <div class="col-sm-6 reset col-xs-6">
+                                                <a href="javascript:void(0);" class="btn btn-danger btn-md" onclick="reset();">Reset</a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                            </div>
+                                            <div id="OTPprocedeDiv" style="display:none;">
+                                                <div class="alert alert-success">
+                                                    <h2>Enter One Time Password (OTP)</h2>
+                                                </div>
+                                                <div id="OTPErrorMsg" class="alert alert-info">
+                                                    One Time Password (OTP) has been sent to your mobile ******<span id="mobileLastDigit"></span> please enter the same here to login.
+                                                </div>
+                                                <div class="form-group login-input">
+                                                    <i class="fa fa-user overlay"></i>
+                                                    <input name="txtOTP" type="text" id="txtOTP" placeholder="Enter OTP" class="form-control text-input" onkeypress="return clickProcedure(event);" />
+                                                    <br />
+                                                    <small id="mobileRegisteredMsg" class="help-block" style="color:#96444E;display:none;"></small>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6 reset">
+                                                        <a href="" class="btn btn-default btn-block">Cancel</a>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="submit" name="btnProceed" value="PROCEED" onclick="return validateProcede();" id="btnProceed" class="btn btn-success btn-block" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center"><a href="sisForgetPasswordForStudent.aspx?id=sFILXNHjXZY=" id="forgetPassword" class="help-label">Forget Password?</a></p>
+            </div>
+            <div class="Footer-div-img">
+                <br />
+                <img id="ImgProd" title="eConnect-K12" class="econnect-logo" src="Images/7itians_logo.png" alt="eConnect-K12" style="max-width: 150px;" />
+            </div>
+            <div class="Footer-div">
+                <br />
+                <br />
+                <br />
+                <br />
+                <p style="text-align: center; font-size: 10px; letter-spacing: 1px;">All Right Reserved to Bal Vikas School, Panipat. Powered By : <a id="hrefpow" class="footer-jupsoft" target="_blank">7itians</a></p>
+            </div>
+        }
+
+        @*</form>*@
+</body>
+
+
+
+
+
+</html>
+

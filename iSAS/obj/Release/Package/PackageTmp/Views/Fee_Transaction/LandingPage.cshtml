@@ -1,0 +1,395 @@
+﻿@model ISas.Entities.FeesEntities.Fee_Tran_LandingModel
+@{
+    ViewBag.Title = "Fee Transaction Details";
+}
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+
+<section class="content-header">
+    <h1>
+        Fee Search
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li class="active">Fee Search</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h5 class="box-title">Search Student <span class="fa fa-search"></span> </h5>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>&nbsp;</label>
+                                    <h3>Search</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="radio">
+                                            <label>@Html.RadioButtonFor(m => m.SearchType, "FieldSearch", htmlAttributes: new { @checked = "checked" })  Text Search  </label> &nbsp;
+                                            <label>@Html.RadioButtonFor(m => m.SearchType, "Class", htmlAttributes: new { }) Class </label>
+                                            @Html.ValidationMessageFor(r => Model.SearchType, null, htmlAttributes: new { style = "color:red;" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="">
+                                            @Html.DropDownListFor(m => m.SelectedClassID, new SelectList(Model.ClassList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                            @Html.ValidationMessageFor(r => Model.SelectedClassID, null, htmlAttributes: new { style = "color:red;" })
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <div class="">
+                                            @Html.TextBoxFor(m => m.SearchText, htmlAttributes: new { @class = "form-control", placeholder = "Enter father, mother, student names, mobile, admission etc.." })
+                                            @Html.ValidationMessageFor(r => Model.SearchText, null, htmlAttributes: new { style = "color:red;" })
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success" onclick="getStudentDetails()">
+                                        <i class="fa fa-search btnDefaultColor"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="" id="studentDetailsMainDiv">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h5 class="box-title">Day Collection</h5>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="small-box bg-aqua">
+                                            <div class="inner">
+                                                <h3> <span id="C_Total">@Html.DisplayFor(r => Model.FeeCollection.Total)</span></h3>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        @Html.LabelFor(r => Model.FeeCollection.Cash) : <span id="C_Cash">@Html.DisplayFor(r => Model.FeeCollection.Cash)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        @Html.LabelFor(r => Model.FeeCollection.Cheque) : <span id="C_Cheque">@Html.DisplayFor(r => Model.FeeCollection.Cheque)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        @Html.LabelFor(r => Model.FeeCollection.Online) : <span id="C_Online">@Html.DisplayFor(r => Model.FeeCollection.Online)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-rupee"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer">Fee Collection</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="small-box bg-green">
+                                            <div class="inner">
+                                                <h3><span id="T_Total">@Html.DisplayFor(r => Model.TransportCollection.Total) </span><sup style="font-size: 20px"></sup></h3>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        @Html.LabelFor(r => Model.TransportCollection.Cash) : <span id="T_Cash"> @Html.DisplayFor(r => Model.TransportCollection.Cash)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        @Html.LabelFor(r => Model.TransportCollection.Cheque) : <span id="T_Cheque">@Html.DisplayFor(r => Model.TransportCollection.Cheque)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        @Html.LabelFor(r => Model.TransportCollection.Online) : <span id="T_Online"> @Html.DisplayFor(r => Model.TransportCollection.Online)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-bus"></i>
+                                            </div>
+                                            <a href="#" class="small-box-footer">Transport Collection</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h5 class="box-title"> Search Receipt <span class="fa fa-search"></span> </h5>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.FromDate)</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                    @Html.ValidationMessageFor(r => Model.FromDate, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.ToDate)</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                    @Html.ValidationMessageFor(r => Model.ToDate, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <br />
+                                <h5><input type="button" class="btn btn-primary" value="Get Receipts" onclick="GetCollectionDetails()" /></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Receipt Details</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="receiptDetailsMainDiv">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function getReceiptDetails_ByERPNo(erpno) {
+        $.ajax({
+            type: "GET",
+            url: "../StudentFeeDetails/_ReceiptDetails",
+            data: { erpno: erpno },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenMessegeModal(response, '', 'lg', 'Download : Receipts / Invoice');
+            },
+        });
+    }
+
+    function getLedgerDetails_ByERPNo(erpno) {
+        $.ajax({
+            type: "GET",
+            url: "../StudentFeeDetails/_StudentLedger",
+            data: { erpno: erpno },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenMessegeModal(response, '', 'lg', 'Download/View : Student Ledger');
+            },
+        });
+    }
+
+</script>
+
+
+@*Receipt Details Page Script*@
+<script>
+    function ViewReceipt_ByReceiptNo(receiptno, erpno) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../StudentFeeDetails/GetFeeDocument_View",
+            data: { TransRefNo: receiptno, Mode: 'RECEIPT', erpno: erpno },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                var w = window.open('about:blank');
+                w.document.open();
+                w.document.write(response);
+                //w.document.close();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+
+<script>
+    function getReceiptDetails() {
+        var fromDate = $('#FromDate').val(); var toDate = $('#ToDate').val();
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_Transaction/_ReceiptDetails",
+            data: { fromDate: fromDate, toDate: toDate },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                console.log(response);
+                $('#receiptDetailsMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function getStudentDetails() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_Transaction/_StudentDetails",
+            data: { SearchType: $("#SearchType:checked").val(), SearchText: $('#SearchText').val(), ClassID: $('#SelectedClassID').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#studentDetailsMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function GetCollectionDetails() {
+        var fromDate = $('#FromDate').val(); var toDate = $('#ToDate').val();
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_Transaction/GetCollectionDetails",
+            data: { fromDate: fromDate, toDate: toDate },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#C_Cash').html(response.FeeCollection.Cash);
+                $('#C_Cheque').html(response.FeeCollection.Cheque);
+                $('#C_Online').html(response.FeeCollection.Online);
+                $('#C_Total').html(response.FeeCollection.Total);
+
+                $('#T_Cash').html(response.TransportCollection.Cash);
+                $('#T_Cheque').html(response.TransportCollection.Cheque);
+                $('#T_Online').html(response.TransportCollection.Online);
+                $('#T_Total').html(response.TransportCollection.Total);
+
+                getReceiptDetails();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function GetStudentFeeDetails(dueDate) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../StudentFeeDetails/_FeeDetails",
+            data: { DueDate: dueDate },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                //   $('#FeeDetailsMainDiv').html(response);
+                OpenMessegeModal(response, 'Primary', 'lg', 'Receipt Details')
+                //   return false;
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        //        return false;
+    }
+
+</script>

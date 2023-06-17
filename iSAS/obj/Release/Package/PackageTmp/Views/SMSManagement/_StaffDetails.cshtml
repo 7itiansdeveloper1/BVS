@@ -1,0 +1,67 @@
+﻿@model ISas.Entities.SMSManagement.SMS_MainModel
+@{
+    int totalStaffResutlCount = 0;
+    if (Model != null && Model.AdminAndStaffList != null && Model.AdminAndStaffList.Count > 0)
+    {
+        totalStaffResutlCount = Model.AdminAndStaffList.Count;
+    }
+}
+<table class="table table-responsive table-bordered table-condensed table-hover" id="tblStaffList">
+    <thead>
+        <tr>
+            <th>@Html.CheckBox("chkBoxSelectAllStaff", false, htmlAttributes: new { onchange = "chekBoxAllStaff()" })</th>
+            <th>Staff ID</th>
+            <th>Staff Name</th>
+            <th>Department</th>
+            <th  id="use_staffMobile" class="btn btn-info" title="Click here to copy mobile nos..!" style="width:100%;">Mobile</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.AdminAndStaffList != null && Model.AdminAndStaffList.Count > 0)
+        {
+            for (int i = 0; i < Model.AdminAndStaffList.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(r => Model.AdminAndStaffList[i].StaffCode)
+                        @Html.HiddenFor(r => Model.AdminAndStaffList[i].StaffID)
+                        @Html.HiddenFor(r => Model.AdminAndStaffList[i].StaffName)
+                        @Html.HiddenFor(r => Model.AdminAndStaffList[i].Mobile)
+
+                        @Html.CheckBoxFor(r => Model.AdminAndStaffList[i].IsSelected, htmlAttributes: new { @class = "staffSelectchkBox", onchange = "getSelectedStaffCount()" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(r => Model.AdminAndStaffList[i].StaffID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(r => Model.AdminAndStaffList[i].StaffName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(r => Model.AdminAndStaffList[i].Department)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(r => Model.AdminAndStaffList[i].Mobile)
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#staffresultCount').html('@totalStaffResutlCount');
+    });
+
+    $("#use_staffMobile").click(function () {
+        var allStaffMobileNos = "";
+        $('#tblStaffList > tbody > tr').each(function () {
+            //allStaffMobileNos += $(this).find('td').eq(4).html();
+            if ($(this).find('td').eq(4).html().trim() != "") {
+                allStaffMobileNos += $(this).find('td').eq(4).html().trim() + "\n";
+            }
+        });
+        copyTextToClipboard(allStaffMobileNos);
+        OpenMessegeAutoHideDiv('Mobile nos copied successfully..!', 'Info');
+    });
+</script>

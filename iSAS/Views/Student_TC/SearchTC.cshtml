@@ -1,0 +1,123 @@
+﻿@{
+     Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+
+<link href="~/bower_components/pageSize/PageSize.css" rel="stylesheet" />
+
+<style>
+    h3 {
+        font-family: Calibri;
+        font-size: 20pt;
+        font-style: normal;
+        font-weight: bold;
+        color: #3c8dbc;
+        text-align: center;
+        text-decoration: underline;
+    }
+</style>
+
+<page size="A4" style="padding:5px;background-color:#fbf6f6;">
+    <div>
+        @{
+            Html.RenderAction("_ReportHeader", "Common", new { tempReportName = "" });
+        }
+    </div>
+    <div style="border-bottom:1px solid #ddd;">
+        &nbsp;
+    </div>
+    <section class="content-header">
+        <h3>STUDENT TC DOWNLOAD</h3>
+    </section>
+
+    <div class="row">
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="form-group">
+                <label for="">Admision Number <i class="mandateLbl">*</i></label>
+                <div class="select">
+                    @Html.TextBox("AdmNo", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessage("AdmNo", null, htmlAttributes: new { style = "color:red;" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="form-group">
+                <label for="">Date of Birth <i class="mandateLbl">*</i></label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBox("DOB", null, htmlAttributes: new { @class = "form-control pull-right date" })
+                    @Html.ValidationMessage("DOB", null, htmlAttributes: new { style = "color:red;" })
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="form-group">
+                <button onclick="getTCDetails()" type="button" class="btn btn-primary pull-right" style="margin-right: 5px;margin-top:25px;">
+                    <i class="fa fa-search"></i> Search TC Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tcDetails">&nbsp;</div>
+</page>
+<script>
+    $(function () {
+        var datepicker = $.fn.datepicker.noConflict();
+        $.fn.bootstrapDP = datepicker;
+        $('.date').bootstrapDP({
+            autoclose: true,
+            format: 'dd/mm/yyyy'
+        });
+    });
+
+    function getTCDetails() {
+        var admNo = $('#AdmNo').val();
+        var dob = $('#DOB').val();
+
+        if (admNo == "" || admNo == null) {
+            OpenMessegeAutoHideDiv("Admision number is requried.", 'Warning');
+            return false;
+        }
+
+        if (dob == "" || dob == null) {
+            OpenMessegeAutoHideDiv("Date of birth is requried.", 'Warning');
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '@Url.Action("_SearchedTCDetails", "Student_TC")',
+            data: { admNo: admNo, dob: dob},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#tcDetails').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function spinnerShow() {
+        $('#spinner').show();
+    }
+
+    function spinnerHide() {
+        $('#spinner').hide();
+    }
+</script>

@@ -1,0 +1,52 @@
+﻿@model ISas.Entities.LibraryEntities.Library_TransactionModels
+
+
+<table class="table table-striped table-bordered table-condensed table-hover table-responsive" id="tblBooReturnDetails">
+    <thead>
+        <tr>
+            <th>@Html.CheckBox("chkBoxAllReturnBook", false, htmlAttributes: new { onchange = "CheckToSelectAllReturnBook()" })</th>
+            <th>Issue Date</th>
+            <th>Trans ID</th>
+            <th>Acc No</th>
+            <th>Issued Days</th>
+            <th>Due Date</th>
+            <th>Over Due Days</th>
+            <th>Fine</th>
+            <th>Book Title</th>
+            <th>Author</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.BookReturnDetails.Count; i++)
+        {
+            string className = "";
+            if (Model.BookReturnDetails[i].Fine > 0)
+            {
+                className = "alert alert-danger alert - dismissable";
+            }
+            <tr class="@className">
+                <td>
+                    @Html.CheckBoxFor(r => Model.BookReturnDetails[i].Selected, htmlAttributes: new { @class = "chkBoxReturnBook", onchange = "checkToEnableIssueReturnBtn()" })
+                </td>
+                <td>
+                    @Html.HiddenFor(r => Model.BookReturnDetails[i].AccNo)
+                    @Html.HiddenFor(r => Model.BookReturnDetails[i].BookName)
+                    @Html.HiddenFor(r => Model.BookReturnDetails[i].AuthorName)
+                    @Html.HiddenFor(r => Model.BookReturnDetails[i].TransDate)
+                    @Html.HiddenFor(r => Model.BookReturnDetails[i].TransID)
+                    @Html.HiddenFor(r => Model.BookReturnDetails[i].Fine)
+
+                    @Html.DisplayFor(r => Model.BookReturnDetails[i].IssueDate)
+                </td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].TransID)</td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].AccNo)</td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].IssuedDays)</td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].DueDate)</td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].OverDueDays)</td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].Fine)</td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].BookName)</td>
+                <td>@Html.DisplayFor(r => Model.BookReturnDetails[i].AuthorName)</td>
+            </tr>
+        }
+    </tbody>
+</table>

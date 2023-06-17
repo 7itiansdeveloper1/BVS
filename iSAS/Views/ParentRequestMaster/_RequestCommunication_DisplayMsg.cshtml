@@ -1,0 +1,33 @@
+﻿@model  List<ISas.Entities.DashboardEntities.RequestCommunicationDetailsModel>
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        if (item.IsUserSendMsg)
+        {
+            <div class="direct-chat-msg right">
+                <div class="direct-chat-info clearfix">
+                    <span class="direct-chat-name pull-right">@Html.DisplayFor(r => item.SendBy)</span>
+                    <span class="direct-chat-timestamp pull-left">@Html.DisplayFor(r => item.SendDateTime)</span>
+                </div>
+                <img class="direct-chat-img" src="~/Images/System/defaultUserImg.png" alt="message user image">
+                <div class="direct-chat-text">
+                    @Html.DisplayFor(r => item.Message)
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="direct-chat-msg">
+                <div class="direct-chat-info clearfix">
+                    <span class="direct-chat-name pull-left">@Html.DisplayFor(r => item.SendBy)</span>
+                    <span class="direct-chat-timestamp pull-right">@Html.DisplayFor(r => item.SendDateTime)</span>
+                </div>
+                <img class="direct-chat-img" src="~/Images/System/defaultUserImg.png" alt="message user image">
+                <div class="direct-chat-text">
+                    @Html.DisplayFor(r => item.Message)
+                </div>
+            </div>
+        }
+    }
+}

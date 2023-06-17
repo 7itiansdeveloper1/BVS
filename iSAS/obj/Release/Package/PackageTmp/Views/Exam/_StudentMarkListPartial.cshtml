@@ -1,0 +1,175 @@
+﻿@model ISas.Web.ViewModels.MarksEntry1to5ViewModel
+@{
+    List<SelectListItem> gradeList = new List<SelectListItem>();
+    gradeList.Add(new SelectListItem { Text = "A+", Value = "A+" });
+    gradeList.Add(new SelectListItem { Text = "A", Value = "A" });
+    gradeList.Add(new SelectListItem { Text = "B", Value = "B" });
+    gradeList.Add(new SelectListItem { Text = "C", Value = "C" });
+    gradeList.Add(new SelectListItem { Text = "D", Value = "D" });
+    gradeList.Add(new SelectListItem { Text = "E", Value = "E" });
+    gradeList.Add(new SelectListItem { Text = "A1", Value = "A1" });
+    gradeList.Add(new SelectListItem { Text = "A2", Value = "A2" });
+    gradeList.Add(new SelectListItem { Text = "B1", Value = "B1" });
+    gradeList.Add(new SelectListItem { Text = "B2", Value = "B2" });
+    gradeList.Add(new SelectListItem { Text = "C1", Value = "C1" });
+    gradeList.Add(new SelectListItem { Text = "C2", Value = "C2" });
+    gradeList.Add(new SelectListItem { Text = "D1", Value = "D1" });
+    gradeList.Add(new SelectListItem { Text = "D2", Value = "D2" });
+}
+
+<table id="tblHeader" class="table table-striped" style="width:100%;display:none;">
+    <tr>
+        <td colspan="6">
+            <h3>
+                BAL VIKAS SCHOOL
+                <br />24 GTB Colony, Model Town, Panipat
+            </h3>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6"><strong> Report Name : Report Name :- Marks Details For (@Html.DisplayFor(r => Model.ClassName)-@Html.DisplayFor(r => Model.SectionName), @Html.DisplayFor(r => Model.SubjectName), @Html.DisplayFor(r => Model.AssessmentName))</strong></td>
+    </tr>
+</table>
+
+
+@if (Model.SubjectCategory == "Grade")
+{
+    <div class="col-xs-12 col-sm-12 col-md-3">
+        <div class="form-group">
+            <label for="">Apply All Grade</label>
+            <div class="select">
+                @Html.DropDownList("ApplyAll_Grade", new SelectList(gradeList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "fun_ApplyAll_Grade()" })
+            </div>
+
+            
+        </div>
+    </div>
+}
+else
+{
+    <div class="col-xs-12 col-sm-12 col-md-3">
+        <div class="form-group">
+            <label for="">Apply All Marks</label>
+            <div class="select">
+                @Html.TextBox("ApplyAll_Marks", "0", htmlAttributes: new { @class = "form-control", onchange = "fun_ApplyAll_Marks()", onkeypress = "return NumericDecimalOnly(event)" })
+                
+            </div>
+            
+        </div>
+    </div>
+    <div>
+    </div>
+}
+    <div class="col-md-12">
+        <div class="row pull-right">
+            <div class="col-md-12">
+                <label>Max. Marks :</label>
+                <label class="text-primary">@Html.DisplayFor(r => Model.MaxMark)</label> <label>|</label>
+                <label>Weightage : </label>
+                <label class="text-primary">@Html.DisplayFor(r => Model.Weightage)</label><label>|</label>
+                <label>Last Updated By : </label>
+                <label class="text-primary">@Html.DisplayFor(r => Model.LastModifiedBy)</label>
+            </div>
+        </div>
+    </div>
+<div class="col-md-12" style="overflow-y:auto;">
+    <table class="table table-bordered table-responsive table-condensed table-hover" id="MarkTable" style="border:1px solid black;font-family:Calibri;font-size:15px;" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr style="border:1px solid black;">
+                <th style="border:1px solid black;">Adm No.</th>
+                <th style="border:1px solid black;">Roll No.</th>
+                <th style="border:1px solid black;">Student Name</th>
+                <th style="border:1px solid black;">Is ABSENT</th>
+                <th style="border:1px solid black;">Is ML</th>
+                <th style="border:1px solid black;">Is Exempt</th>
+                @if (Model.SubjectCategory == "Grade")
+                {
+                    <th style="border:1px solid black;">Grade</th>
+                }
+                else
+                {
+                    <th style="border:1px solid black;">Mark</th>
+                    <th style="border:1px solid black;">Grade</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.StudentsMarkList.Count > 0)
+            {
+                //foreach (var item in @Model.StudentsMarkList)
+                for (int i = 0; i < Model.StudentsMarkList.Count; i++)
+                {
+                    <tr class="abc" style="border:1px solid black;">
+                        <td style="border:1px solid black;">
+                            @Model.StudentsMarkList[i].Student.StudentAdmNo
+                            @Html.HiddenFor(x => x.StudentsMarkList[i].Student.StudentERPNo)
+                        </td>
+                        <td style="border:1px solid black;"> @Model.StudentsMarkList[i].Student.StudentRollNo </td>
+                        <td style="border:1px solid black;"> @Model.StudentsMarkList[i].Student.StudentName </td>
+                        <td style="border:1px solid black;">@Html.CheckBoxFor(m => m.StudentsMarkList[i].StudentsMarkFromDBList.IsStudentAbsent, new { @class = "jsgrid-cell jsgrid-align-center", style = "width: 70px", id = "IsStudentAbsent", tabindex = "-1" })</td>
+                        <td style="border:1px solid black;">@Html.CheckBoxFor(m => m.StudentsMarkList[i].StudentsMarkFromDBList.IsStudentonML, new { @class = "jsgrid-cell jsgrid-align-center", style = "width: 70px", id = "IsStudentML", tabindex = "-1" }) </td>
+                        <td style="border:1px solid black;">@Html.CheckBoxFor(m => m.StudentsMarkList[i].StudentsMarkFromDBList.IsStudentExempt, new { @class = "jsgrid-cell jsgrid-align-center", style = "width: 70px", id = "IsStudentExempt", tabindex = "-1" })</td>
+
+                        @if (Model.SubjectCategory == "Grade")
+                        {
+                            <td style="border:1px solid black;">
+                                <div class="select">
+                                    @Html.DropDownListFor(m => Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentGrade, new SelectList(gradeList, "Value", "Text", Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentGrade), "--Select--", new { @class = "form-control select2", style = "width:100%" })
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="border:1px solid black;">
+                                @Html.TextBoxFor(m => m.StudentsMarkList[i].StudentsMarkFromDBList.StudentMark, new { @class = "form-control", style = "width: 150px", onkeypress = "return NumericDecimalOnly(event)" })
+                            </td>
+                            <td style="border:1px solid black;">@Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentGrade </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<table id="tblExportToExcel" class="table-bordered table table-hover" style="border:1px solid black;display:none;">
+    <thead>
+        <tr>
+            <th style="border:1px solid black;">Adm No.</th>
+            <th style="border:1px solid black;">Roll No.</th>
+            <th style="border:1px solid black;">Student Name</th>
+            @if (Model.SubjectCategory == "Grade")
+            {
+                <th style="border:1px solid black;">Grade</th>
+            }
+            else
+            {
+                <th style="border:1px solid black;">Mark</th>
+                <th style="border:1px solid black;">Grade</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.StudentsMarkList != null && Model.StudentsMarkList.Count > 0)
+        {
+            for (int i = 0; i < Model.StudentsMarkList.Count; i++)
+            {
+                <tr>
+                    <td style="border:1px solid black;"> @Html.DisplayFor(r => Model.StudentsMarkList[i].Student.StudentAdmNo)  </td>
+                    <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].Student.StudentRollNo) </td>
+                    <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].Student.StudentName)  </td>
+                    @if (Model.SubjectCategory == "Marks")
+                    {
+                        <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentMark) </td>
+                        <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentGrade) </td>
+                    }
+                    else if (Model.SubjectCategory == "Grade")
+                    {
+                        <td style="border:1px solid black;">
+                            @Html.DisplayFor(r => Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentGrade)
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>

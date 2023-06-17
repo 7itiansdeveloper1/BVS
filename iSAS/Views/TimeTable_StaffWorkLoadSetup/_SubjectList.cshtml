@@ -1,0 +1,23 @@
+﻿@model ISas.Entities.TimeTable_Entities.StaffSubjectSetupModels
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.CheckBox("checkBoxselectAllsubjects", false, htmlAttributes: new { onchange = "Fun_checkToSelectAllsubjects()" }) </th>
+            <th>Subject</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.SubjectList.Count; i++)
+        {
+            <tr>
+                <td>@Html.CheckBoxFor(r => Model.SubjectList[i].Selected, htmlAttributes: new { @class = "checkBoxsubject" })</td>
+                <td>
+                    @Html.HiddenFor(r => Model.SubjectList[i].Value)
+                    @Html.DisplayFor(r => Model.SubjectList[i].Text)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

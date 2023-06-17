@@ -1,0 +1,52 @@
+﻿@model ISas.Entities.Examination_Entities.Examination_TempleteClassSetupModel
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="alert alert-info alert-dismissible" id="autoHideMsgDiv" style="z-index:1;position: absolute;min-width:98%;max-width:98%;display:none;">
+            <h4><i id="autoHideDivTitleIcon" class="icon fa fa-info"></i> <span id="autoHideDivTitle"> Alert! </span> </h4>
+            <p id="autoHideDivMsg"> Info alert preview. This alert is dismissable.</p>
+        </div>
+    </div>
+</div>
+
+
+@using (Html.BeginForm("RemarksTemplete_ClassSetup_CRUD", "Examination_RemarksCenter", FormMethod.Post, htmlAttributes: new { }))
+{
+    @Html.HiddenFor(r => Model.RemarksTempleteId)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-widget">
+                <div class="box-body no-padding">
+                    <div style="max-height:300px;overflow:auto;">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>@Html.CheckBox("checkBoxselectAllClasses", false, htmlAttributes: new { onchange = "Fun_checkToSelectAllClases()" })</th>
+                                    <th>Class</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.ClassList.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@Html.CheckBoxFor(r => Model.ClassList[i].Selected, htmlAttributes: new { @class = "checkBoxclass" })</td>
+                                        <td>
+                                            @Html.HiddenFor(r => Model.ClassList[i].Value)
+                                            @Html.DisplayFor(r => Model.ClassList[i].Text)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="button" onclick="CommonAjaxPost(this); setTimeout(function () { $('#mainModalWithSave').modal('toggle'); GetRemarksTempleteList();}, 1500);" class="btn btn-success">SAVE</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

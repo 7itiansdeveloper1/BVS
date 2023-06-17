@@ -1,0 +1,96 @@
+﻿@model ISas.Entities.Academic.Academic_SectionMasterModels
+@{
+    ViewBag.Title = "Update";
+}
+
+<section class="content-header">
+    <h1>
+        Section Master <small>(UPDATE)</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>School</li>
+        <li><a href="@Url.Action("New", "Academic_SectionMaster")">Section Master</a> </li>
+        <li class="active">Update</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Academic_SectionMaster_CRUD", "Academic_SectionMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.SecId)
+        <div class="box box-warning">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SecName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.SecName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.SecName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PrintOrder)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                <input type="number" id="PrintOrder" name="PrintOrder" class="form-control" value="@Model.PrintOrder" />
+                                @Html.ValidationMessageFor(r => Model.PrintOrder, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="checkbox">
+                            <br /><label>
+                                @Html.CheckBoxFor(r => Model.Active)@Html.LabelFor(r => Model.Active)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-warning" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this);">UPDATE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+
+    @{ Html.RenderAction("LandingPage", "Academic_SectionMaster"); }
+</section>
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Academic_SectionMaster/New"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

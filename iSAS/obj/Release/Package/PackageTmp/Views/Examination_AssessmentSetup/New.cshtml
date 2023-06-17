@@ -1,0 +1,177 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Examination_Entities.Examination_AssessmentSetupModels
+<section class="content-header">
+    <h1>
+        Assessment Setup
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Exam</li>
+        <li><a href="@Url.Action("New", "Exam_TemplateSetup")">Templete Setup</a></li>
+        <li><a href="@Html.EncodedPath(" ", "New", "Examination_SubjectMaster", new { TemplateId = Model.ExamTemplateId, TempleteName = Model.Exam_TemplateName }, htmlAttributes: new { })">Subject Setup</a></li>
+        @if (Model.IsChildSubjectSetup)
+        {
+            <li><a href="@Html.EncodedPath(" ", "New", "Examination_ChildSubjectSetup", new { TemplateId = Model.ExamTemplateId, TempleteName = Model.Exam_TemplateName, SubjectId = Model.MainSubjectId, SubjectName = Model.MainSubjectName }, htmlAttributes: new { })">Child Subject Setup</a> </li>
+        }
+        <li class="active">Assessment Setup</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Examination_AssessmentSetup_CRUD", "Examination_AssessmentSetup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.TransactionMode)
+        @Html.HiddenFor(r => Model.SubjectId)
+        @Html.HiddenFor(r => Model.ExamTemplateId)
+
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Exam : <label class="text-primary">@Html.DisplayFor(r => Model.Exam_TemplateName)</label>, Subject : <label class="text-primary">@Html.DisplayFor(r => Model.SubjectName)</label> </h5>
+            </div>
+            <div class="box-body">
+                <div class="col-md-6">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.CheckBox("chkBoxAllAssessment", false, htmlAttributes: new { onchange = "fun_checkToSelectAllAssessment()" })
+                                </th>
+                                <th>Assessment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.AssessmentNameList.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.HiddenFor(r => Model.AssessmentNameList[i].Text)
+                                        @Html.HiddenFor(r => Model.AssessmentNameList[i].Value)
+                                        @Html.CheckBoxFor(r => Model.AssessmentNameList[i].Selected, htmlAttributes: new { @class = "chkboxAssessment" })
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(r => Model.AssessmentNameList[i].Text)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-4 pull-right">
+                            <label for="" class=" pull-right checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(r => Model.ChkBoxAddNewAssessment, htmlAttributes: new { onchange = "funFormAddNewAssessment()" }) Add New Assessment
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row" id="addNewAssessmentDiv" style="display:none;">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.AssessmentName)<i class="mandateLbl">*</i></label>
+                                <div class="select">
+                                    @Html.TextBoxFor(m => m.AssessmentName, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.AssessmentName, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.AssessmentDisplayName)<i class="mandateLbl">*</i></label>
+                                <div class="select">
+                                    @Html.TextBoxFor(m => m.AssessmentDisplayName, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.AssessmentDisplayName, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+    <div class="" id="departmentMasterMainDiv">
+        @{ Html.RenderAction("LandingPage", "Examination_AssessmentSetup", new { ExamTemplateId = Model.ExamTemplateId, AssessmentPropertyId = Model.AssessmentPropertyId, SubjectId = Model.SubjectId, MainSubjectId = Model.MainSubjectId, MainSubjectName = Model.MainSubjectName, IsChildSubjectSetup = Model.IsChildSubjectSetup == false ? "NO" : "YES" }); }
+    </div>
+</section>
+
+<script>
+    function fun_checkToSelectAllAssessment() {
+        if ($('#chkBoxAllAssessment').is(':checked')) {
+            $('.chkboxAssessment').prop('checked', true);
+        } else {
+            $('.chkboxAssessment').prop('checked', false);
+        }
+    }
+
+    function funFormAddNewAssessment() {
+        if ($('#ChkBoxAddNewAssessment').is(':checked')) {
+            $('#addNewAssessmentDiv').show();
+        } else {
+            $('#AssessmentDisplayName').val(null);
+            $('#AssessmentName').val(null);
+            $('#addNewAssessmentDiv').hide();
+        }
+    }
+    function getAssessmentList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Examination_AssessmentSetup/LandingPage",
+            data: { ExamTemplateId: '@Model.ExamTemplateId', SubjectId: '@Model.SubjectId' },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#departmentMasterMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location.reload(); }, $('#hddnReloadTime').val());
+                    //  getSubjectList();
+                    //  emptyValForNew();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

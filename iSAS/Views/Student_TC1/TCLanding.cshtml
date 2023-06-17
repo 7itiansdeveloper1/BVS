@@ -1,0 +1,170 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.Student_TC>
+
+@{
+    string reportName = "TC Details";
+}
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+</div>
+
+<section class="content-header">
+    <h1>
+        TC
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li class="active">TC</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">TC List</h5>
+            <span class="pull-right box-title">
+                @Html.ActionLink("Print Blank TC", "PrintTC", "Student_TC1", new { ERPNo = "BlankTC" }, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+                @Html.ActionLink("ADD NEW", "NewTC", "Student_TC1", new { }, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+            </span>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>TC No</th>
+                        <th>Applied Date</th>
+                        <th>Creation Date</th>
+                        <th>Issue Date</th>
+                        <th>Student Name</th>
+                        <th>Class</th>
+                        <th>TC Reason</th>
+                        <th>Is Cancelled</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].TCNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].AppliedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].CreationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].IssueDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].Student)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].ClassName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].ReasonForTC)
+                            </td>
+                            <td class="text-center">
+                                @if (Model[i].IsTCCancelled)
+                                {
+                                    <i class="fa fa-toggle-on" style="color:forestgreen;" title="YES"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-toggle-off" style="color:red;" title="NO"></i>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @Html.EncodedActionLink(" ", "EditTC", "Student_TC1", new { TCID = Model[i].TCNo }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); 
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>
+

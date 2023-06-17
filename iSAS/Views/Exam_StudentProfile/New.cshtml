@@ -1,0 +1,161 @@
+﻿@model ISas.Entities.Exam_StudentProfileModels
+
+<section class="content-header">
+    <h1>
+        Profile & Attendance Entry
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">Academic</a></li>
+        <li><a href="#">Profile & Attendance Entry</a></li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Exam_StudentProfile_CRUD", "Exam_StudentProfile", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-primary">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SessionId)</label>
+                            <div class="select">
+                                @Html.HiddenFor(r=> Model.SessionId)
+                                @Html.DropDownListFor(m => m.SessionId, new SelectList(Model.SessionList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", disabled = "disabled" })
+                                @Html.ValidationMessageFor(r => Model.SessionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ExamId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ExamId, new SelectList(Model.ExamList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "emptyClassList()" })
+                                @Html.ValidationMessageFor(r => Model.ExamId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ClassId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ClassId, new SelectList(Model.ClassList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "$('#bodytblStudentDetails').empty(); getSectionListByClass_Custom('ClassId','SectionId');" })
+                                @Html.ValidationMessageFor(r => Model.ClassId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SectionId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SectionId, new SelectList(Model.SectionList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getStudentDetails()" })
+                                @Html.ValidationMessageFor(r => Model.SectionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SectionId, "Open Day Apply")</label>
+                            <div class="select">
+                                @Html.TextBox("openDayApply", "", htmlAttributes: new { @class = "form-control", onchange = "applyOpenDay()" })
+                                @Html.ValidationMessageFor(r => Model.SectionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="" id="studentDetails">
+            @Html.Partial("_StudentDetails", Model)
+        </div>
+
+        <div class="box-footer">
+            <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">Save</button>
+            <button class="btn btn-default" type="button" onclick="window.location.reload()">Reset</button>
+        </div>
+    }
+</section>
+
+<script>
+    function emptyClassList()
+    {
+        $('#bodytblStudentDetails').empty();
+        $('#ClassId').val(null).change();
+    }
+
+    function applyOpenDay() {
+        $('.openDay').val($('#openDayApply').val());
+    }
+
+    function getSectionListByClass_Custom(ClassId, SectionId) {
+        var sectionHtml = '<option value="">--Select--</option>';
+        $.ajax({
+            type: "GET",
+            url: "../Exam_StudentProfile/GetUserWiseSectionList",
+            data: { ClassId: $('#' + ClassId).val() },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    sectionHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                }
+                $('#' + SectionId).html(sectionHtml);
+            },
+        });
+    }
+
+      function getStudentDetails() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Exam_StudentProfile/_StudentDetails",
+            data: { SessionId: $('#SessionId').val(), ClassId: $('#ClassId').val(), SectionId: $('#SectionId').val(), ExamId: $('#ExamId').val(), },
+            error: function (xhr, status, error) {
+                OpenMessegeModal($('#ErrorMsgOnJasonFailed').val());
+            },
+            success: function (result) {
+                $('#studentDetails').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+ 
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeModal($('#ErrorMsgOnJasonFailed').val());
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeModal(response.Msg);
+                    getStudentDetails();
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+</script>

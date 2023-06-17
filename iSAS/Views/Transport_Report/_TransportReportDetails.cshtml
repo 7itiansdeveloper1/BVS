@@ -1,0 +1,203 @@
+﻿@model  ISas.Entities.TransportEntities.Transport_ReportModel
+@{
+    int colspanVal = @Model.HeaderNameList.Count;
+    string reportName = Model.ReportHeaders.ReportName;
+}
+
+@Html.Hidden("hddnReportName", @reportName)
+
+@if (Model.ReportId == "Trans_TransportList")
+{
+    <div id="tempReportHeader" style="display:none;">
+        @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+        <table class="table table-responsive table-bordered table-condensed nowrap" style="width:100%">
+            <tr>
+                <td>
+                    Driver Name :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.DName)
+                </td>
+                <td>
+                    Driver Mobile :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.DMob)
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    Licence No :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.DDLNo)
+                </td>
+                <td>
+                    Bedge No :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.DBedgeNo)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Helper Name :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.HName)
+                </td>
+                <td>
+                    Helper Mobile :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.HMob)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Incharge Name :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.InchargeName)
+                </td>
+                <td>
+                    Incharge Mobile :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.InchargeMobile)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Parent1 Name :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.Parent1Name)
+                </td>
+                <td>
+                    Parent1 Mobile :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.Parent1Mobile)
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    Parent2 Name :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.Parent2Name)
+                </td>
+                <td>
+                    Parent2 Mobile :
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.OtherReportHeader.Parent2Mobile)
+                </td>
+            </tr>
+        </table>
+        <br />
+    </div>
+}
+else
+{
+    <div id="tempReportHeader" style="display:none;">
+        @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+    </div>
+}
+<table id="example1" class="table table-responsive table-bordered table-condensed nowrap" style="width:100%">
+    <thead>
+        <tr>
+            @foreach (var item in Model.HeaderNameList)
+            {
+                <th>@Html.DisplayFor(r => item) </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.ValueList.Count; i++)
+        {
+            <tr>
+                @for (int j = 0; j < Model.ValueList[i].Count; j++)
+                {
+                    <td>@Html.DisplayFor(r => Model.ValueList[i][j])</td>
+                }
+            </tr>
+        }
+
+        @if (Model.ReportId == "Trans_DefaulterList" || Model.ReportId == "Trans_PaidList")
+        {
+            <tr>
+                <td colspan="@colspanVal" style="text-align:right;padding-right:10%;">
+                    <strong>Total : @Html.DisplayFor(r => Model.TotalAmount)</strong>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: $('#hddnReportName').val(),
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: $('#hddnReportName').val(),
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#tempReportHeader').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>

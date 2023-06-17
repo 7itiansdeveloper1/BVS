@@ -1,0 +1,64 @@
+﻿@model List<ISas.Entities.Academic.Academic_PTMOpendDayEntities>
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">PTM DAY List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Attendance Date</th>
+                    @*<th>Class</th>
+                    <th>Category</th>*@
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => count)
+
+                                @Html.HiddenFor(r => Model[i].ClassId, htmlAttributes: new { id = "ClassId_" + @i })
+                                @Html.HiddenFor(r => Model[i].AttDate, htmlAttributes: new { id = "AttDate_" + @i })
+                                @Html.HiddenFor(r => Model[i].Category, htmlAttributes: new { id = "Category_" + @i })
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].AttDate)</td>
+                            @*<td>@Html.DisplayFor(r => Model[i].Class)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Category)</td>*@
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteConfirm('@i')" title="Delete House" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span title="Delete Class" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+        })
+    })
+</script>

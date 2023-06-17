@@ -1,0 +1,117 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.Examination_Entities.Examination_ChildSubjectSetupModels>
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Department List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Child Subject Name</th>
+                    <th>Assessment</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>@Html.DisplayFor(r => Model[i].ChildSubjectName)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Assessment)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteConfirm('@Model[i].SubjectPropertyId', '@Model[i].Exam_TemplateName')" title="Delete Subject" class="fa fa-remove btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span title="Delete Department" class="fa fa-remove btnDefaultColorFaded"></span>
+                                }
+                                @Html.EncodedActionLink(" ", "Updation", "Examination_ChildSubjectSetup", new { TemplateId = Model[i].ExamTemplateId, SubjectId = Model[i].SubjectId, SubjectPropertyId = Model[i].SubjectPropertyId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Subject" })
+
+                                <a href="#" onclick="OpenPropertiesDialog('@Model[i].SubjectPropertyId', '@Model[i].SubjectName')" title="Properties" class="fa fa-gear btnDefaultColor"></a>
+
+                                @if (Model[i].HavingChildSubject)
+                                {
+                                    @Html.ActionLink(" ", "", "", new { }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColorFaded", title = "Assessment Setup" })
+                                }
+                                else
+                                {
+                                    @Html.EncodedActionLink(" ", "New", "Examination_AssessmentSetup", new { ExamTemplateId = Model[i].ExamTemplateId, SubjectId = Model[i].ChildSubjectId, ExamTempleteName = Model[i].Exam_TemplateName, SubjectName = Model[i].ChildSubjectName, MainSubjectId = Model[i].SubjectId, MainSubjectName = Model[i].SubjectName, IsChildSubjectSetup = "YES" }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Assessment Setup" })
+                                }
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable();
+    });
+
+    function DeleteConfirm(Id, templeteName) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to remove this subject from '" + templeteName + "' ?", MyYesFunction, MyNoFunction, Id);
+    }
+
+    function MyYesFunction(Id) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Examination_SubjectMaster/Examination_SubjectMaster_Delete",
+            data: { PropertyId: Id },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                getSubjectList();
+               // setTimeout(function () { window.location.reload(); }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function OpenPropertiesDialog(PropertyId, subjectName) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Examination_SubjectMaster/_SubjectPropertySetup",
+            data: { PropertyId: PropertyId, SubjectType: 'C'},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenModalWithSave(result, 'Properties For :- ' + subjectName);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

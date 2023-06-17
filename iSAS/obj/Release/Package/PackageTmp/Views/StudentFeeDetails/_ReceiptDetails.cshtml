@@ -1,0 +1,31 @@
+﻿@model List<ISas.Entities.DashboardEntities.StudentFeeStatusModel>
+@{
+    int count = 1;
+}
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-2 @item.Status" style="border:1px solid black;">
+                <span onclick="GetStudentFeeDetails('@item.DueDate')" style="cursor:pointer">@Html.DisplayFor(r => item.Duration)</span>
+                @Html.ActionLink(item.Bill, "GetFeeDocument", "StudentFeeDetails", new { TransRefNo = item.Bill == "RECEIPT" ? item.ReceiptNo : item.InvoiceNo, Mode = item.Bill, erpno = Session["UserID"].ToString(), MonthName = item.Duration }, htmlAttributes: new { style = "color:aqua;" })
+            </div>
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+            count++;
+            if (count > 4)
+            {
+                <div class="row">
+                    <div class="col-md-2">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                </div>
+                count = 1;
+            }
+        }
+    </div>
+</div>

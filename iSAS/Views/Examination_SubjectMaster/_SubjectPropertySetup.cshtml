@@ -1,0 +1,138 @@
+﻿@model ISas.Entities.Examination_Entities.Examination_SubjectPropertyModel
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="alert alert-info alert-dismissible" id="autoHideMsgDiv" style="z-index:1;position: absolute;min-width:98%;max-width:98%;display:none;">
+            @*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>*@
+            <h4><i id="autoHideDivTitleIcon" class="icon fa fa-info"></i> <span id="autoHideDivTitle"> Alert! </span> </h4>
+            <p id="autoHideDivMsg"> Info alert preview. This alert is dismissable.</p>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Examination_SubjectPropertySetup_CRUD", "Examination_SubjectMaster", FormMethod.Post, htmlAttributes: new { }))
+{
+    @Html.HiddenFor(r => Model.SubjectId)
+    @Html.HiddenFor(r => Model.SubjectPropertyId)
+    @Html.HiddenFor(r => Model.ExamTemplateId)
+    @Html.HiddenFor(r => Model.SubjectType)
+
+    <div class="row">
+        <div class="col-md-6">
+            &nbsp;
+        </div>
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <div class="form-group">
+                <div class="radio">
+                    <label>
+                        @Html.RadioButtonFor(r => Model.IsAcademicSubject, true, htmlAttributes: new { selected = true }) @Html.LabelFor(r => r.IsAcademicSubject)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <div class="form-group">
+                <div class="radio">
+                    <label>
+                        @Html.RadioButtonFor(r => Model.IsAcademicSubject, false, htmlAttributes: new { }) @Html.LabelFor(r => r.IsNonAcademicSubject)
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3" style="min-width:142px;max-width:142px;">
+            &nbsp;
+        </div>
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <div class="form-group">
+                <div class="radio">
+                    <label>
+                        @Html.RadioButtonFor(r => Model.IsMarkBased, true, htmlAttributes: new { selected = true }) @Html.LabelFor(r => r.IsMarkBased)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <div class="form-group">
+                <div class="radio">
+                    <label>
+                        @Html.RadioButtonFor(r => Model.IsMarkBased, false, htmlAttributes:new { }) @Html.LabelFor(r => r.IsGradeBased)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.DispalyMark) @Html.LabelFor(r => r.DispalyMark)
+                </label>
+            </label>
+        </div>
+
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.DispalyGrade) @Html.LabelFor(r => r.DispalyGrade)
+                </label>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="min-width:300px;max-width:300px;">
+            &nbsp;
+        </div>
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.Is1stLanguage) @Html.LabelFor(r => r.Is1stLanguage)
+                </label>
+            </label>
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.Is2ndLanguage) @Html.LabelFor(r => r.Is2ndLanguage)
+                </label>
+            </label>
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.Is3rdLanguage) @Html.LabelFor(r => r.Is3rdLanguage)
+                </label>
+            </label>
+        </div>
+
+        <div class="col-md-3" style="min-width:150px;max-width:150px;">
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.DisplayOnReportCard) @Html.LabelFor(r => r.DisplayOnReportCard)
+                </label>
+            </label>
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.IsOptionalSubject) @Html.LabelFor(r => r.IsOptionalSubject)
+                </label>
+            </label>
+            <label for="" class=" pull-right checkbox">
+                <label>
+                    @Html.CheckBoxFor(r => Model.IsCompulsorySubject) @Html.LabelFor(r => r.IsCompulsorySubject)
+                </label>
+            </label>
+
+            @if (Model.SubjectType == 'P')
+            {
+                <label for="" class=" pull-right checkbox">
+                    <label>
+                        @Html.CheckBoxFor(r => Model.HavingChildSubject) @Html.LabelFor(r => r.HavingChildSubject)
+                    </label>
+                </label>
+            }
+        </div>
+    </div>
+
+    <div class="row" style="border-top:1px solid #808080;">
+        <div class="col-md-12">
+            <button style="margin-top:2%;margin-right:1%;" type="button" onclick="CommonAjaxPost(this); setTimeout(function () { getSubjectList();$('#mainModalWithSave').modal('toggle'); }, 1500);" class="btn btn-success">SAVE</button>
+            <button style="margin-top:2%;" type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+        </div>
+    </div>
+}

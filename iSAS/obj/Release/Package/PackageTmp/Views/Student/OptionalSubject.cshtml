@@ -1,0 +1,175 @@
+﻿@model ISas.Web.ViewModels.Student_OptionalSubjectViewModel
+
+@{
+    ViewBag.Title = "Student Updation";
+}
+
+<section class="content-header">
+    <h1>
+        Optional Subject Update
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li class="active">Optional Subject Update</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-warning">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Session</label>
+                        <div class="select">
+                            @Html.HiddenFor(r=> Model.SelectedSessionId)
+                            @Html.DropDownListFor(m => m.SelectedSessionId, Model.SessionList, new { @class = "form-control select2", style = "width:100%;", disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Class</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.SelectedClassId, Model.ClassList, "-- Select Class --", new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionList()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Section</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.SelectedSectionId, Model.SectionList, new { @class = "form-control select2", style = "width:100%;", onchange = "getSubjectGroup()" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Subject Group</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.SelectedParameterId, Model.OptionalSubjectParametersList, new { @class = "form-control select2", style = "width:100%;", onchange = "getStudentList()" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="divAttendanceList">
+                        @Html.Partial("_StudentListPartial", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-warning" id="savebutton">UPDATE</button>
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+    function myfunction() {
+        var myTableArray = [];
+        $('#AttendanceTable tr:not(:first)').each(function () {
+            var tds = $(this).find('td');
+            var myDets;
+            myDets = { studentERPNo: $(tds[0]).html(), Parameter1: $(tds[4]).find(":selected").val() }
+            //if ($('#SelectedParameterId').val() == "3rdLanguage" || $('#SelectedParameterId').val() == "ArtEducation" ) {
+            //    myDets = { studentERPNo: $(tds[0]).html(), Parameter1: $(tds[4]).find(":selected").val() }}
+            myTableArray.push(myDets);
+
+        });
+        return myTableArray;
+    }
+
+    function getSectionList() {
+        $.ajax({
+            url: '../Student/GetSectionsForClass',
+            data: { classId: $('#SelectedClassId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SelectedSectionId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Section ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.SecId).text(this.SecName));
+                });
+            })
+        })
+    }
+
+    function getSubjectGroup() {
+        $.ajax({
+            url: '../Student/GetOptionalSubjectParametersList',
+            data: { sessionId: $('#SelectedSessionId').val(), classId: $('#SelectedClassId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SelectedParameterId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Subject ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.FieldName).text(this.FieldDisplayName));
+                })
+            })
+        })
+    }
+
+    function getStudentList() {
+        $.ajax({
+            url: '../Student/GetStudentList',
+            beforeSend: function () {
+                spinnerShow();
+            },
+            data: { sessionId: $('#SelectedSessionId').val(), classId: $('#SelectedClassId').val(), sectionId: $('#SelectedSectionId').val(), mode: $('#SelectedParameterId').val() },
+            type: 'get',
+            success : (function (data) {
+                $('#divAttendanceList').empty();
+                $('#divAttendanceList').html(data);
+            }),
+            complete: function () {
+                spinnerHide();
+            }
+        })
+    }
+
+        $(document).ready(function () {
+            $('#savebutton').on("click", function () {
+                var myTableArray = myfunction();
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    beforeSend: function () {
+                        spinnerShow();
+                    },
+                    url: '@Url.Action("Student_OptionalSubject_CRUD", "Student")',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(
+                        { mode: $('#SelectedParameterId').val(), StudentUpdateList: myTableArray, sessionId: $('#SelectedSessionId').val() }),
+                    success: function (result) {
+                        $('#divAttendanceList').html('');
+                        $('#SelectedClassId').val(null);
+                        $('#SelectedSectionId').val(null);
+                        $('#SelectedParameterId').val(null);
+                        $('#select2-SelectedClassId-container').html('--Select--');
+                        $('#select2-SelectedSectionId-container').html('--Select--');
+                        $('#select2-SelectedParameterId-container').html('--Select--');
+                        OpenMessegeAutoHideDiv(result.Msg, result.Color );
+                    },
+                    error: function () {
+                        OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                    },
+                    complete: function () {
+                        spinnerHide();
+                    }
+                });
+               
+            });
+
+        });
+</script>

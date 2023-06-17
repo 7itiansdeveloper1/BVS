@@ -1,0 +1,58 @@
+﻿@model ISas.Web.ViewModels.MarksEntry1to5ViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+
+<div>
+    <h4>
+        School Name :- Bal Vikas School, Panipat <br />
+        Date        :- @DateTime.Now <br />
+        Report Name :- Marks Details For (@Html.DisplayFor(r => Model.ClassName)-@Html.DisplayFor(r => Model.SectionName), @Html.DisplayFor(r => Model.SubjectName), @Html.DisplayFor(r => Model.AssessmentName))
+    </h4>
+</div>
+
+@if (Model != null && Model.StudentsMarkList != null)
+{
+    <table class="table-bordered table table-hover" style="border:1px solid black;">
+        <thead>
+            <tr>
+                <th style="border:1px solid black;">Adm No.</th>
+                <th style="border:1px solid black;">Roll No.</th>
+                <th style="border:1px solid black;">Student Name</th>
+                @if (Model.SubjectCategory == "Grade")
+                {
+                    <th style="border:1px solid black;">Grade</th>
+                }
+                else
+                {
+                    <th style="border:1px solid black;">Mark</th>
+                    <th style="border:1px solid black;">Grade</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.StudentsMarkList != null && Model.StudentsMarkList.Count > 0)
+            {
+                for (int i = 0; i < Model.StudentsMarkList.Count; i++)
+                {
+                    <tr>
+                        <td style="border:1px solid black;"> @Html.DisplayFor(r => Model.StudentsMarkList[i].Student.StudentAdmNo)  </td>
+                        <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].Student.StudentRollNo) </td>
+                        <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].Student.StudentName)  </td>
+                        @if (Model.SubjectCategory == "Marks")
+                        {
+                            <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentMark) </td>
+                            <td style="border:1px solid black;">@Html.DisplayFor(r => Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentGrade) </td>
+                        }
+                        else if (Model.SubjectCategory == "Grade")
+                        {
+                            <td style="border:1px solid black;">
+                                @Html.DisplayFor(r => Model.StudentsMarkList[i].StudentsMarkFromDBList.StudentGrade)
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}

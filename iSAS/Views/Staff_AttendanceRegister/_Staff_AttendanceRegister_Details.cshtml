@@ -1,0 +1,135 @@
+﻿@model ISas.Entities.StaffEntities.Staff_AttendanceRegisterModels
+@{
+    List<SelectListItem> AttStatusList = new List<SelectListItem>();
+    AttStatusList.Add(new SelectListItem { Text = "P",Value="P" });
+    AttStatusList.Add(new SelectListItem { Text = "AB", Value = "A" });
+    AttStatusList.Add(new SelectListItem { Text = "OD", Value = "OD" });
+    AttStatusList.Add(new SelectListItem { Text = "L", Value = "L" });
+    AttStatusList.Add(new SelectListItem { Text = "1st HD", Value = "HD1"});
+    AttStatusList.Add(new SelectListItem { Text = "2nd HD", Value = "HD2"});
+    AttStatusList.Add(new SelectListItem { Text = "SL", Value = "SL" });
+}
+<table id="example1" class="table table-responsive table-bordered table-condensed nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>Staff Name</th>
+            <th>Department</th>
+            <th>Mark Attendance</th>
+            <th>Attendance Status</th>
+            <th>In Time</th>
+            <th>Out Time</th>
+            <th>Mobile No</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.StaffAttendanceDetails.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Html.HiddenFor(r => Model.StaffAttendanceDetails[i].StaffID)
+                    @Html.HiddenFor(r => Model.StaffAttendanceDetails[i].StaffCode)
+
+                    @Html.DisplayFor(r => Model.StaffAttendanceDetails[i].StaffName)
+                </td>
+                <td>@Html.DisplayFor(r => Model.StaffAttendanceDetails[i].Department)</td>
+                <td style="text-align:center">
+                    @if (Model.StaffAttendanceDetails[i].AttStatus)
+                    {
+                        <label class="switch">
+                            <input id="AttStatusStr_@i" name="StaffAttendanceDetails[@i].AttStatusStr" type="checkbox" checked="checked" onchange="fun_attendanceStatusChanged('@i')">
+                            <span class="slider round"></span>
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="switch">
+                            <input id="AttStatusStr_@i" name="StaffAttendanceDetails[@i].AttStatusStr" type="checkbox" onchange="fun_attendanceStatusChanged('@i')">
+                            <span class="slider round"></span>
+                        </label>
+                    }
+                </td>
+                <td>
+                            <div class="select">
+                                @Html.DropDownListFor(m => Model.StaffAttendanceDetails[i].AttStatusStr, new SelectList(AttStatusList, "Value", "Text", Model.StaffAttendanceDetails[i].AttStatusStr), htmlAttributes: new { @class = "form-control",  style = "width:100%;" ,@disabled=true})
+                            </div>
+                    
+                </td>
+
+                <td style="width:200px;">
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                @Html.TextBoxFor(r => Model.StaffAttendanceDetails[i].InTime, htmlAttributes: new { @class = "form-control bootstrap-timepicker  timepicker", onfocusin = "focusInfunction('" + @i + "', 'InTime')" })
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td style="width:200px;">
+                    <div class="bootstrap-timepicker">
+                        <div class="form-group">
+                            <div class="input-group">
+                                @Html.TextBoxFor(r => Model.StaffAttendanceDetails[i].OutTime, htmlAttributes: new { @class = "form-control bootstrap-timepicker  timepicker", onfocusin = "focusInfunction('" + @i + "', 'OutTime')" })
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>@Html.DisplayFor(r => Model.StaffAttendanceDetails[i].Mobile)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $('.timepicker').timepicker({
+        showInputs: false,
+        pick12HourFormat: true,
+        defaultTime: false,
+        //showMeridian: false
+    })
+    function focusInfunction(i, inOutVal) {
+        if ($('#StaffAttendanceDetails_' + i + '__' + inOutVal).val() == '' || $('#StaffAttendanceDetails_' + i + '__' + inOutVal).val() == null) {
+            var dt = new Date();
+            var amPM = "AM";
+            var hour = dt.getHours();
+            if (hour >= 12 && hour <= 24) {
+                hour = hour - 12;
+                amPM = "PM";
+            }
+
+            if (hour <= 9) {
+                hour = "0" + hour;
+            }
+
+            var time = hour + ":" + dt.getMinutes() + " " + amPM;
+            $('#StaffAttendanceDetails_' + i + '__' + inOutVal).val(time);
+        }
+    }
+    $(function () {
+        $('#example1 > tbody > tr').each(function (i) {
+            fun_attendanceStatusChanged(i);
+        });
+    });
+
+    function fun_attendanceStatusChanged(i) {
+
+        if ($('#AttStatusStr_' + i).is(':checked')) {
+            $('#StaffAttendanceDetails_' + i + '__AttStatusStr').prop('disabled', true);
+            $('#StaffAttendanceDetails_' + i + '__InTime').prop('disabled', false);
+            $('#StaffAttendanceDetails_' + i + '__OutTime').prop('disabled', false);
+            $('#StaffAttendanceDetails_' + i + '__AttStatusStr').append(new Option('P', 'P', true, true));
+        } else {
+            $('#StaffAttendanceDetails_' + i + '__InTime').val('');
+            $('#StaffAttendanceDetails_' + i + '__OutTime').val('');
+            $('#StaffAttendanceDetails_' + i + '__AttStatusStr option[value=P]').remove();
+            $('#StaffAttendanceDetails_' + i + '__AttStatusStr').prop('disabled', false);
+            $('#StaffAttendanceDetails_' + i + '__InTime').prop('disabled', true);
+            $('#StaffAttendanceDetails_' + i + '__OutTime').prop('disabled', true);
+        }
+    }
+</script>

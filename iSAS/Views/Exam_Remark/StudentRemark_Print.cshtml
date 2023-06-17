@@ -1,0 +1,35 @@
+﻿@model ISas.Web.ViewModels.Exam_RemarkViewModel
+@{ 
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+
+<div>
+    <h4>
+        Client Name :- Bal Vikas School, Panipat<br />
+        Date        :- @DateTime.Now <br />
+        Report Name :- Remarks Entry For (@Html.DisplayFor(r=> Model.TermName), @Html.DisplayFor(r=> Model.ClassName) - @Html.DisplayFor(r=> Model.SectionName))
+    </h4>
+</div>
+
+<table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th>Adm No.</th>
+            <th>Roll No.</th>
+            <th>Student Name</th>
+            <th>Remark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Model.StudentRemarkList)
+        {
+            <tr class="abc">
+                <td>@item.Student.StudentAdmNo </td>
+                <td>@item.Student.StudentRollNo </td>
+                <td>@item.Student.StudentName </td>
+                <td>@Html.DisplayFor(m => item.RemarkId)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

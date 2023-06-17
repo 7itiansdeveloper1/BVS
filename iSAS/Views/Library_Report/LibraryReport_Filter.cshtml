@@ -1,0 +1,159 @@
+﻿@model ISas.Entities.LibraryEntities.Library_ReportModel
+@{
+}
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+
+<section class="content-header">
+    <h1>Library Reports</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Library</li>
+        <li class="active">Reports</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Student_Report_Testing", "Student_Report", FormMethod.Post, htmlAttributes: new { id = "stud_ReportForm", target = "_blank" }))
+    {
+        <div class="box box-primary">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-5">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.reportId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.reportId, new SelectList(Model.ReportNameList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.reportId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.fromDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.fromDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.fromDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.toDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.toDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.toDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <br />
+                            <div class="select">
+                                <h5>
+                                    <button title="SEARCH" type="button" class="btn btn-success" onclick="getStudentDetailReport('NO')">
+                                        <i class="fa fa-search btnDefaultColor"></i>
+                                    </button>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                
+                <hr />
+                <div class="row">
+                    <div class="col-md-12" style="width:100%;overflow-y:auto;">
+                        @*<div class="col-md-12" style="width:100%">*@
+                        <div id="LibraryReportMainDiv"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+<script>
+    
+    
+    
+    function getStudentDetailReport(Print) {
+
+        //var tempClassSecId = ""; var wingID = $('#WingId').val();
+        //var reportFilterType = $('input[name=ReportFilterType]:checked').val();
+        //if (reportFilterType == 'ClassWise') {
+        //    var classSecIds = $('#ClassSectionIds').val();  //$("#hddnClassSectionId").val()
+        //    if (classSecIds == null || classSecIds == "") {
+        //        OpenMessegeModal('No class selected..!', 'Warning');
+        //        return false;
+        //    } else {
+        //        tempClassSecId = classSecIds.toString();
+        //        wingID = "";
+        //    }
+        //} else {
+        //    if (wingID == null || wingID == "") {
+        //        OpenMessegeModal('No wing selected..!', 'Warning');
+        //        return false;
+        //    } else {
+        //        tempClassSecId = "";
+        //    }
+        //}
+
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Library_Report/_LibraryDetailReport",
+            data: {
+                reportId: $("#reportId").val(),
+                fromDate: $("#fromDate").val(),
+                toDate: $("#toDate").val(),
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeModal($('#ErrorMsgOnJasonFailed').val());
+            },
+            success: function (result) {
+
+
+
+                console.log(Print);
+
+                if (Print == "NO") {
+
+                    $('#LibraryReportMainDiv').html(result);
+
+                } else {
+                    //var w = window.open('');
+                    //$(w.document.body).html(result);
+                    //w.print();
+                    //w.close();
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

@@ -1,0 +1,384 @@
+﻿@model  ISas.Entities.FeesEntities.Fee_FilterDefaulterDetailModel
+@{
+    ViewBag.Title = "Filter Defaulter";
+
+
+    List<SelectListGroup> classGroupList = Model.ClassList.Select(r => r.Text.Substring(0, r.Text.Length - 2)).Distinct().Select(r => new SelectListGroup
+    {
+        Name = r,
+        Disabled = false
+    }).ToList();
+
+    for (int i = 0; i < Model.ClassList.Count; i++)
+    {
+        string className = Model.ClassList[i].Text.Substring(0, Model.ClassList[i].Text.Length - 2);
+        Model.ClassList[i].Group = classGroupList.Where(r => className == r.Name).FirstOrDefault();
+    }
+
+}
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>Defaulter Records</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li class="active">Defaulter Records</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    @using (Html.BeginForm("Fee_DefaulterDetails_Report", "Fee_DefaulterDetails", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Find Defaulter</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.FeeCategoryId)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.FeeCategoryId, new SelectList(Model.FeeCategoryList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getInstallments()" })
+                                        @Html.ValidationMessageFor(r => Model.FeeCategoryId, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.InstallmentId)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.InstallmentId, new SelectList(Model.InstallmentList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                        @Html.ValidationMessageFor(r => Model.InstallmentId, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-10">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.ClassId)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(r => Model.ClassId, Model.ClassList, htmlAttributes: new { @class = "form-control multiSelectWithSelectOptGrp", multiple = true })
+                                        @Html.ValidationMessageFor(r => Model.ClassId, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-xs-12 col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label for="">@Html.LabelFor(r => Model.SectionId)</label>
+                                        <div class="select">
+                                            @Html.DropDownListFor(m => m.SectionId, new SelectList(Model.SectionList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                            @Html.ValidationMessageFor(r => Model.SectionId, null, htmlAttributes: new { style = "color:red;" })
+                                        </div>
+                                    </div>
+                                </div>*@
+                            <div class="col-xs-12 col-sm-6 col-md-2">
+                                <div class="form-group">
+                                    <br />
+                                    <h5>
+                                        <button class="btn btn-success" id="savebutton" type="button" onclick="getDefaulterDetails()">
+                                            <i class="fa fa-search btnDefaultColor"></i>
+                                        </button>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-1">
+                                <div class="radio">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.DefaulterType, "F", htmlAttributes: new { @class = "" }) <span>Fee</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="radio">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.DefaulterType, "T", htmlAttributes: new { @class = "" }) <span>Transport</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="border-left:1px solid #808080;">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5> <label for="">@Html.LabelFor(r => Model.SMSType)</label></h5>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="radio">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.SMSType, "Default", htmlAttributes: new { @class = "", onchange = "checkForSMSText()" }) <span>Default SMS</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="radio">
+                                    <label>
+                                        @Html.RadioButtonFor(m => m.SMSType, "Manual", htmlAttributes: new { @class = "", onchange = "checkForSMSText()" }) <span>Manual SMS</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="select">
+                                        @Html.TextAreaFor(m => m.SMSText, htmlAttributes: new { @class = "form-control", style = "height:130px;" })
+                                        @Html.ValidationMessageFor(r => Model.SMSText, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="button" id="btnSendSMS" onclick="SendSMS(this)" disabled="disabled" value="SEND SMS" class="btn btn-success btn-sm pull-right" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Defaulter List</h5>
+            </div>
+            <div class="box-body">
+                <div class="" id="defaulterListMainDiv">
+                    @Html.Partial("_DefaulterDetails", Model)
+                </div>
+            </div>
+            <div class="box-footer">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-3 pull-right">
+                            <input type="button" id="btnPrint" onclick="window.open('DefaulterDetails_Print', 'Fee_DefaulterDetails').print()" class="btn btn-success btn-sm  pull-right" style="margin-left:2%;" value="PRINT" />
+                            <input type="submit" id="btnDefaulterLetter" disabled="disabled" class="btn btn-info btn-sm pull-right" value="DEFAULTER LETTER" />
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.Date, htmlAttributes: new { @class = "form-control pull-right date pull-right" })
+                                @Html.ValidationMessageFor(r => Model.Date, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    $(function () {
+        getInstallments();
+    });
+
+    function getSelectCount() {
+        var count = 0;
+        $('#example1 > tbody > tr').each(function (i) {
+            if ($('#DefaulterList_' + i + '__Selected').is(':checked')) {
+                count++;
+            }
+        });
+
+        if (parseInt(count) > 0) {
+            $('#btnSendSMS').attr('disabled', false);
+            $('#btnDefaulterLetter').attr('disabled', false);
+        } else {
+            $('#btnSendSMS').attr('disabled', true);
+            $('#btnDefaulterLetter').attr('disabled', true);
+        }
+    }
+
+    $(function () {
+        checkForSMSText();
+    });
+
+    function checkForSMSText() {
+        if ($("input[name='SMSType']:checked").val() == "Default") {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_DefaulterDetails/getSMSTextForFee",
+                data: {},
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    $('#SMSText').empty();
+                    $('#SMSText').attr('readonly', true);
+                    $('#SMSText').html(result);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        }
+        else {
+            $('#SMSText').attr('readonly', false);
+            $('#SMSText').empty();
+            $('#SMSText').html('');
+        }
+    }
+
+    function getInstallments() {
+        var installmentHtml = '<option value="">--Select--</option>';
+        if ($('#FeeCategoryId').val() != null && $('#FeeCategoryId').val() != "") {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_DefaulterDetails/Fee_Installments",
+                data: { StructId: $('#FeeCategoryId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    for (var i = 0; i < result.length; i++) {
+                        installmentHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                    }
+                    $('#InstallmentId').html(installmentHtml);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            $('#InstallmentId').val(null);
+            $('#InstallmentId').html(installmentHtml);
+        }
+    }
+
+    function getDefaulterDetails() {
+        if ($('#FeeCategoryId').val() == null && $('#FeeCategoryId').val() == "") {
+            OpenMessegeAutoHideDiv('Fee Category Should be Selected..!', 'Info');
+            return false;
+        }
+
+        var classIds = "";
+        var classSectionIds = $('#ClassId').val();
+        if (classSectionIds == "" || classSectionIds == null) {
+            OpenMessegeAutoHideDiv('Select at least one class..!', 'Info');
+            return false;
+        }
+        classIds = classSectionIds.toString();
+        if (classIds == "" || classIds == null) {
+            OpenMessegeAutoHideDiv('Select at least one class..!', 'Info');
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_DefaulterDetails/_DefaulterDetails",
+            data: { // SectionId: $('#SectionId').val(),
+                DueDate: $('#InstallmentId').val(), ClassId: classIds,
+                FeeCategoryId: $('#FeeCategoryId').val(),
+                DefaulterType: $("input[name='DefaulterType']:checked").val()
+            },
+            success: function (result) {
+                $('#defaulterListMainDiv').html(result);
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function SendSMS(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Fee_DefaulterDetails/SendSMS',
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    //function DoAjaxPostAndMore(btnClicked) {
+    //    var $form = $(btnClicked).parents('form');
+    //    $.ajax({
+    //        type: "POST",
+    //        beforeSend: function () {
+    //            spinnerShow();
+    //        },
+    //        url: $form.attr('action'),
+    //        data: $form.serialize(),
+    //        error: function (xhr, status, error) {
+    //            OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+    //        },
+    //        success: function (response) {
+    //            if (response.status == 'success') {
+    //                OpenMessegeAutoHideDiv(response.Msg, 'Success');
+    //            }
+    //            else {
+    //                OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+    //                AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+    //                AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+    //            }
+    //        },
+    //        complete: function () {
+    //            spinnerHide();
+    //        }
+    //    });
+    //}
+</script>
+

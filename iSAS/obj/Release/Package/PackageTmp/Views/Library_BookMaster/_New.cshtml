@@ -1,0 +1,505 @@
+﻿@model ISas.Entities.LibraryEntities.Library_BookMasterModels
+@{
+    List<SelectListItem> booktypes = new List<SelectListItem>();
+    booktypes.Add(new SelectListItem { Text = "Text Book", Value = "T", Selected = true });
+    booktypes.Add(new SelectListItem { Text = "Reference Book", Value = "R" });
+
+    List<SelectListItem> languages = new List<SelectListItem>();
+    languages.Add(new SelectListItem { Text = "English", Value = "E", Selected = true });
+    languages.Add(new SelectListItem { Text = "Hindi", Value = "H" });
+    languages.Add(new SelectListItem { Text = "Urdu", Value = "U" });
+}
+@Html.HiddenFor(r => Model.BookID)
+<div class="row">
+    <div class="col-md-8">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Book Details</h5>
+            </div>
+            <div class="box-body">
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.LibID)</span>
+                            @Html.DropDownListFor(m => m.LibID, new SelectList(Model.LibraryList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.LibID, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.BookDate)</span>
+                            @Html.TextBoxFor(m => m.BookDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                            @Html.ValidationMessageFor(r => Model.BookDate, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.TotalBook)</span>
+                            @Html.TextBoxFor(m => m.TotalBook, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.TotalBook, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="input-group">
+                            <div class="radio">
+                                <label title="Single Book">@Html.RadioButtonFor(r => r.BookEntry, "SIN", htmlAttributes: new { }) S.B. </label>
+                                <label title="Multiple Book">@Html.RadioButtonFor(r => r.BookEntry, "MUL", htmlAttributes: new { }) M.B.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.RefBook)</span>
+                            @Html.TextBoxFor(m => m.RefBook, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.RefBook, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.TextBook)</span>
+                            @Html.TextBoxFor(m => m.TextBook, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.TextBook, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.AccNo)</span>
+                            @Html.TextBoxFor(m => m.AccNo, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(r => Model.AccNo, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.TitleID)<i class="mandateLbl">*</i></span>
+                            <select class="form-control select2" style="position:absolute;top:0px;left:0px;margin:0;padding:0;width:100%;"
+                                    onchange="document.getElementById('TitleID').value = this.options[this.selectedIndex].text;">
+                                <option>--Select--</option>
+                                @for (int i = 0; i < Model.TitleList.Count; i++)
+                                {
+                                    <option value="@Model.TitleList[i].Value">@Html.DisplayFor(r => Model.TitleList[i].Text)</option>
+                                }
+                            </select>
+                            <input type="text" name="TitleID" id="TitleID"
+                                   placeholder="Add/Select a value" onfocus="this.select()"
+                                   style="position:absolute;top:1px;left:16%;width:75%;height:32px; padding-left:4%;border:none;">
+                            @Html.ValidationMessageFor(r => Model.TitleID, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.SubTitleID)</span>
+
+
+                            <select class="form-control select2" style="position:absolute;top:0px;left:0px;margin:0;padding:0;width:100%;"
+                                    onchange="document.getElementById('SubTitleID').value = this.options[this.selectedIndex].text;">
+                                <option>--Select--</option>
+                                @for (int i = 0; i < Model.SubTitleList.Count; i++)
+                                {
+                                    <option value="@Model.SubTitleList[i].Value">@Html.DisplayFor(r => Model.SubTitleList[i].Text)</option>
+                                }
+                            </select>
+                            <input type="text" name="SubTitleID" id="SubTitleID"
+                                   placeholder="Add/Select a value" onfocus="this.select()"
+                                   style="position:absolute;top:1px;left:24%;width:67%;height:32px; padding-left:4%;border:none;">
+                            @Html.ValidationMessageFor(r => Model.SubTitleID, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.AuthID)</span>
+
+                            <select class="form-control select2" style="position:absolute;top:0px;left:0px;margin:0;padding:0;width:100%;"
+                                    onchange="document.getElementById('AuthID').value = this.options[this.selectedIndex].text;">
+                                <option>--Select--</option>
+                                @for (int i = 0; i < Model.AuthorList.Count; i++)
+                                {
+                                    <option value="@Model.AuthorList[i].Value">@Html.DisplayFor(r => Model.AuthorList[i].Text)</option>
+                                }
+                            </select>
+                            <input type="text" name="AuthID" id="AuthID"
+                                   placeholder="Add/Select a value" onfocus="this.select()"
+                                   style="position:absolute;top:1px;left:32%;width:58%;height:32px; padding-left:4%;border:none;">
+                            @Html.ValidationMessageFor(r => Model.AuthID, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.SubAuthID)</span>
+
+                            <select class="form-control select2" style="position:absolute;top:0px;left:0px;margin:0;padding:0;width:100%;"
+                                    onchange="document.getElementById('SubAuthID').value = this.options[this.selectedIndex].text;">
+                                <option>--Select--</option>
+                                @for (int i = 0; i < Model.CoAuthorList.Count; i++)
+                                {
+                                    <option value="@Model.CoAuthorList[i].Value">@Html.DisplayFor(r => Model.CoAuthorList[i].Text)</option>
+                                }
+                            </select>
+                            <input type="text" name="SubAuthID" id="SubAuthID"
+                                   placeholder="Add/Select a value" onfocus="this.select()"
+                                   style="position:absolute;top:1px;left:34%;width:55%;height:32px; padding-left:4%;border:none;">
+                            @Html.ValidationMessageFor(r => Model.SubAuthID, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Edition)</span>
+                            @Html.TextBoxFor(m => m.Edition, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.Edition, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Vol)</span>
+                            @Html.TextBoxFor(m => m.Vol, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.Vol, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Year)</span>
+                            @Html.TextBoxFor(m => m.Year, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.Year, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Pages)</span>
+                            @Html.TextBoxFor(m => m.Pages, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.Pages, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.ISBN)<i class="mandateLbl">*</i></span>
+                            @Html.TextBoxFor(m => m.ISBN, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.ISBN, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.ClassCall)</span>
+                            @Html.TextBoxFor(m => m.ClassCall, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.ClassCall, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.BookCall)</span>
+                            @Html.TextBoxFor(m => m.BookCall, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.BookCall, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.ClassID)</span>
+                            @Html.DropDownListFor(m => m.ClassID, new SelectList(Model.ClassList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control  select2", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.ClassID, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.SubID)<i class="mandateLbl">*</i></span>
+                            @Html.DropDownListFor(m => m.SubID, new SelectList(Model.SubjectList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2 ", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.SubID, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Lang)</span>
+                            @Html.DropDownListFor(m => m.Lang, languages, htmlAttributes: new { @class = "form-control select2 ", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.Lang, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.BookType)</span>
+                            @Html.DropDownListFor(m => m.BookType, booktypes, htmlAttributes: new { @class = "form-control select2 ", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.BookType, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Reference)</span>
+                            @Html.TextBoxFor(m => m.Reference, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.Reference, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Remark)</span>
+                            @Html.TextBoxFor(m => m.Remark, htmlAttributes: new { @class = "form-control " })
+                            @Html.ValidationMessageFor(r => Model.Remark, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                                    <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-warning btn-sm" id="savebutton" type="button" onclick="GetBookDetails('FIRST')">First</button>
+                                    <button class="btn btn-info btn-sm" type="button" onclick="GetBookDetails('PRE')"><< Pre</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-warning pull-right btn-sm" type="button" style="margin-left:1%;" onclick="GetBookDetails('LAST')">Last</button>
+                                    <button class="btn btn-info pull-right btn-sm" id="savebutton" type="button" onclick="GetBookDetails('NEXT')">Next>></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h5 class="box-title">Book Source Details</h5>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-7">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.BillDate)</span>
+                                    @Html.TextBoxFor(m => m.BillDate, htmlAttributes: new { @class = "form-control  date" })
+                                    @Html.ValidationMessageFor(r => Model.BillDate, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.BillNo)</span>
+                                    @Html.TextBoxFor(m => m.BillNo, htmlAttributes: new { @class = "form-control " })
+                                    @Html.ValidationMessageFor(r => Model.BillNo, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Recfrom)</span>
+                                    @Html.DropDownListFor(m => m.Recfrom, new SelectList(string.Empty, "", ""), "--Select--", htmlAttributes: new { @class = "form-control select2 ", style = "width:100%;" })
+                                    @Html.ValidationMessageFor(r => Model.Recfrom, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.PubID)</span>
+
+                                    <select class="form-control select2" style="position:absolute;top:0px;left:0px;margin:0;padding:0;width:100%;"
+                                            onchange="document.getElementById('PubID').value = this.options[this.selectedIndex].text;">
+                                        <option>--Select--</option>
+                                        @for (int i = 0; i < Model.PublisherList.Count; i++)
+                                        {
+                                            <option value="@Model.PublisherList[i].Value">@Html.DisplayFor(r => Model.PublisherList[i].Text)</option>
+                                        }
+                                    </select>
+                                    <input type="text" name="PubID" id="PubID"
+                                           placeholder="Add/Select a value" onfocus="this.select()"
+                                           style="position:absolute;top:1px;left:26%;width:65%;height:32px; padding-left:4%;border:none;">
+
+                                    @*@Html.DropDownListFor(m => m.PubID, new SelectList(Model.PublisherList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2 ", style = "width:100%;" })*@
+                                    @Html.ValidationMessageFor(r => Model.PubID, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.SupID)<i class="mandateLbl">*</i></span>
+                                    @Html.DropDownListFor(m => m.SupID, new SelectList(Model.SupplierList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2 ", style = "width:100%;" })
+                                    @Html.ValidationMessageFor(r => Model.SupID, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Price)</span>
+                                    @Html.TextBoxFor(m => m.Price, htmlAttributes: new { @class = "form-control " })
+                                    @Html.ValidationMessageFor(r => Model.Price, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.Disc)</span>
+                                    @Html.TextBoxFor(m => m.Disc, htmlAttributes: new { @class = "form-control " })
+                                    @Html.ValidationMessageFor(r => Model.Disc, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.NetPrice)</span>
+                                    @Html.TextBoxFor(m => m.NetPrice, htmlAttributes: new { @class = "form-control " })
+                                    @Html.ValidationMessageFor(r => Model.NetPrice, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.BookLocation)</span>
+                                    @Html.TextBoxFor(m => m.BookLocation, htmlAttributes: new { @class = "form-control", style = "width:100%;" })
+                                    @Html.ValidationMessageFor(r => Model.BookLocation, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.AlmirahNo)</span>
+                                    @Html.TextBoxFor(m => m.AlmirahNo, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.AlmirahNo, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.ShelfNo)</span>
+                                    @Html.TextBoxFor(m => m.ShelfNo, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.ShelfNo, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-7">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.WDDate)</span>
+                                    @Html.TextBoxFor(m => m.WDDate, htmlAttributes: new { @class = "form-control  pull-right date" })
+                                    @Html.ValidationMessageFor(r => Model.WDDate, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.WDNo)</span>
+                                    @Html.TextBoxFor(m => m.WDNo, htmlAttributes: new { @class = "form-control " })
+                                    @Html.ValidationMessageFor(r => Model.WDNo, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@Html.DisplayNameFor(r => Model.WDRemark)</span>
+                                    @Html.TextBoxFor(m => m.WDRemark, htmlAttributes: new { @class = "form-control " })
+                                    @Html.ValidationMessageFor(r => Model.WDRemark, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<script>
+        $(function () {
+            $('.select2').select2()
+        })
+    </script>*@
+
+
+
+
+
+
+
+

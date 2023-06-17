@@ -1,0 +1,159 @@
+﻿@model ISas.Entities.SMSManagement.SMS_MainModel
+
+@using (Html.BeginForm("SendOutBoxSMS", "SMSManagement", FormMethod.Post, htmlAttributes: new { }))
+{
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" style="margin-left:1%;" onclick="confirmToDeleteSMS(this);" class="btn btn-warning pull-right btn-sm"><i class="fa fa-trash"></i> Delete SMS</a>
+                    <a href="#" onclick="checkToPostForm(this);" class="btn btn-success pull-right btn-sm"><i class="fa fa-envelope-o"></i> Send SMS</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="tblOutBox" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>@Html.CheckBox("chkBoxSelectAll", htmlAttributes: new { onchange = "fun_SelectAllSMSOutBox()" })</th>
+                                <th>Mobile No</th>
+                                <th>SMS Text</th>
+                                <th>Receiver Name</th>
+                                <th>Send By</th>
+                                <th>Record Send Date</th>
+                                <th>Send Date</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.OutBoxList.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(r => Model.OutBoxList[i].Selected, htmlAttributes: new { @class = "chkBoxOutbox" })
+                                        @Html.HiddenFor(r => Model.OutBoxList[i].MobileNo)
+                                        @Html.HiddenFor(r => Model.OutBoxList[i].SMSText)
+                                        @Html.HiddenFor(r => Model.OutBoxList[i].RecordSendDate)
+                                    </td>
+                                    <td>@Html.DisplayFor(r => Model.OutBoxList[i].MobileNo)</td>
+                                    <td>@Html.DisplayFor(r => Model.OutBoxList[i].SMSText)</td>
+                                    <td>@Html.DisplayFor(r => Model.OutBoxList[i].ReciverName)</td>
+                                    <td>@Html.DisplayFor(r => Model.OutBoxList[i].RecordSendBy)</td>
+                                    <td>@Html.DisplayFor(r => Model.OutBoxList[i].RecordSendDate)</td>
+                                    <td>@Html.DisplayFor(r => Model.OutBoxList[i].SendDate)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $('#tblOutBox').DataTable({});
+    function checkToPostForm(evt) {
+        var selectedCount = 0;
+        $('#tblOutBox > tbody > tr').each(function (i) {
+            if ($('#OutBoxList_' + i + '__Selected').is(':checked')) {
+                selectedCount++;
+            }
+        });
+
+        if (selectedCount > 0) {
+            AjaxPost(evt);
+        } else {
+            OpenMessegeAutoHideDiv('At least one record must be selected..!', 'Info');
+        }
+    }
+    function AjaxPost(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getOutBoxSMSList();
+                }
+                else {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function confirmToDeleteSMS(evt) {
+        var selectedCount = 0;
+        $('#tblOutBox > tbody > tr').each(function (i) {
+            if ($('#OutBoxList_' + i + '__Selected').is(':checked')) {
+                selectedCount++;
+            }
+        });
+
+        if (selectedCount > 0) {
+            AsyncConfirmYesNo("Confirmation", "Are you sure to remove selected sms?", DeleteSMS, MyNoFunction, evt);
+        } else {
+            OpenMessegeAutoHideDiv('At least one record must be selected..!', 'Info');
+        }
+    }
+    function DeleteSMS(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../SMSManagement/DeleteOutBoxSMS',
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    getOutBoxSMSList();
+                }
+                else {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function getOutBoxSMSList() {
+        $.ajax({
+            type: "GET",
+            url: '../SMSManagement/OutboxMainPage',
+            data: {},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#tab3').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

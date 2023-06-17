@@ -1,0 +1,97 @@
+﻿@model ISas.Web.ViewModels.Student_PhotoUploadViewModel
+<table cellspacing="0" cellpadding="0" border="0" class="table table-bordered table-responsive" id="AttendanceTable">
+    <thead>
+        <tr>
+            <th>Adm No.</th>
+            <th>Roll No.</th>
+            <th>Student Image</th>
+            <th>Father Image</th>
+            <th>Mother Image</th>
+            <th>Guardian Image</th>
+            <th>Grand Father Image</th>
+            <th>Grand Mother Image</th>
+            <th>Any Other Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.ClassPhotoList != null)
+        {
+            for (int i = 0; i < Model.ClassPhotoList.Count; i++)
+            {
+                <tr id="@i">
+                    <td>
+                        @Html.HiddenFor(r => Model.ClassPhotoList[i].Student.StudentERPNo)
+                        @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.StudentAdmNo)
+                    </td>
+                    <td>@Html.DisplayFor(r => Model.ClassPhotoList[i].Student.StudentRollNo) </td>
+
+                    <td id="S">
+                        <div>
+                            <a class="example-image-link" href="~/@Model.ClassPhotoList[i].Student.StuentPhotoURL" data-lightbox="example-set" data-title="Student Name: @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.StudentName)">
+                                <img class="example-image" id="selfImg_@i" style="width:95px;height:95px;" src="~/@Model.ClassPhotoList[i].Student.StuentPhotoURL" />
+                            </a>
+                        </div>
+                        <br />
+                        @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.StudentName)
+                    </td>
+
+
+
+                    <td id="F">
+                        <div>
+                            <a target="_blank" class="example-image-link" href="~/@Model.ClassPhotoList[i].Student.FatherPhotoURL" data-lightbox="example-set" data-title="Father Name: @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.FatherName)">
+                                <img class="example-image" id="fatherImg_@i" style="width:120px;height:120px;" src="~/@Model.ClassPhotoList[i].Student.FatherPhotoURL" />
+                            </a>
+                        </div>
+                        <br />
+                        @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.FatherName)
+                    </td>
+                    <td id="M">
+                        <div>
+                            <a target="_blank" class="example-image-link" href="~/@Model.ClassPhotoList[i].Student.MotherPhotoURL" data-lightbox="example-set" data-title="Mother Name: @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.FatherName)">
+                                <img class="example-image" id="motherImg_@i" style="width:120px;height:120px;" src="~/@Model.ClassPhotoList[i].Student.MotherPhotoURL" />
+                            </a>
+                        </div>
+                        <br />
+                        @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.MotherName)
+                    </td>
+                    <td id="G">
+
+                        <div>
+                            <a target="_blank" class="example-image-link" href="~/@Model.ClassPhotoList[i].Student.GardianPhotoURL" data-lightbox="example-set" data-title="Guardian Name: @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.GuardianName )">
+                                <img class="example-image" id="GardianImg_@i" style="width:120px;height:120px;" src="~/@Model.ClassPhotoList[i].Student.GardianPhotoURL" />
+                            </a>
+                        </div>
+                        <br />
+                        @Html.DisplayFor(r => Model.ClassPhotoList[i].Student.GuardianName)
+                    </td>
+                    <td id="GF">
+                        <div>
+                            <a target="_blank" class="example-image-link" href="~/@Model.ClassPhotoList[i].Student.GFPhotoURL" data-lightbox="example-set">
+                                <img class="example-image" id="GFImg_@i" style="width:120px;height:120px;" src="~/@Model.ClassPhotoList[i].Student.GFPhotoURL" />
+                            </a>
+                        </div>
+
+                    </td>
+                    <td id="GM">
+
+                        <div>
+                            <a target="_blank" class="example-image-link" href="~/@Model.ClassPhotoList[i].Student.GMPhotoURL" data-lightbox="example-set">
+                                <img class="example-image" id="GMImg_@i" style="width:120px;height:120px;" src="~/@Model.ClassPhotoList[i].Student.GMPhotoURL" />
+                            </a>
+                        </div>
+                    </td>
+                    <td id="P">
+                        <div>
+                            <a target="_blank" class="example-image-link" href="~/@Model.ClassPhotoList[i].Student.PPhotoURL" data-lightbox="example-set">
+                                <img class="example-image" id="PImg_@i" style="width:120px;height:120px;" src="~/@Model.ClassPhotoList[i].Student.PPhotoURL" />
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

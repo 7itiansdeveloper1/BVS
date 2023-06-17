@@ -1,0 +1,87 @@
+﻿@model List<ISas.Entities.Academic.Academic_HouseMasterModels>
+@{
+    int rowlength = 0;
+    if (Model != null && Model.Count > 0)
+    {
+        rowlength = Model.Count;
+    }
+}
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">House List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>House</th>
+                    <th>Color</th>
+                    <th>Incharge Name</th>
+                    <th>Print Order</th>
+                    <th>Active</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => count)
+                            </td>
+                            <td>
+                                <span style="display:none;"> @Html.DisplayFor(r => Model[i].HouseName)</span>
+                                @Html.HiddenFor(r => Model[i].HouseId, htmlAttributes: new { id = "HouseId_" + @i })
+                                @Html.TextBoxFor(r => Model[i].HouseName, htmlAttributes: new { @class = "form-control editableFeild_" + @i + "", id = "HouseName_" + @i, @readonly = true })
+                            </td>
+                            <td>
+                                <span style="display:none;"> @Html.DisplayFor(r => Model[i].HouseColor)</span>
+                                @Html.TextBoxFor(r => Model[i].HouseColor, htmlAttributes: new { @class = "form-control editableFeild_" + @i + "", id = "HouseColor_" + @i, @readonly = true })
+                            </td>
+                            <td>
+                                <span style="display:none;"> @Html.DisplayFor(r => Model[i].HouseInchargeName)</span>
+                                @Html.TextBoxFor(r => Model[i].HouseInchargeName, htmlAttributes: new { @class = "form-control editableFeild_" + @i + "", id = "HouseInchargeName_" + @i, @readonly = true })
+                            </td>
+                            <td>
+                                <span style="display:none;"> @Html.DisplayFor(r => Model[i].PrintOrder)</span>
+                                <input type="number" value="@Model[i].PrintOrder" class="form-control editableFeild_@i" id="PrintOrder_@i" readonly="readonly" />
+                            </td>
+                            <td> <div class="checkbox"> @Html.CheckBoxFor(r => Model[i].Active, htmlAttributes: new { @class = "editableFeild_Chk_" + @i + "", id = "Active_" + @i, disabled = true }) <label>@Html.LabelFor(r => Model[i].Active)</label> </div></td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeletable)
+                                {
+                                    <a href="#" onclick="DeleteHouseConfirm('@Model[i].HouseId')" title="Delete House" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span title="Delete Class" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                <a href="#" onclick="EnableEditableRow('@i')"  title="Edit House" id="btnEdit_@i" class="fa fa-edit btnDefaultColor"></a>
+
+                                <a href="#" onclick="UpdateHouseMaster('@i')" style="display:none;" title="Save House" id="btnSave_@i" class="fa fa-check btnDefaultColor"></a>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable();
+        $('#hddnRowLenght').val('@rowlength');
+    });
+</script>

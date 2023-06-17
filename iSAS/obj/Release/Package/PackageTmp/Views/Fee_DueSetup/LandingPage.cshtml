@@ -1,0 +1,122 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.FeesEntities.Fee_DueSetupModels>
+@{
+    string structId = ""; string structName = ""; int rowCount = 0; int totalVal = 0;
+    if (Model != null && Model.Count > 0)
+    {
+        structId = Model[0].StructId;
+        structName = Model[0].StructName;
+        rowCount = Model.Count;
+        totalVal = Model.Select(r => r.Amount).DefaultIfEmpty(0).Sum();
+    }
+}
+
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <h5 class="box-title">Class Due List</h5>
+        <div class="pull-right box-title">
+            <strong> Total :</strong> <span class="text-danger" style="font-weight:800">@Html.DisplayFor(r => totalVal)</span>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Installment</th>
+                    <th>Head Name</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr class="editable" id="editable_@i" style="display:none;">
+                            <td>
+                                @Html.DisplayFor(r => count)
+
+                                @Html.HiddenFor(r => Model[i].RecordId, htmlAttributes: new { id = "RecordId_" + @i })
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].InstallName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].HeadName)</td>
+                            <td>@Html.TextBoxFor(r => Model[i].Amount, htmlAttributes: new { @class = "form-control", onkeypress = "return NumericOnly(event)", id = "Amount_" + @i })</td>
+                            <td class="text-center">
+                                @if (Model[i].IsEditable)
+                                {
+                                    <a href="#" onclick="UpdateClassDue('@i')" title="Save Class Due" class="fa fa-check"></a>
+                                }
+                                else
+                                {
+                                    <a href="#" style="cursor:not-allowed;" disabled="disabled" title="Save Class Due" class="fa fa-check"></a>
+                                }
+
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteClassDueConfirm('@Model[i].RecordId')" title="Delete  Class Due" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <a href="#" style="cursor:not-allowed;" title="Delete  Class Due" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                            </td>
+                        </tr>
+
+                        <tr id="displayOnly_@i" style="display:normal;">
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].InstallName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].HeadName)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Amount)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsEditable)
+                                {
+                                    <a href="#" onclick="EnableEditableRow('@i')" title="Edit Class Due" class="fa fa-edit"></a>
+                                }
+                                else
+                                {
+                                    <a href="#" style="cursor:not-allowed;" disabled="disabled" title="Edit Class Due" class="fa fa-edit"></a>
+                                }
+
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteClassDueConfirm('@Model[i].RecordId')" title="Delete  Class Due" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <a href="#" style="cursor:not-allowed;" title="Delete Class Due" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+
+@*@Html.Hidden("hddnRedirectRoute")*@
+<script>
+    $(function () {
+        $('#example1').DataTable();
+        $('#hddnRowLenght').val('@rowCount');
+
+        if (parseInt('@rowCount') > 0) {
+            $('#btnCopyToClass').attr('disabled', false);
+        } else {
+            $('#btnCopyToClass').attr('disabled', true);
+        }
+    });
+</script>

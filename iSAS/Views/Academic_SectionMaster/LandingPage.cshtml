@@ -1,0 +1,88 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.Academic.Academic_SectionMasterModels>
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Section List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Section</th>
+                    <th>Print Order</th>
+                    <th>Is Active</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].SecName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].PrintOrder)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Active)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeletable)
+                                {
+                                    <a href="#" onclick="DeleteSectionConfirm('@Model[i].SecId')" title="Delete Section" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <a href="#" title="Delete Class" class="fa fa-trash btnDefaultColorFaded"></a>
+                                }
+
+                                @Html.EncodedActionLink(" ", "Updation", "Academic_SectionMaster", new { SecId = Model[i].SecId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Section" })
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteSectionConfirm(secId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this section?", MyYesFunction, MyNoFunction, secId);
+    }
+
+    function MyYesFunction(SecId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_SectionMaster/Academic_SectionMaster_Delete",
+            data: { SecId: SecId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../Academic_SectionMaster/New"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

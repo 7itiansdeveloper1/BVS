@@ -1,0 +1,126 @@
+﻿@model ISas.Entities.Student_ReportModel
+@{
+    string reportName = Model.ReportHeader.ReportName;
+}
+
+@*<style>
+    body {
+        font: 10px "Arial", HelveticaNeue, Verdana, Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 8px 10px;
+        color: #333;
+        background-color: #fff;
+    }
+
+    table.dataTable tbody th, table.dataTable tbody td {
+        padding: 2px 10px;
+    }
+</style>*@
+
+<div style="display:none;">
+    @{
+        Html.RenderAction("_ReportHeader", "Common", new
+        {
+            Header1 = Model.ReportHeader.Header1,
+            Header2 = Model.ReportHeader.Header2,
+            Header3 = Model.ReportHeader.Header3,
+            Header4 = Model.ReportHeader.Header4,
+            LogoURL = Model.ReportHeader.LogoURL,
+            ReportName = Model.ReportHeader.ReportName,
+        });
+    }
+</div>
+
+<table id="example1" class="table table-responsive table-bordered table-condensed nowrap" style="width:100%">
+    <thead>
+        <tr>
+            @for (int i = 0; i < Model.HeaderNameList.Count; i++)
+            {
+                <th>@Html.DisplayFor(r => Model.HeaderNameList[i])</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.ValueList.Count; i++)
+        {
+            <tr>
+                @for (int j = 0; j < Model.ValueList[i].Count; j++)
+                {
+                    <td>@Html.DisplayFor(r => Model.ValueList[i][j])</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            "ordering": false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+                        //var sheet = xlsx.xl.worksheets['Sheet1.xml'];
+                        
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                {
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'Custom Report, PDF',
+                    action: function (e, dt, node, config) {
+                        $('#stud_ReportForm').submit();
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>

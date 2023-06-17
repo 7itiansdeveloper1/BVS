@@ -1,0 +1,155 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Exam_Entities.Exam_TemplateSetupModels
+@{
+    ViewBag.Title = "New";
+}
+<section class="content-header">
+    <h1>
+        Templete Setup <small>(ADD)</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Exam</li>
+        <li class="active">Templete Setup</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Exam_TemplateSetup_CRUD", "Exam_TemplateSetup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-success">
+            @*<div class="box-header with-border">
+                <h5 class="box-title">Wing Name :- </h5>
+            </div>*@
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.TemplateName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.TemplateName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.TemplateName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.Exam_TemplateDisplayName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.Exam_TemplateDisplayName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.Exam_TemplateDisplayName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.StartDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.StartDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.StartDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.EndDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.EndDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.EndDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FeedingLastDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.FeedingLastDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.FeedingLastDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                  
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ResultDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.ResultDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.ResultDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PrintOrder)</label>
+                            <div class="select">
+                                <input type="number" id="PrintOrder" name="PrintOrder" class="form-control" value="@Model.PrintOrder" />
+                                @Html.ValidationMessageFor(r => Model.PrintOrder, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-success" id="savebutton" type="button" onclick="alert('Pending to copy')">MAKE A COPY</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+
+    @{ Html.RenderAction("LandingPage", "Exam_TemplateSetup"); }
+</section>
+
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Exam_TemplateSetup/New"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

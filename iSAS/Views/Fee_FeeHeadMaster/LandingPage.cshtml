@@ -1,0 +1,145 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.FeesEntities.Fee_FeeHeadMasterModels>
+
+<section class="content-header">
+    <h1>
+        Head Master
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li class="active">Head Master</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">Head List</h5>
+            <h5 class="pull-right box-title">
+                @Html.ActionLink("ADD NEW", "New", "Fee_FeeHeadMaster", htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+            </h5>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        @*<th>#</th>*@
+                        <th>Print Order</th>
+                        <th>Head Name</th>
+                        <th>Head Alias</th>
+                        <th>Is Refund</th>
+                        <th>Is Fine Head</th>
+                        <th>Conc. Enable</th>
+                        <th>Fine Enable</th>
+                        <th>Is Main Head</th>
+                        <th>Is Misc</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(r => Model[i].HeadID, htmlAttributes: new { id = "HeadID_" + @i })
+                                    @Html.TextBoxFor(r => Model[i].PrintOrder, htmlAttributes: new { @class = "form-control", type = "number", style = "width:50%;", onchange = "updatePrintOrder(" + @i + ")", id = "PrintOrder_" + @i })
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(r => Model[i].HeadName)
+                                </td>
+                                <td>@Html.DisplayFor(r => Model[i].HeadAlias)</td>
+                                <td>@Html.DisplayFor(r => Model[i].IsNonRefundable)</td>
+                                <td>@Html.DisplayFor(r => Model[i].IsFineHead)</td>
+                                <td>@Html.DisplayFor(r => Model[i].IsConcessionHead)</td>
+                                <td>@Html.DisplayFor(r => Model[i].IsFineEnableHead)</td>
+                                <td>@Html.DisplayFor(r => Model[i].IsMainHead)</td>
+                                <td>@Html.DisplayFor(r => Model[i].IsMiscHead)</td>
+                                <td class="text-center">
+                                    @if (Model[i].IsDeletetable)
+                                    {
+                                        <a href="#" onclick="DeleteHeadConfirm('@Model[i].HeadID')" title="Delete Head" class="fa fa-trash btnDefaultColor"></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" style="cursor:not-allowed;" title="Delete Head" class="fa fa-trash btnDefaultColorFaded"></a>
+                                    }
+
+                                    @if (Model[i].IsEditable)
+                                    {
+                                        @Html.EncodedActionLink(" ", "Updation", "Fee_FeeHeadMaster", new { HeadId = Model[i].HeadID }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Head" })
+                                    }
+                                    else
+                                    {
+                                        @Html.EncodedActionLink(" ", "Updation", "Fee_FeeHeadMaster", new { HeadId = Model[i].HeadID }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColorFaded", disabled = true, title = "Edit Head" })
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</section>
+<script>
+    function updatePrintOrder(i) {
+        if ($('#PrintOrder_' + i).val() == null || $('#PrintOrder_' + i).val() == '') {
+            $('#PrintOrder_' + i).val(0);
+        }
+        $.ajax({
+            type: "POST",
+            url: "../Fee_FeeHeadMaster/Fee_FeeHeadMaster_UpdatePrintOrder",
+            data: { HeadId: $('#HeadID_' + i).val(), PrintOrder: $('#PrintOrder_' + i).val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                //setTimeout(function () { window.location = "../Fee_FeeHeadMaster/LandingPage"; }, $('#hddnReloadTime').val());
+            }
+        });
+    }
+
+    $(function () {
+        $('#example1').DataTable({
+            "pageLength": 50
+        });
+    });
+
+    function DeleteHeadConfirm(HeadId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this head?", MyYesFunction, MyNoFunction, HeadId);
+    }
+
+    function MyYesFunction(HeadId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_FeeHeadMaster/Fee_FeeHeadMaster_Delete",
+            data: { HeadId: HeadId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../Fee_FeeHeadMaster/LandingPage"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

@@ -1,0 +1,217 @@
+﻿@model ISas.Web.ViewModels.PTMAttendanceViewModel
+
+@Html.Hidden("HddnFilpTo_Father", value: "A")
+@Html.Hidden("HddnFilpTo_Mother", value: "A")
+@Html.Hidden("HddnFilpTo_Student", value: "A")
+
+<div class="col-xs-12">
+    <div class="form-group">
+        <label for="" style="font-size: 20px">Class Teacher :</label>
+        <label for="" style="color: red; font-size: 20px">@Model.ClassTeacherName</label>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="content-box-large" style="padding: 0px; margin: 0px 0px 15px;">
+        <table class="table" style="margin-bottom: 0px;">
+            <tbody>
+                <tr>
+                    <th style="border: 0px none;">Total Students</th>
+                    <td style="border: 0px none;" align="right">@Model.TotalStudents</td>
+                </tr>
+                <tr>
+                    <th>Present</th>
+                    <td align="right">@Model.PresentStudents</td>
+                </tr>
+                <tr>
+                    <th>Absent</th>
+                    <td align="right">@Model.AbsentStudents</td>
+                </tr>
+                @*<tr>
+                        <th>Leave</th>
+                        <td align="right">@Model.StudentsOnLeave</td>
+                    </tr>*@
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="col-xs-12">
+    <div class="table-responsive searchtable table_ev_od">
+        <table cellspacing="0" cellpadding="0" border="0" class="table table-bordered table-responsive" id="AttendanceTable">
+            <thead>
+                <tr>
+                    <th hidden>ERP No.</th>
+                    <th>Adm No.</th>
+                    <th>Roll No.</th>
+                    <th>Student Name</th>
+                    <th>Father Name</th>
+                    <th>Mobile No</th>
+                    <th>
+                        Mother
+                        <button id="FlipAttn_Mother" style="margin-left:80px;" class="btn btn-success pull-right" title="Filp Attendance Mother">
+                            <i class="fa fa-exchange pull-right"></i>
+                        </button>
+                    </th>
+
+
+                    <th>
+                        Father
+                        <button id="FlipAttn_Father" class="btn btn-success pull-right" title="Filp Attendance Father">
+                            <i class="fa fa-exchange pull-right"></i>
+                        </button>
+                    </th>
+                    <th>
+                        Student
+
+                        <button id="FlipAttn_Student" class="btn btn-success pull-right" title="Filp Attendance Student">
+                            <i class="fa fa-exchange pull-right"></i>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in @Model.StudentPTMAttendanceList)
+                {
+
+                    <tr class="abc">
+                        <td hidden>@item.Student.StudentERPNo </td>
+                        <td>@item.Student.StudentAdmNo </td>
+                        <td>@item.Student.StudentRollNo </td>
+                        <td>@item.Student.StudentName </td>
+                        <td>@item.Student.FatherName </td>
+                        <td>@item.Student.SmsMobileNo </td>
+
+
+
+                        @if (@item.StudentPTMAttendanceDetail.Mother.Trim() == "A")
+                        {
+                            <td class="MA" style="color: red;"><b>@item.StudentPTMAttendanceDetail.Mother  </b></td>
+                        }
+                        else
+                        {
+                            <td class="MA" style="color: green;"><b>@item.StudentPTMAttendanceDetail.Mother  </b></td>
+                        }
+
+                        @if (@item.StudentPTMAttendanceDetail.Father.Trim() == "A")
+                        {
+                            <td class="FA" style="color: red;"><b>@item.StudentPTMAttendanceDetail.Father  </b></td>
+                        }
+                        else
+                        {
+                            <td class="FA" style="color: green;"><b>@item.StudentPTMAttendanceDetail.Father  </b></td>
+                        }
+
+                        @if (@item.StudentPTMAttendanceDetail.Student.Trim() == "A")
+                        {
+                            <td class="SA" style="color: red;"><b>@item.StudentPTMAttendanceDetail.Student  </b></td>
+                        }
+                        else
+                        {
+                            <td class="SA" style="color: green;"><b>@item.StudentPTMAttendanceDetail.Student  </b></td>
+                        }
+
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#FlipAttn_Father").click(function () {
+        var filipto = $('#HddnFilpTo_Father').val();
+        var textcolor = "";
+        if (filipto == "A") {
+            textcolor = "red";
+            $('#HddnFilpTo_Father').val("P");
+        } else {
+            textcolor = "green";
+            $('#HddnFilpTo_Father').val("A");
+        }
+        $('#AttendanceTable tr:not(:first)').each(function () {
+            $(".FA").each(function (i, e) {
+                $(this).text(filipto);
+                $(this).css({ 'color': textcolor, 'font-weight': 'bold' });
+            });
+        })
+    });
+    $("#FlipAttn_Mother").click(function () {
+        var filipto = $('#HddnFilpTo_Mother').val();
+        var textcolor = "";
+        if (filipto == "A") {
+            textcolor = "red";
+            $('#HddnFilpTo_Mother').val("P");
+        } else {
+            textcolor = "green";
+            $('#HddnFilpTo_Mother').val("A");
+        }
+        $('#AttendanceTable tr:not(:first)').each(function () {
+            $(".MA").each(function (i, e) {
+                $(this).text(filipto);
+                $(this).css({ 'color': textcolor, 'font-weight': 'bold' });
+            });
+        })
+    });
+    $("#FlipAttn_Student").click(function () {
+        var filipto = $('#HddnFilpTo_Student').val();
+        var textcolor = "";
+        if (filipto == "A") {
+            textcolor = "red";
+            $('#HddnFilpTo_Student').val("P");
+        } else {
+            textcolor = "green";
+            $('#HddnFilpTo_Student').val("A");
+        }
+        $('#AttendanceTable tr:not(:first)').each(function () {
+            $(".SA").each(function (i, e) {
+                $(this).text(filipto);
+                $(this).css({ 'color': textcolor, 'font-weight': 'bold' });
+            });
+        })
+    });
+
+
+    $(".FA").click(function () {
+        var $FA = $(this).text();
+        var $MA = $(this).closest('tr').children('td.MA').text()
+        if ($FA.trim() == "P") {
+            $(this).text("A");
+            $(this).css({ 'color': 'red', 'font-weight': 'bold' });
+            if ($MA.trim() == "A") {
+                $(this).closest('tr').children('td.SA').text("A");
+                $(this).closest('tr').children('td.SA').css({ 'color': 'red', 'font-weight': 'bold' });
+            }
+        }
+        if ($FA.trim() == "A") {
+            $(this).text("P");
+            $(this).css({ 'color': 'green', 'font-weight': 'bold' });
+            $(this).closest('tr').children('td.SA').text("P");
+            $(this).closest('tr').children('td.SA').css({ 'color': 'green', 'font-weight': 'bold' });
+
+        }
+
+
+    });
+    $(".MA").click(function () {
+        var $MA = $(this).text();
+        var $FA = $(this).closest('tr').children('td.FA').text()
+        if ($MA.trim() == "P") {
+            $(this).text("A");
+            $(this).css({ 'color': 'red', 'font-weight': 'bold' });
+            if ($FA.trim() == "A") {
+                $(this).closest('tr').children('td.SA').text("A");
+                $(this).closest('tr').children('td.SA').css({ 'color': 'red', 'font-weight': 'bold' });
+            }
+        }
+        if ($MA.trim() == "A") {
+            $(this).text("P");
+            $(this).css({ 'color': 'green', 'font-weight': 'bold' });
+            $(this).closest('tr').children('td.SA').text("P");
+            $(this).closest('tr').children('td.SA').css({ 'color': 'green', 'font-weight': 'bold' });
+
+        }
+    });
+</script>

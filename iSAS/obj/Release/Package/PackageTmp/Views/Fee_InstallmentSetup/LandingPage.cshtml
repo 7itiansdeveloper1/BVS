@@ -1,0 +1,108 @@
+﻿@using ISas.Web.Models;
+@{
+    string structId = ""; string structName = "";
+    if (Model != null && Model.Count > 0)
+    {
+        structId = Model[0].StructId;
+        structName = Model[0].StrectureName;
+    }
+}
+@model List<ISas.Entities.FeesEntities.Fee_InstallmentSetupModels>
+
+<!-- /.box -->
+<div class="box box-widget">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Installment List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Installmet Name</th>
+                    <th>First Date</th>
+                    <th>Due Date</th>
+                    <th>Last Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].InstallName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].InstallFirstDate)</td>
+                            <td>@Html.DisplayFor(r => Model[i].InstallDueDate)</td>
+                            <td>@Html.DisplayFor(r => Model[i].InstallLastDate)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeletetable)
+                                {
+                                    <a href="#" onclick="DeleteInstallConfirm('@Model[i].InstallId')" title="Delete Installment" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span title="Delete Installment" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                @if (Model[i].IsEditable)
+                                {
+                                    @Html.EncodedActionLink(" ", "Updation", "Fee_InstallmentSetup", new { StructId = Model[i].StructId, InstallId = Model[i].InstallId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Installment" })
+                                }
+                                else
+                                {
+                                    @Html.EncodedActionLink(" ", "Updation", "Fee_InstallmentSetup", new { }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColorFaded", disabled = true, title = "Edit Installment" })
+                                }
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteInstallConfirm(InstallId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this installment?", MyYesFunction, MyNoFunction, InstallId);
+    }
+
+    function MyYesFunction(InstallId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_InstallmentSetup/Fee_InstallmentSetup_Delete",
+            data: { InstallId: InstallId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../Fee_InstallmentSetup/New?StructId=@structId&StrectureName=@structName"; }, 3000);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

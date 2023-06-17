@@ -1,0 +1,52 @@
+﻿@model ISas.Entities.Examination_Entities.Examination_RemarksTempleteModels
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="alert alert-info alert-dismissible" id="autoHideMsgDiv" style="z-index:1;position: absolute;min-width:98%;max-width:98%;display:none;">
+            <h4><i id="autoHideDivTitleIcon" class="icon fa fa-info"></i> <span id="autoHideDivTitle"> Alert! </span> </h4>
+            <p id="autoHideDivMsg"> Info alert preview. This alert is dismissable.</p>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("RemarksTemplete_CRUD", "Examination_RemarksCenter", FormMethod.Post, htmlAttributes: new { }))
+{
+    @Html.HiddenFor(r => Model.TemplateId)
+    <div class="box box-widget">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.TemplateName)<i class="mandateLbl">*</i></label>
+                        <div class="select">
+                            @Html.TextBoxFor(m => m.TemplateName, htmlAttributes: new { @class = "form-control" , autocomplete = "off"})
+                            @Html.ValidationMessageFor(r => Model.TemplateName, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="" class="checkbox">
+                        <label>
+                            @Html.RadioButtonFor(r => Model.IsRemarkTemplate, true, htmlAttributes: new { }) Is Remark Templete
+                        </label>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="" class="checkbox">
+                        <label>
+                            @Html.RadioButtonFor(r => Model.IsRemarkTemplate, false, htmlAttributes: new { }) Is Acheivement Templete
+                        </label>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-success" id="savebutton" type="button" onclick="CommonAjaxPost(this); setTimeout(function () { $('#mainModalWithSave').modal('toggle'); GetRemarksTempleteList(); }, 1500); ">SAVE</button>
+            @*<button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>*@
+        </div>
+    </div>
+}

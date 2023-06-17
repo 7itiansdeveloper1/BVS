@@ -1,0 +1,152 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.RegistrationEntities.Student_RegistrationMaster>
+@{ 
+    string reportName = "Student Registration Details";
+}
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @reportName });}
+</div>
+
+<section class="content-header">
+    <h1>
+        Registration List
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li class="active">Registration</li>
+    </ol>
+</section>
+<section class="content">
+    <!-- /.box -->
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-header with-border">
+            <span class="pull-right box-title" style="padding-right:1%;">
+                @Html.ActionLink("ADD NEW", "NewRegistration", "Student_Registration", htmlAttributes: new { @class = "btn btn-block btn-primary btn-sm" })
+            </span>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Reg No</th>
+                        <th>Reg Date</th>
+                        <th>Class</th>
+                        <th>Student Name</th>
+                        <th>Father Name</th>
+                        <th>Father Mobile</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        string studentFullName = Model[i].Student_FirstName + " " + Model[i].Student_MiddleName + " " + Model[i].Student_LastName;
+                        string fatherFullName = Model[i].Father_FirstName + " " + Model[i].Father_MiddleName + " " + Model[i].Father_LastName;
+                        <tr>
+                            <td>@Html.DisplayFor(r => Model[i].RegID)</td>
+                            <td>@Html.DisplayFor(r => Model[i].RegDate)</td>
+                            <td>@Html.DisplayFor(r => Model[i].RegistrationClass)</td>
+                            <td>@Html.DisplayFor(r => studentFullName)</td>
+                            <td>@Html.DisplayFor(r => fatherFullName)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Father_MoblieNo)</td>
+                            <td>@Html.DisplayFor(r => Model[i].RegStatus)</td>
+                            <td class="text-center">
+                                @Html.EncodedActionLink(" ", "Updation", "Student_Registration", new { RegID = Model[i].RegID }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Registration" })
+
+                                @Html.EncodedActionLink(" ", "NewAdmission_BasicForm", "Student_Admission", new { RegID = Model[i].RegID }, htmlAttributes: new { @class = "fa fa-plus-square btnDefaultColor", style = "margin-left:10%;", title = "Go to Admission", target="_blank" })
+
+                                @Html.EncodedActionLink(" ", "RegistrationSlip_Print", "Student_Registration", new { RegId = Model[i].RegID }, htmlAttributes: new { @class = "fa fa-print btnDefaultColor", title = "Registration Slip", target = "_blank" })
+
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</section>
+
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    title: '@reportName',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (xlsx) {
+                        console.log(xlsx);
+
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    title: "",
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function (win) {
+                        $(win.document.body)
+                            //.css('font-size', '10pt')
+                            .prepend($('#reportHeaderDiv').html()); //'<img src="http://localhost:60254/Images/System/balVikasLog.jpg" style="" />'
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                },
+                'colvis'
+            ],
+            select: true
+        });
+    });
+</script>

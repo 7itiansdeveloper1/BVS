@@ -1,0 +1,261 @@
+﻿@model ISas.Entities.ActivityMarksEntryModel
+
+<section class="content-header">
+    <h1>
+        VI to X (Activities)
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>CCE Exam Module</li>
+        <li class="active">VI to X (Activities)</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-success">
+        @using (Html.BeginForm("Student_CoScholasticMarksEntry_CRUD1", "Exam", FormMethod.Post, htmlAttributes: new { }))
+        {
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Session</label>
+                            <div class="select">
+                                @Html.HiddenFor(r => Model.SelectedSessionId)
+                                @Html.DropDownListFor(m => m.SelectedSessionId, Model.SessionList, new { @class = "form-control select2", style = "width:100%", id = "SelectedSessionId", disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Term</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedExamId, Model.ExamList, "-- Select Exam --", new { @class = "form-control select2", style = "width:100%", id = "ddlExamList", dataChangeUrl = Url.Action("BindClassddl") })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Class</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedClassId, Model.ClassList, new { @class = "form-control select2", style = "width:100%", id = "ddlClassList", dataChangeUrl = Url.Action("BindSectionddl") })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Section</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedSectionId, Model.SectionList, new { @class = "form-control select2", style = "width:100%", id = "ddlSectionList", dataChangeUrl = Url.Action("BindParentSubjectddl1") })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Subject</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedSubjectId, Model.SubjectList, new { @class = "form-control select2", style = "width:100%", id = "ddlSubjectList", dataChangeUrl = Url.Action("BindAssessmentddl1") })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Assessments</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedAssessmentId, Model.AssessmentList, new { @class = "form-control select2", style = "width:100%", id = "ddlAssessmentList", dataChangeUrl = Url.Action("BindStudentActivityMarkList") })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Apply All</label>
+                            <div class="select">
+                                @Html.DropDownList("FooBarDropDown", new List<SelectListItem>
+                                                                        {
+                                                                        new SelectListItem{ Text="--select--", Value = "0" ,Selected=true },
+                                                                        new SelectListItem{ Text="1", Value = "1" },
+                                                                        new SelectListItem{ Text="2", Value = "2" },
+                                                                        new SelectListItem{ Text="3", Value = "3" },
+                                                                        new SelectListItem{ Text="4", Value = "4" },
+                                                                        new SelectListItem{ Text="5", Value = "5" },
+                                                                        new SelectListItem{ Text="6", Value = "6" },
+                                                                        new SelectListItem{ Text="7", Value = "7" },
+                                                                        new SelectListItem{ Text="8", Value = "8" },
+                                                                        new SelectListItem{ Text="9", Value = "9" },
+                                                                        new SelectListItem{ Text="10", Value = "10" },
+                                                                        new SelectListItem{ Text="15", Value = "15" },
+                                                                        new SelectListItem{ Text="20", Value = "20" }
+                                                                         }, new { @class = "form-control select2", style = "width:100%", id = "ddlApplyAll" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="divMarkList">
+                        @Html.Partial("_StudentActivityCoScholasticPartial", Model)
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="button" class="btn btn-success" onclick="DoAjaxPostAndMore(this)" id="savebutton">SAVE</button>
+            </div>
+        }
+    </div>
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on('change', "#ddlExamList", function () {
+            $.ajax({
+                url: $('#ddlExamList').attr('dataChangeUrl'),
+                data: { examId: $('#ddlExamList').val() },
+                type: 'get',
+                success: (function (data) {
+                    var $ddlClass = $('#ddlClassList');
+                    $ddlClass.empty();
+                    $('#ddlSectionList').empty();
+                    $('#ddlSubjectList').empty();
+                    $('#ddlAssessmentList').empty();
+                    $ddlClass.append($("<option />").text("--- Select Class ---"));
+                    $.each(data, function () {
+                        $ddlClass.append($("<option />").val(this.ClassId).text(this.ClassName));
+                    });
+                }),
+                fail: (function (error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                })
+            })
+        });
+        $(document).on('change', "#ddlClassList", function () {
+            $.ajax({
+                url: $('#ddlClassList').attr('dataChangeUrl'),
+                data: { classId: $('#ddlClassList').val(), examId: $('#ddlExamList').val() },
+                type: 'get',
+                success: (function (data) {
+                    var $ddlSec = $('#ddlSectionList');
+                    $ddlSec.empty();
+                    $('#ddlSubjectList').empty();
+                    $('#ddlAssessmentList').empty();
+                    $ddlSec.append($("<option />").text("--- Select Section ---"));
+                    $.each(data, function () {
+                        $ddlSec.append($("<option />").val(this.SectionId).text(this.SectionName));
+                    })
+                }),
+                fail: (function (error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                })
+            })
+        });
+        $(document).on('change', "#ddlSectionList", function () {
+            $.ajax({
+                url: $('#ddlSectionList').attr('dataChangeUrl'),
+                data: { classId: $('#ddlClassList').val(), sectionId: $('#ddlSectionList').val(), examId: $('#ddlExamList').val() },
+                type: 'get',
+                success: (function (data) {
+                    var $ddlSubject = $('#ddlSubjectList');
+                    $ddlSubject.empty();
+                    $('#ddlStudentList').empty();
+                    $ddlSubject.append($("<option />").text("--- Select Subject ---"));
+                    $.each(data, function () {
+                        $ddlSubject.append($("<option />").val(this.ParentSubjectId).text(this.ParentSubjectName));
+                    });
+                }),
+                fail: (function (error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                })
+            })
+        });
+        $(document).on('change', "#ddlSubjectList", function () {
+            $.ajax({
+                url: $('#ddlSubjectList').attr('dataChangeUrl'),
+                data: {
+                    classId: $('#ddlClassList').val(), sectionId: $('#ddlSectionList').val(),
+                    examId: $('#ddlExamList').val(), subjectId: $('#ddlSubjectList').val()
+                },
+                type: 'get',
+                success: (function (data) {
+                    $('#divMarkList').empty();
+                    var $ddlAssessment = $('#ddlAssessmentList');
+                    $ddlAssessment.empty();
+                    $ddlAssessment.append($("<option />").text("--- Select Assessment ---"));
+                    $.each(data, function () {
+                        $ddlAssessment.append($("<option />").val(this.AssessmentId).text(this.AssessmentName));
+                    });
+                }),
+                fail: (function (error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                })
+            })
+        });
+        $(document).on('change', "#ddlAssessmentList", function () {
+
+            $.ajax({
+
+                url: $('#ddlAssessmentList').attr('dataChangeUrl'),
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                data: {
+                    classId: $('#ddlClassList').val(), sectionId: $('#ddlSectionList').val(),
+                    examId: $('#ddlExamList').val(), subjectId: $('#ddlSubjectList').val()
+                    , assessmentId: $('#ddlAssessmentList').val(), sessionId: $('#SelectedSessionId').val()
+                },
+                type: 'get',
+                success: (function (data) {
+                    $('#divMarkList').empty();
+                    $('#divMarkList').html(data);
+                }),
+                fail: (function (error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                }),
+                complete: function () {
+                    spinnerHide();
+                }
+            })
+        });
+        $(document).on('change', "#ddlApplyAll", function () {
+            $('#MarkCoScholasicTable tr:not(:first)').each(function () {
+                var ddlMark = $('#ddlApplyAll').val();
+                $("[id*='StudentMark']").each(function (i, e) {
+                    $(this).val(ddlMark);
+                });
+            })
+
+        });
+    });
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

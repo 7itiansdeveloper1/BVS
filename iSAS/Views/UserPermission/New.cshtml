@@ -1,0 +1,147 @@
+﻿@model ISas.Entities.UserEntities.UserPermissionModels
+
+<section class="content-header">
+    <h1>
+        User Permission For <span class="text-primary">@Html.DisplayFor(r => Model.SelectedARefName) </span>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>User</li>
+        <li>User Permission</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("UserPermission_CRUD", "UserPermission", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.UserType)
+        @Html.HiddenFor(r => Model.UserReferenceNo)
+        @Html.HiddenFor(r => Model.SelectedARefName)
+
+        <div class="box box-primary">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <h5> <label>Select Module</label></h5>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ModuleID, new SelectList(Model.ModuleList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getModuleRoleList()" })
+                                @Html.ValidationMessageFor(r => Model.ModuleID, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="studOrStaffDetailsMainDiv">
+                            @*@Html.Partial("_ModuleRoleDetail", Model)*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-info" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">Save</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">Reset</button>
+            </div>
+        </div>
+    }
+</section>
+<script>
+    function Fun_CheckToSelectAllMenu() {
+        if ($('#chkBoxSelectAllMenu').is(':checked')) {
+            $('.menu').prop('checked', true);
+
+            $('.SAVE').prop('checked', true);
+            $('.DELETE').prop('checked', true);
+            $('.UPDATE').prop('checked', true);
+            $('.VIEW').prop('checked', true);
+        }
+        else {
+            $('.menu').prop('checked', false);
+
+            $('.SAVE').prop('checked', false);
+            $('.DELETE').prop('checked', false);
+            $('.UPDATE').prop('checked', false);
+            $('.VIEW').prop('checked', false);
+        }
+    }
+
+    function Fun_CheckToSelectAllCan_Permission(PER) {
+        if ($('#chkBoxSelectAllCan' + PER).is(':checked')) {
+            $('.' + PER).prop('checked', true);
+        } else {
+            $('.' + PER).prop('checked', false);
+        }
+    }
+
+    function Fun_CheckToSelectAllPermission(i) {
+        if ($('#chkBoxMenu_' + i).is(':checked')) {
+            $('#ModuleRoleList_' + i + '__canSAVE').prop('checked', true);
+            $('#ModuleRoleList_' + i + '__canDELETE').prop('checked', true);
+            $('#ModuleRoleList_' + i + '__canUPDATE').prop('checked', true);
+            $('#ModuleRoleList_' + i + '__canVIEW').prop('checked', true);
+        } else {
+            $('#ModuleRoleList_' + i + '__canSAVE').prop('checked', false);
+            $('#ModuleRoleList_' + i + '__canDELETE').prop('checked', false);
+            $('#ModuleRoleList_' + i + '__canUPDATE').prop('checked', false);
+            $('#ModuleRoleList_' + i + '__canVIEW').prop('checked', false);
+        }
+    }
+
+    function getModuleRoleList() {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../UserPermission/_ModuleRoleDetail',
+            data: { ModuleId: $('#ModuleID').val(), UserRefId : '@Model.UserReferenceNo'  },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#studOrStaffDetailsMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, 'Success');
+                    getModuleRoleList();
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+   
+</script>
+

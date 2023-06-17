@@ -1,0 +1,11 @@
+F:\Work Data\iSAS\iSASData\bin\Debug\iSASData.dll.config
+F:\Work Data\iSAS\iSASData\bin\Debug\iSASData.dll
+F:\Work Data\iSAS\iSASData\bin\Debug\iSASData.pdb
+F:\Work Data\iSAS\iSASData\bin\Debug\EntityFramework.dll
+F:\Work Data\iSAS\iSASData\bin\Debug\EntityFramework.SqlServer.dll
+F:\Work Data\iSAS\iSASData\bin\Debug\EntityFramework.xml
+F:\Work Data\iSAS\iSASData\bin\Debug\EntityFramework.SqlServer.xml
+F:\Work Data\iSAS\iSASData\obj\Debug\iSASData.csprojResolveAssemblyReference.cache
+F:\Work Data\iSAS\iSASData\obj\Debug\iSASData.csproj.CoreCompileInputs.cache
+F:\Work Data\iSAS\iSASData\obj\Debug\iSASData.dll
+F:\Work Data\iSAS\iSASData\obj\Debug\iSASData.pdb

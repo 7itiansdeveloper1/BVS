@@ -1,0 +1,340 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Exam_Entities.Exam_QuestionMasterModels
+@{
+    List<SelectListItem> qNatureList = new List<SelectListItem>();
+    qNatureList.Add(new SelectListItem { Text = "Optional", Value = "OP", Selected = true });
+    qNatureList.Add(new SelectListItem { Text = "Discriptive", Value = "DIS" });
+}
+<style>
+    #option span {
+        margin-right: 12px;
+    }
+
+    .radio label {
+        padding-left: 27px;
+    }
+</style>
+
+<section class="content-header">
+    <h1> Add Question</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Exam Module</li>
+        <li>Question Paper <a href="@Url.Action("Exam_QuestionPaperMaster", "Exam_QuestionPaper")" title="Question Paper"></a></li>
+        <li>Set Questions</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("Exam_QuestionMaster_CRUD", "Exam_QuestionMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-primary">
+
+            <div class="box-header with-border">
+                <h5 class="box-title">Class :- <strong class="text-primary">@Html.DisplayFor(r => Model.className)</strong></h5>
+                <h5 class="box-title">Subject :- <strong class="text-primary">@Html.DisplayFor(r => Model.subjectName)</strong></h5>
+                <h5 class="box-title">Assessment :- <strong class="text-primary">@Html.DisplayFor(r => Model.assessmentName)</strong></h5>
+                <h5 class="box-title">Max Mark :- <strong class="text-primary">@Html.DisplayFor(r => Model.maxMark)</strong></h5>
+            </div>
+
+
+            <div class="box-body">
+
+                <div class="col-xs-12 col-sm-12 col-md-6">
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-3">
+                            <div class="form-group">
+                                <label for="">
+                                    @Html.LabelFor(r => Model.qNo)
+                                    @Html.HiddenFor(r => Model.qpId, htmlAttributes: new { })
+                                </label>
+                                <div class="select">
+                                    <input type="number" id="qNo" name="qNo" class="form-control" value="@Model.qNo" />
+                                    @Html.ValidationMessageFor(r => Model.qNo, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.qMark)<i class="mandateLbl">*</i></label>
+                                <div class="select">
+                                    @Html.TextBoxFor(m => m.qMark, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.qMark, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.qNature)</label>
+                                <div class="select">
+                                    @Html.DropDownListFor(m => m.qNature, new SelectList(qNatureList, "Value", "Text", "OPT"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                    @Html.ValidationMessageFor(r => Model.qNature, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.qText)<i class="mandateLbl">*</i></label>
+                                <div class="select">
+                                    @Html.TextAreaFor(m => m.qText, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.qText, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="optional">
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Oa)<i class="mandateLbl">*</i></label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Oa, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(r => Model.Oa, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Ob)<i class="mandateLbl">*</i></label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Ob, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(r => Model.Ob, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label id="lblOc" for="">@Html.LabelFor(r => Model.Oc)</label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Oc, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(r => Model.Oc, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Od)</label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Od, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(r => Model.Od, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-md-6">
+                                <label for="">@Html.LabelFor(r => Model.ans)<i class="mandateLbl">*</i></label>
+                                <div class="form-group">
+                                    <div class="radio" id="option">
+                                        <label> @Html.RadioButtonFor(r => r.ans, "a", htmlAttributes: new { @class = "radioa" })<span>a</span>|</label>
+                                        <label> @Html.RadioButtonFor(r => r.ans, "b", htmlAttributes: new { id = "ansb" })<span>b</span>|</label>
+                                        <label> @Html.RadioButtonFor(r => r.ans, "c", htmlAttributes: new { id = "ansc" })<span>c</span>|</label>
+                                        <label> @Html.RadioButtonFor(r => r.ans, "d", htmlAttributes: new { id = "ansd" })<span>d</span></label>
+                                        @Html.ValidationMessageFor(r => Model.ans, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6" id="parValueDiv">
+
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label> @Html.CheckBoxFor(r => Model.isHavingParagraph, new { onclick = "chkParagraph()" })  <strong>Having Paragraph</strong>   </label>
+                                <label class="pull-right " id="lblcharLen" style="font-style:oblique"></label>
+                            </div>
+                            <div class="select">
+                                @Html.TextAreaFor(m => m.parValue, htmlAttributes: new { @class = "form-control", @rows = 18, maxlength = 2000, @disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="box-footer">
+                <div class="box-footer">
+                    <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                    <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                </div>
+            </div>
+        </div>
+
+    }
+    @{ Html.RenderAction("LandingPage", "Exam_QuestionMaster", new { }); }
+</section>
+<script>
+
+  function DoAjaxPostAndMore(btnClicked) {
+
+    var qNature = $( "#qNature option:selected" ).text();
+    
+    if (qNature=='Discriptive'){
+        
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    //setTimeout(function () { window.location = "../Academic_DocumentMaster/New"; }, $('#hddnReloadTime').val());
+                    setTimeout(function () { window.location = "../Exam_QuestionMaster/New?qpId=@Model.qpId&className=@Model.className&subjectName=@Model.subjectName&assessmentName=@Model.assessmentName&maxMark=@Model.maxMark"; }, $('#hddnReloadTime').val());
+                    //setTimeout(function () { window.location = "../Exam_QuestionMaster/LandingPage"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    else {
+
+    
+    if ($("#qText").val().length==0){
+    OpenMessegeAutoHideDiv("Question is required.", 'Danger');
+    return;}
+
+    if ($("#Oa").val().length==0 || $("#Ob").val().length==0 ){
+    OpenMessegeAutoHideDiv("Mininmum Option a or b is required.", 'Danger');
+    return;}
+
+    var selValue = $("input[type='radio']:checked").val();
+    if (selValue==null){
+    OpenMessegeAutoHideDiv("Correct answer is required.", 'Danger');
+    return;}
+    
+    if ($('#isHavingParagraph').is(':checked') ) {
+
+            if ($("#parValue").val().length>0) {
+                
+                 var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    //setTimeout(function () { window.location = "../Academic_DocumentMaster/New"; }, $('#hddnReloadTime').val());
+                    setTimeout(function () { window.location = "../Exam_QuestionMaster/New?qpId=@Model.qpId&className=@Model.className&subjectName=@Model.subjectName&assessmentName=@Model.assessmentName&maxMark=@Model.maxMark"; }, $('#hddnReloadTime').val());
+                    //setTimeout(function () { window.location = "../Exam_QuestionMaster/LandingPage"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+            }
+            else
+            OpenMessegeAutoHideDiv("Paragraph is not valid.", 'Danger');
+
+        }
+         else {
+        alert("I am in else.")
+         var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    //setTimeout(function () { window.location = "../Academic_DocumentMaster/New"; }, $('#hddnReloadTime').val());
+                    setTimeout(function () { window.location = "../Exam_QuestionMaster/New?qpId=@Model.qpId&className=@Model.className&subjectName=@Model.subjectName&assessmentName=@Model.assessmentName&maxMark=@Model.maxMark"; }, $('#hddnReloadTime').val());
+                    //setTimeout(function () { window.location = "../Exam_QuestionMaster/LandingPage"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        
+       }
+    }
+    };
+
+    function chkParagraph() {
+        $('#isHavingParagraph').change(function () {
+            $("#parValue").prop("disabled", !$(this).is(':checked'));
+        });
+    }
+
+    $(function () {
+        $("#parValue").keyup(function () {
+            var charsLeft = $(this).attr("maxlength") - $(this).val().length;
+            $("#lblcharLen").text(charsLeft + " characters left");
+        });
+    });
+    $("#qNature").change(function() {
+        var qNature = $('option:selected', $(this)).text();
+    if (qNature=='Discriptive'){
+    $('#optional').hide();
+    $('#parValueDiv').hide();
+    }
+    else
+    {
+    $('#optional').show();
+    $('#parValueDiv').show();
+    }
+
+
+    });
+
+</script>

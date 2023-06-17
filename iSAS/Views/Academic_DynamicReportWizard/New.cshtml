@@ -1,0 +1,187 @@
+﻿@model  ISas.Entities.Academic.Academic_DynamicReportWizardModels
+
+<section class="content-header">
+    <h1>Dynamic Report Wizard <small>ADD NEW</small> </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>School</li>
+        <li class="active"><a href="@Url.Action("LandingPage", "Academic_DynamicReportWizard")">Dynamic Report Wizard</a></li>
+        <li class="active">ADD NEW</li>
+
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("Academic_DynamicReportWizard_CRUD", "Academic_DynamicReportWizard", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.ReportId)
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Report Wizard</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ModuleId)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ModuleId, new SelectList(Model.ModuleList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getReportFeild()" })
+                                @Html.ValidationMessageFor(r => Model.ModuleId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ReportName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.ReportName, htmlAttributes: new { @class = "form-control", onkeypress = "return NoSpaceAtAnyPlace(event)" })
+                                @Html.ValidationMessageFor(r => Model.ReportName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ReportDisplayName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.ReportDisplayName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.ReportDisplayName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ReportCaption)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.ReportCaption, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.ReportCaption, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButtonFor(r => Model.ReportType, "Detail", htmlAttributes: new { }) Detail
+                                </label>
+                                <label>
+                                    @Html.RadioButtonFor(r => Model.ReportType, "Statical", htmlAttributes: new { }) Statical
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="form-group">
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>@Html.CheckBox("SelectAllReportFeild", false, htmlAttributes: new { @onchange = "fun_CheckToSelectAllReportFeild()" })</th>
+                                        <th>Field Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_reportFeild">
+                                    @for (int i = 0; i < Model.ReportFeildList.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.CheckBoxFor(r => Model.ReportFeildList[i].Selected, htmlAttributes: new { @class = "chkboxReportFeild" })
+                                                @Html.HiddenFor(r => Model.ReportFeildList[i].Value)
+                                                @Html.HiddenFor(r => Model.ReportFeildList[i].Text)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(r => Model.ReportFeildList[i].Text)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+</section>
+
+
+<script>
+    function fun_CheckToSelectAllReportFeild() {
+        if ($('#SelectAllReportFeild').is(':checked')) {
+            $('.chkboxReportFeild').prop('checked', true);
+        } else {
+            $('.chkboxReportFeild').prop('checked', false);
+        }
+    }
+
+    function getReportFeild() {
+        $('#tbody_reportFeild').html('');
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Academic_DynamicReportWizard/GetReportFeildList',
+            data: { ModuleId: $('#ModuleId').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                console.log(response);
+                var html = '';
+                $(response).each(function (i) {
+                    html += "<tr><td>";
+                    html += '<input class="chkboxReportFeild" data-val="true" data-val-required="The Selected field is required." id="ReportFeildList_' + i + '__Selected" name="ReportFeildList[' + i + '].Selected" type="checkbox" value="true"><input name="ReportFeildList[' + i + '].Selected" type="hidden" value="false">';
+                    html += '<input id="ReportFeildList_' + i + '__Value" name="ReportFeildList[' + i + '].Value" type="hidden" value="' + response[i].Value + '">';
+                    html += '<input id="ReportFeildList_' + i + '__Text" name="ReportFeildList[' + i + '].Text" type="hidden" value="' + response[i].Text + '">';
+                    html += '</td><td>';
+                    html += '' + response[i].Text + '';
+                    html += '</td></tr>';
+                });
+                $('#tbody_reportFeild').html(html);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location.reload(); }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

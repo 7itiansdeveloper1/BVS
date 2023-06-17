@@ -1,0 +1,220 @@
+﻿@model ISas.Entities.Student_NSOModel
+@{
+    ViewBag.Title = "Student NSO";
+}
+<section class="content-header">
+    <h1>NSO <small>(UPDATE)</small> </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li><a href="@Url.Action("Student_NSOLandingPage", "Student_NSO")">NSO</a></li>
+        <li class="active">Update</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h5 class="box-title">
+                NSO No. : &nbsp; <small class="label pull-right bg-green">@Html.DisplayFor(r => Model.NSO_No)</small>
+            </h5>
+            <h5 class="box-title pull-right">
+                Last Modified :&nbsp; <small class="label pull-right bg-green">@Html.DisplayFor(r => Model.ModifiedBy)|@Html.DisplayFor(r => Model.ModifiedDate)</small>
+                
+            </h5>
+        </div>
+        @using (Html.BeginForm("Student_NSO_CRUD", "Student_NSO", FormMethod.Post, htmlAttributes: new { id = "form1" }))
+        {
+            @Html.HiddenFor(r => Model.Mode)
+            @Html.HiddenFor(r => Model.NSO_No)
+            @Html.HiddenFor(r => Model.LastNSONo)
+            @Html.HiddenFor(r => Model.CurrentSessionNSOCount)
+            @Html.HiddenFor(r => Model.ClassId)
+            @Html.HiddenFor(r => Model.SectionId)
+            @Html.HiddenFor(r => Model.StudentID)
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SessionId)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.HiddenFor(r => Model.SessionId)
+                                @Html.DropDownListFor(m => m.SessionId, Model.DropDownList.SessionList, "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", disabled = true })
+                                @Html.ValidationMessageFor(r => Model.SessionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.NSO_AppliedDate)<i class="mandateLbl">*</i></label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.NSO_AppliedDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.NSO_AppliedDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ERPNO)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.ERPNO, htmlAttributes: new { @class = "form-control", @readonly = true })
+                                @Html.ValidationMessageFor(r => Model.ERPNO, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.AdmissionNo)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.AdmissionNo, htmlAttributes: new { @class = "form-control", @readonly = true })
+                                @Html.ValidationMessageFor(r => Model.AdmissionNo, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ClassId)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ClassId, new SelectList(Model.DropDownList.ClassList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionListByClass('ClassId', 'SectionId')", disabled = true })
+                                @Html.ValidationMessageFor(r => Model.ClassId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SectionId)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SectionId, new SelectList(Model.DropDownList.SectionList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "GetStudentListForTCByClassSection('SessionId', 'ClassId', 'SectionId', 'StudentID')", disabled = true })
+                                @Html.ValidationMessageFor(r => Model.SectionId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.StudentID)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.StudentID, new SelectList(Model.DropDownList.StudentList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", disabled = true })
+                                @Html.ValidationMessageFor(r => Model.StudentID, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FatherName)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.FatherName, htmlAttributes: new { @class = "form-control", @readonly = true })
+                                @Html.ValidationMessageFor(r => Model.FatherName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    @*<div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.Refund_Amount)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.Refund_Amount, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.Refund_Amount, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.NSO_Reason)</label>
+                            <div class="select">
+                                @Html.TextAreaFor(m => m.NSO_Reason, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.NSO_Reason, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.NSO_Description)</label>
+                            <div class="select">
+                                @Html.TextAreaFor(m => m.NSO_Description, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.NSO_Description, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-footer">
+                <button class="btn btn-warning" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this, 'SAVE')">UPDATE</button>
+                <button class="btn btn-default" type="button" onclick="ShowConfirmYesNo(this, 'CANCEL')">CANCEL</button>
+            </div>
+        }
+    </div>
+
+</section>
+<script>
+        function DoAjaxPostAndMore(btnClicked, mode) {
+            var $form = $(btnClicked).parents('form');
+            $('#Mode').val(mode);
+            $.ajax({
+                type: "POST",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    if (response.status == 'success') {
+                        OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                        setTimeout(function () { window.location = "../Student_NSO/Student_NSOLandingPage"; }, $('#hddnReloadTime').val());
+                    } else {
+                        OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                        AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                        AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                    }
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        }
+
+        function ShowConfirmYesNo(evt, mode) {
+            $('#Mode').val(mode);
+            AsyncConfirmYesNo("Confirmation Box", "Are you sure to Cancel this NSO ?", MyYesFunction, MyNoFunction, evt);
+        }
+
+        function MyYesFunction(evt) {
+            DoAjaxPostAndMore(evt, $('#Mode').val());
+        }
+        function MyNoFunction() {
+        }
+
+         $(document).on('change', "#StudentID", function () {
+            $.ajax({
+                url: '@Url.Action("GetddlStudentList1", "Student_TC")',
+                data: { sessionId: $('#SessionId').val(), classId: $('#ClassId').val(), sectionId: $('#SectionId').val(), erpNo: $('#StudentID').val() },
+                type: 'get',
+                success: (function (data) {
+                    $('#ERPNO').val(data.ERPNo);
+                    $('#AdmissionNo').val(data.AdmNo);
+                    $('#FatherName').val(data.FatherName);
+                }),
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+            });
+        });
+</script>

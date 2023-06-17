@@ -1,0 +1,309 @@
+﻿@model ISas.Web.ViewModels.Student_UpdationViewModel
+
+@Html.HiddenFor(r => Model.ColumnType)
+@Html.HiddenFor(r => Model.SelectedParameterId)
+
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeaderWithoutLogo", "Common", new { tempReportName = @Model.SelectedClassSectionName });}
+</div>
+<table id="tblStudentDetails" cellspacing="0" cellpadding="0" class="table table-bordered table-responsive" style="border:1px solid black; width:100%;text-align:center;display:none;">
+    <thead>
+        <tr style="border:1px solid black;">
+            <th style="border:1px solid black;">Adm No.</th>
+            <th style="border:1px solid black;">Roll No.</th>
+            <th style="border:1px solid black;">Student Name</th>
+            @if (Model.SelectedParameterId == "Student" || Model.SelectedParameterId == "Father" || Model.SelectedParameterId == "Mother")
+            {
+                <th style="border:1px solid black;">First Name</th>
+                <th style="border:1px solid black;">Middle Name</th>
+                <th style="border:1px solid black;">Last Name</th>
+            }
+            else if (Model.SelectedParameterId == "MOT")
+            {
+                <th style="border:1px solid black;">@Model.SelectedParameterId</th>
+                <th style="border:1px solid black;">Picked up By</th>
+            }
+            else if (Model.SelectedParameterId == "BUSStop")
+            {
+                <th style="border:1px solid black;">@Model.SelectedParameterId</th>
+                <th style="border:1px solid black;">Stop</th>
+            }
+            else
+            {
+                <th style="border:1px solid black;">@Model.SelectedParameterId</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.ClassofJoiningList.Count; i++)
+        {
+        <tr style="border:1px solid black;">
+            <td style="border:1px solid black;">
+                @Html.HiddenFor(r => @Model.ClassofJoiningList[i].Student.StudentERPNo)
+                @Model.ClassofJoiningList[i].Student.StudentAdmNo
+            </td>
+            <td style="border:1px solid black;">@Model.ClassofJoiningList[i].Student.StudentRollNo </td>
+            <td style="border:1px solid black;">@Model.ClassofJoiningList[i].Student.StudentName </td>
+
+            @if (Model.ColumnType == "1C")
+            {
+                if (Model.UserRole != "Admin" && Model.SelectedParameterId=="DOB")
+                {
+                    
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "disabled" })</td>
+                }
+                else
+                {
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter1  , new { @class = "disabled" })</td>
+                }
+
+
+            }
+            else if (Model.ColumnType == "3C")
+            {
+                if (Model.UserRole == "Admin")
+                {
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter1 )</td>
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter2)</td>
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter3)</td>
+                }
+                else
+                {
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter1)</td>
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter2)</td>
+                    <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter3)</td>
+                }
+
+            }
+
+
+            else if (Model.ColumnType == "DD")
+            {
+                <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].DD1TextVal)</td>
+            }
+            else if (Model.ColumnType == "2DD")
+            {
+                <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].DD1TextVal)</td>
+                <td style="border:1px solid black;">@Html.DisplayFor(m => Model.ClassofJoiningList[i].DD2TextVal)</td>
+            }
+            else
+            {
+                @*<td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "form-control"})</td>*@
+            }
+        </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Print == "YES")
+{
+    { Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @Model.SelectedClassSectionName }); }
+    <hr />
+    <table cellspacing="0" cellpadding="0" border="1" class="table table-bordered table-responsive" style="width:100%;text-align:center;">
+        <thead>
+            <tr>
+                <th>Adm No.</th>
+                <th>Roll No.</th>
+                <th>Student Name</th>
+                @if (Model.SelectedParameterId == "Student" || Model.SelectedParameterId == "Father" || Model.SelectedParameterId == "Mother")
+                {
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                }
+                else if (Model.SelectedParameterId == "MOT")
+                {
+                    <th>@Model.SelectedParameterId</th>
+                    <th>Picked up By</th>
+                }
+                else if (Model.SelectedParameterId == "BUSStop")
+                {
+                    <th style="border:1px solid black;">@Model.SelectedParameterId</th>
+                    <th style="border:1px solid black;">Stop</th>
+                }
+                else
+                {
+                    <th>@Model.SelectedParameterId</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.ClassofJoiningList.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(r => @Model.ClassofJoiningList[i].Student.StudentERPNo)
+                        @Model.ClassofJoiningList[i].Student.StudentAdmNo
+                    </td>
+                    <td>@Model.ClassofJoiningList[i].Student.StudentRollNo </td>
+                    <td>@Model.ClassofJoiningList[i].Student.StudentName </td>
+
+                    @if (Model.ColumnType == "1C")
+                    {
+                        <td>@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter1)</td>
+                    }
+                    else if (Model.ColumnType == "3C")
+                    {
+                        <td>@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter1)</td>
+                        <td>@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter2)</td>
+                        <td>@Html.DisplayFor(m => Model.ClassofJoiningList[i].Parameter3)</td>
+                    }
+                    else if (Model.ColumnType == "DD")
+                    {
+                        <td>@Html.DisplayFor(m => Model.ClassofJoiningList[i].DD1TextVal)</td>
+                    }
+                    else if (Model.ColumnType == "2DD")
+                    {
+                        <td>@Html.DisplayFor(m => Model.ClassofJoiningList[i].DD1TextVal)</td>
+                        <td>@Html.DisplayFor(m => Model.ClassofJoiningList[i].DD2TextVal)</td>
+                    }
+                    else
+                    {
+                        @*<td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "form-control"})</td>*@
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table cellspacing="0" cellpadding="0" border="0" class="table table-bordered table-responsive" id="tblStudUpdation">
+        <thead>
+            <tr>
+                <th>Adm No.</th>
+                <th>Roll No.</th>
+                <th>Student Name</th>
+                @if (Model.SelectedParameterId == "Student" || Model.SelectedParameterId == "Father" || Model.SelectedParameterId == "Mother")
+                {
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                }
+                else if (Model.SelectedParameterId == "MOT")
+                {
+                    <th>@Model.SelectedParameterId</th>
+                    <th>Picked up By</th>
+                }
+                else if (Model.SelectedParameterId == "BUSStop")
+                {
+                    <th>Route</th>
+                    <th>Stop</th>
+                }
+                else
+                {
+                    <th>@Model.SelectedParameterId</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.ClassofJoiningList.Count; i++)
+            {
+            <tr>
+                <td>
+                    @Html.HiddenFor(r => @Model.ClassofJoiningList[i].Student.StudentERPNo)
+                    @Model.ClassofJoiningList[i].Student.StudentAdmNo
+                </td>
+                <td>@Model.ClassofJoiningList[i].Student.StudentRollNo </td>
+                <td>@Model.ClassofJoiningList[i].Student.StudentName </td>
+
+                @if (Model.ColumnType == "1C")
+                {
+
+
+
+                    if (Model.UserRole != "Admin" && (Model.SelectedParameterId == "DOA" || Model.SelectedParameterId == "DOB"))
+                    {
+
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "form-control", @readonly = true })</td>
+                    }
+                    else
+                    {
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "form-control" })</td>
+                    }
+
+                }
+
+
+
+
+                else if (Model.ColumnType == "3C")
+                {
+                    if (Model.UserRole != "Admin" && (Model.SelectedParameterId == "Student" || Model.SelectedParameterId == "Father"|| Model.SelectedParameterId == "Mother"))
+                    {
+
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "form-control", @readonly = true })</td>
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter2, new { @class = "form-control", @readonly = true })</td>
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter3, new { @class = "form-control", @readonly = true })</td>
+                    }
+                    else
+                    {
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "form-control" })</td>
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter2, new { @class = "form-control" })</td>
+                        <td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter3, new { @class = "form-control" })</td>
+                    }
+
+
+                }
+                else if (Model.ColumnType == "DD")
+                {
+                    <td> <div class="select"> @Html.DropDownListFor(m => m.ClassofJoiningList[i].Parameter1, new SelectList(Model.Paramether1_DDList, "Value", "Text", Model.ClassofJoiningList[i].Parameter1), "--Select--", new { @class = "form-control select2", style = "width:200px;" })</div> </td>
+                }
+                else if (Model.ColumnType == "2DD")
+                {
+                    <td> @Html.DropDownListFor(m => m.ClassofJoiningList[i].Parameter1, new SelectList(Model.Paramether1_DDList, "Value", "Text", Model.ClassofJoiningList[i].Parameter1), "--Select--", new { @class = "form-control select2", style = "width:200px;" })</td>
+                    <td>@Html.DropDownListFor(m => m.ClassofJoiningList[i].Parameter2, new SelectList(Model.Paramether2_DDList, "Value", "Text", Model.ClassofJoiningList[i].Parameter2), "--Select--", new { @class = "form-control select2", style = "width:200px;" })</td>
+                }
+                else if (Model.ColumnType == "2DDC")
+                {
+                    @Html.Hidden("hddnparam2Val_" + @i, Model.ClassofJoiningList[i].Parameter2)
+                    <td> @Html.DropDownListFor(m => m.ClassofJoiningList[i].Parameter1, new SelectList(Model.Paramether1_DDList, "Value", "Text", Model.ClassofJoiningList[i].Parameter1), "--Select--", new { @class = "form-control select2", style = "width:200px;", onchange = "getrouteByStopId(" + @i + ")" })</td>
+                    <td>@Html.DropDownListFor(m => m.ClassofJoiningList[i].Parameter2, new SelectList(Model.Paramether2_DDList, "Value", "Text", Model.ClassofJoiningList[i].Parameter2), "--Select--", new { @class = "form-control select2", style = "width:200px;" })</td>
+                }
+                else
+                {
+                    @*<td>@Html.TextBoxFor(m => Model.ClassofJoiningList[i].Parameter1, new { @class = "form-control"})</td>*@
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(function () {
+        $('.select2').select2()
+    });
+    $(function () {
+        var selectedParamId = '@Model.SelectedParameterId';
+        if (selectedParamId == "BUSStop") {
+            spinnerShow();
+            $('#tblStudUpdation > tbody  > tr').each(function (i) {
+                if ($('#ClassofJoiningList_' + i + '__Parameter1').val() != null && $('#ClassofJoiningList_' + i + '__Parameter1').val() != '') {
+                    getrouteByStopId(i);
+                }
+            });
+            spinnerHide();
+        }
+    });
+
+    function getrouteByStopId(rowNo) {
+        var RouteId = 'ClassofJoiningList_' + rowNo + '__Parameter1';
+        var StopId = 'ClassofJoiningList_' + rowNo + '__Parameter2';
+        var stopHtml = '<option selected="true" value="">--Select--</option>';
+        $.ajax({
+            type: "GET",
+            url: "../Common/GetRouteStopByRouteId",
+            data: { RouteId: $('#' + RouteId).val() },
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    stopHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                }
+                $('#' + StopId).html(stopHtml);
+                if ($('#hddnparam2Val_' + rowNo).val() != null && $('#hddnparam2Val_' + rowNo).val() != '') {
+                    $('#' + StopId).val($('#hddnparam2Val_' + rowNo).val()).change();
+                }
+            },
+        });
+    }
+</script>

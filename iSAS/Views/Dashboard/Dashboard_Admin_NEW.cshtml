@@ -1,0 +1,685 @@
+﻿@model ISas.Entities.DashboardEntities.DashboardModel_Admin
+
+@{
+
+    int studBirthdayCount = Model.studentBirthdayList.Where(r => r.DOB1 == "Today").Count();
+    int staffBirthdayCount = Model.staffBirthdayList.Where(r => r.DOB1 == "Today").Count();
+}
+<!-- Content Header (Page header) -->
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 300px;
+    }
+
+    #chartdiv_donnat {
+        width: 100%;
+        height: 300px;
+    }
+
+    #chartdiv_strength {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+<section class="content-header">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <i class="fa fa-dashboard"></i>
+        </li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            &nbsp;
+        </div>
+    </div>
+    <div class="row">
+        <section class="col-lg-6 connectedSortable">
+            <div class="nav-tabs-custom" style="cursor: move;">
+                <ul class="nav nav-tabs ui-sortable-handle">
+                    <li class="active">
+                        <a href="#circularDiv" data-toggle="tab" aria-expanded="true">
+                            <i class="fa fa-bullhorn"></i>  Notice & Circular
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content no-padding">
+                    <div class="tab-pane active" id="circularDiv">
+                        <div class="box box-widget">
+                            <div class="box-header">
+                                <a href="@Url.Action("DisplayList", "Circular")" class="label label-primary pull-right">View More..</a>
+                            </div>
+                            <div class="box-body chat slimScrollDiv_custom">
+                                @for (int i = 0; i < Model.noticeCircularList.Count; i++)
+                                {
+                                    <div class="item">
+                                        @if (Model.noticeCircularList[i].IsNew)
+                                        {
+                                            <img src="~/Images/System/newimg.gif" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Images/System/textIcon.png" alt="user image" class="">
+                                        }
+                                        <p class="message">
+                                            <a href="#" class="name">
+                                                <small class="text-muted pull-right">
+                                                    <i class="fa fa-calendar"></i>
+                                                    @Html.DisplayFor(r => Model.noticeCircularList[i].UploadStartDate)
+                                                </small>
+                                                @Html.DisplayFor(r => Model.noticeCircularList[i].UploadTitle)
+                                            </a>
+                                            <span class="minimize"> @Html.DisplayFor(r => Model.noticeCircularList[i].UploadDescription)</span>
+                                        </p>
+                                        @if (Model.noticeCircularList[i].HavingAttachment)
+                                        {
+                                            List<string> attachments = Model.noticeCircularList[i].AttachPath.Split(',').ToList();
+                                            <div class="attachment">
+                                                <h4>Download Attachments:</h4>
+                                                <p class="filename">
+                                                    @for (int j = 0; j < @attachments.Count; j++)
+                                                    {
+                                                        string commaStr = "";
+                                                        if (j > 0)
+                                                        {
+                                                            commaStr = ", ";
+                                                        }
+                                                        @Html.DisplayFor(r => commaStr)
+                                                        <a class="text-sm" href="~/@attachments[j]" download="@attachments[j].Substring(@attachments[j].LastIndexOf('@') + 1)">@attachments[j].Substring(@attachments[j].LastIndexOf('@') + 1)</a>
+                                                    }
+                                                </p>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <section class="col-lg-6 hei_50">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h5 class="box-title">
+                        <i class="fa fa-envelope"> &nbsp; SMS Details</i>
+                    </h5>
+                </div>
+                <div class="box-footer box-comments slimScrollDiv_custom">
+                    @for (int i = 0; i < Model.sMSList.Count; i++)
+                    {
+                        <div class="box-comment">
+                            @*<img class="img-circle img-sm" src="~/Images/System/textIcon.png" alt="User Image">*@
+                            <div class="comment-text" style="margin-left:0px;">
+                                <span class="username">
+                                    @Html.DisplayFor(r => Model.sMSList[i].SendTime)
+                                </span>
+                                <span class="minimize">@Html.DisplayFor(r => Model.sMSList[i].MessageSend)</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+
+        
+
+
+    </div>
+
+    @* Fee , Transport, Collection*@
+    @*<div class="row">
+            <div class="col-md-4">
+                <div class="box box-widget widget-user">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-aqua-active">
+                        <h6 class="widget-user-desc pull-right"><u>@Html.ActionLink("More Info", "FeeCollectionDetails", "DashBoard_StudentStatatics", new { }, htmlAttributes: new { style = "color:white;" })</u></h6>
+                        <h3 class="widget-user-username">Fee Collection</h3>
+                        <h5 class="widget-user-desc">@DateTime.Now.ToShortDateString()</h5>
+                    </div>
+                    <div class="widget-user-image">
+                        <img class="img-rounded" src="../Images/System/rupeeIcon.png" alt="User Avatar">
+                    </div>
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.FeeCollection.CASH)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.FeeCollection.CASH)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.FeeCollection.CHEQUE)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.FeeCollection.CHEQUE)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <!-- /.col -->
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.FeeCollection.ONLINE)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.FeeCollection.ONLINE)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.FeeCollection.TOTAL)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.FeeCollection.TOTAL)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box box-widget widget-user">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-yellow">
+                        <h3 class="widget-user-username">Transport Collection</h3>
+                        <h5 class="widget-user-desc">@DateTime.Now.ToShortDateString()</h5>
+                    </div>
+                    <div class="widget-user-image">
+                        <img class="img-rounded" src="../Images/System/busIcon.png" alt="User Avatar">
+                    </div>
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.TransportCollection.CASH)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.TransportCollection.CASH)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.TransportCollection.CHEQUE)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.TransportCollection.CHEQUE)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <!-- /.col -->
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.TransportCollection.ONLINE)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.TransportCollection.ONLINE)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.TransportCollection.TOTAL)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.TransportCollection.TOTAL)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box box-widget widget-user">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-green-gradient">
+                        <h6 class="widget-user-desc pull-right"><u> @Html.ActionLink("More Info", "StudentAdmissionDetails", "DashBoard_StudentStatatics", new { }, htmlAttributes: new { style = "color:white" })</u></h6>
+                        <h3 class="widget-user-username">Admission Details</h3>
+                        <h5 class="widget-user-desc">@DateTime.Now.ToShortDateString()</h5>
+                    </div>
+                    <div class="widget-user-image">
+                        <img class="img-rounded" src="../Images/System/userIcon.png" alt="User Avatar">
+                    </div>
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.Registration)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.Registration)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.Admission)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.Admission)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <!-- /.col -->
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.NSO)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.NSO)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.TC)</h5>
+                                    <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.TC)</span>
+                                </div>
+                                <!-- /.description-block -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+    @* Student Attendance and Staff Attendance Graph *@
+    @*<div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h5 class="box-title">Student Attendance on @DateTime.Now.ToShortDateString()</h5>
+                    </div>
+                    <div class="box-body">
+                        <div id="chartdiv_donnat"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h5 class="box-title">Staff Attendance on @DateTime.Now.ToShortDateString()</h5>
+                    </div>
+                    <div class="box-body">
+                        <div id="chartdiv"></div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="row">
+        <section class="col-lg-6">
+            <div class="nav-tabs-custom" style="cursor: move;">
+                <ul class="nav nav-tabs ui-sortable-handle">
+                    <li class="active">
+                        <a href="#studBirthdayDiv" data-toggle="tab" aria-expanded="true">
+                            &nbsp;  <i class="fa fa-birthday-cake"></i> &nbsp; Student &nbsp;  @if (studBirthdayCount > 0)
+                            {<span class="label label-primary">@Html.DisplayFor(r => studBirthdayCount) Today</span>}
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#staffBirthdayDiv" data-toggle="tab" aria-expanded="true">
+                            &nbsp;   <i class="fa  fa-birthday-cake"></i> &nbsp; Staff &nbsp; @if (staffBirthdayCount > 0)
+                            {<span class="label label-primary">@Html.DisplayFor(r => staffBirthdayCount) Today</span>}
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content no-padding">
+                    <div class="tab-pane active" id="studBirthdayDiv">
+                        <div class="box box-widget">
+                            <div class="box-body no-padding slimScrollDiv_custom">
+                                <ul class="users-list clearfix">
+                                    @for (int i = 0; i < Model.studentBirthdayList.Count; i++)
+                                    {
+                                    <li>
+                                        <img src="~/@Model.studentBirthdayList[i].ImageURL" alt="User Image">
+                                        <a class="users-list-name" href="#">@Html.DisplayFor(r => Model.studentBirthdayList[i].Student)</a>
+                                        <a class="users-list-name" href="#">@Html.DisplayFor(r => Model.studentBirthdayList[i].FullClassName)</a>
+                                        <span class="users-list-date">@Html.DisplayFor(r => Model.studentBirthdayList[i].DOB1)</span>
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="staffBirthdayDiv">
+                        <div class="box box-widget">
+                            <div class="box-body no-padding slimScrollDiv_custom">
+                                <ul class="users-list clearfix">
+                                    @for (int i = 0; i < Model.staffBirthdayList.Count; i++)
+                                    {
+                                        <li>
+                                            <img src="~/@Model.staffBirthdayList[i].ImageURL" alt="User Image">
+                                            <a class="users-list-name" href="#">@Html.DisplayFor(r => Model.staffBirthdayList[i].StaffName)</a>
+                                            <span class="users-list-date">@Html.DisplayFor(r => Model.staffBirthdayList[i].DOB1)</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="col-lg-6 connectedSortable hei_50">
+            <div class="nav-tabs-custom" style="cursor: move;">
+                <ul class="nav nav-tabs ui-sortable-handle">
+
+                    <li class="">
+                        <a href="#assignmentDiv" data-toggle="tab" aria-expanded="true">
+                            &nbsp;   <i class="fa fa-bars"></i> &nbsp; Class Notes &nbsp;
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="#homeworkDiv" data-toggle="tab" aria-expanded="true">
+                            &nbsp;  <i class="fa fa-edit"></i> &nbsp; Homework &nbsp;
+                        </a>
+                    </li>
+
+                </ul>
+                <div class="tab-content no-padding">
+                    <div class="tab-pane active" id="homeworkDiv">
+                        <div class="box box-widget">
+                            <div class="box-header">
+                                @Html.ActionLink("View More..", "HomeWork_UserDisplayList", "Academic_HomeWorkMaster", new { Category = "HW" }, htmlAttributes: new { @class = "label label-primary pull-right" })
+                            </div>
+                            <div class="box-body chat slimScrollDiv_custom">
+                                @for (int i = 0; i < Model.homeWorkList.Count; i++)
+                                {
+                                    <div class="item">
+                                        <img src="~/Images/System/textIcon.png" alt="user image" class="">
+                                        <p class="message">
+                                            <a href="#" class="name">
+                                                <small class="text-muted pull-right">
+                                                    <i class="fa fa-calendar"></i>
+                                                    @Html.DisplayFor(r => Model.homeWorkList[i].UploadDate)
+
+                                                </small>
+
+                                                @Html.DisplayFor(r => Model.homeWorkList[i].Title)
+                                            </a>
+                                        </p>
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="assignmentDiv">
+                        <div class="box box-widget">
+                            <div class="box-header">
+                                @Html.ActionLink("View More..", "HomeWork_UserDisplayList", "Academic_HomeWorkMaster", new { Category = "CN" }, htmlAttributes: new { @class = "label label-primary pull-right" })
+                            </div>
+                            <div class="box-body chat slimScrollDiv_custom">
+                                @for (int i = 0; i < Model.classNotesList.Count; i++)
+                                {
+                                    <div class="item">
+                                        <img src="~/Images/System/textIcon.png" alt="user image" class="">
+                                        <p class="message">
+                                            <a href="#" class="name">
+                                                <small class="text-muted pull-right"><i class="fa fa-calendar"></i> @Html.DisplayFor(r => Model.classNotesList[i].UploadDate) </small>
+                                                @Html.DisplayFor(r => Model.classNotesList[i].Title)
+                                            </a>
+                                        </p>
+
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-green-gradient">
+                    <h6 class="widget-user-desc pull-right"><u> @Html.ActionLink("More Info", "StudentAdmissionDetails", "DashBoard_StudentStatatics", new { }, htmlAttributes: new { style = "color:white" })</u></h6>
+                    <h3 class="widget-user-username">Admission Details</h3>
+                    <h5 class="widget-user-desc">@DateTime.Now.ToShortDateString()</h5>
+                </div>
+                <div class="widget-user-image">
+                    <img class="img-rounded" src="../Images/System/userIcon.png" alt="User Avatar">
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-sm-3 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.Registration)</h5>
+                                <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.Registration)</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-3 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.Admission)</h5>
+                                <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.Admission)</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <!-- /.col -->
+                        <div class="col-sm-3 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.NSO)</h5>
+                                <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.NSO)</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-3">
+                            <div class="description-block">
+                                <h5 class="description-header">@Html.DisplayFor(r => Model.AdmissionDetails.TC)</h5>
+                                <span class="description-text">@Html.DisplayNameFor(r => Model.AdmissionDetails.TC)</span>
+                            </div>
+                            <!-- /.description-block -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h5 class="box-title">School Strength Details</h5>
+                    <h5 class="box-title pull-right">Total Strength : <span style="font-weight:800;font-size:20px;" class="text-primary" id="spanTotalStrength">0</span></h5>
+                </div>
+                <div class="box-body">
+                    <div id="chartdiv_strength"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<script src="~/bower_components/newchart.js/amcharts.js"></script>
+<script src="~/bower_components/newchart.js/export.min.js"></script>
+<script src="~/bower_components/newchart.js/light.js"></script>
+<script src="~/bower_components/newchart.js/pie.js"></script>
+<script src="~/bower_components/newchart.js/serial.js"></script>
+<link href="~/bower_components/newchart.css/export.css" rel="stylesheet" />
+
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "../Dashboard/GetAttenSummery",
+            data: {},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+
+                //console.log(result);
+                //console.log(result);
+
+                var chart_Donnat = AmCharts.makeChart("chartdiv_donnat", {
+                    "type": "pie",
+                    "theme": "light",
+                    "innerRadius": "40%",
+                    "gradientRatio": [-0.4, -0.4, -0.4, -0.4, -0.4, -0.4, 0, 0.1, 0.2, 0.1, 0, -0.2, -0.5],
+                    "dataProvider": result,
+                    "balloonText": "[[value]]",
+                    "valueField": "NoOfStudent",
+                    "titleField": "AttenStatus",
+                    "balloon": {
+                        "drop": true,
+                        "adjustBorderColor": false,
+                        "color": "#FFFFFF",
+                        "fontSize": 16
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                });
+
+            },
+        })
+    });
+</script>
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "../Dashboard/GetStudentStrength",
+            data: {},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                var str = result.Strength;
+                $('#spanTotalStrength').html(result.TotalStrength);
+                var chart = AmCharts.makeChart("chartdiv_strength", {
+                    "type": "serial",
+                    "theme": "light",
+                    "depth3D": 20,
+                    "angle": 30,
+                    "legend": {
+                        "horizontalGap": 10,
+                        "useGraphSettings": true,
+                        "markerSize": 10
+                    },
+                    "dataProvider": JSON.parse(str),
+                    "valueAxes": [{
+                        "stackType": "regular",
+                        "axisAlpha": 0,
+                        "gridAlpha": 0
+                    }],
+                    "graphs": result.Sections,
+                    "categoryField": "ClassName",
+                    "categoryAxis": {
+                        "gridPosition": "start",
+                        "axisAlpha": 0,
+                        "gridAlpha": 0,
+                        "position": "left"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                });
+            },
+        })
+    });
+</script>
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "../Dashboard/GetStaffAttendance",
+            data: {},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                var chart = AmCharts.makeChart("chartdiv", {
+                    "theme": "light",
+                    "type": "serial",
+                    "dataProvider": result.staffAtten,
+                    "valueAxes": [{
+                        "stackType": "3d",
+                        "unit": "",
+                        "position": "left",
+                        "title": "No of Staff",
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "(Leave): <b>[[value]]</b>",
+                        "fillAlphas": 2,
+                        "lineAlpha": 1,
+                        "title": "Leave",
+                        "type": "column",
+                        "valueField": "Leave"
+                    }, {
+                        "balloonText": "(Absent): <b>[[value]]</b>",
+                        "fillAlphas": 40,
+                        "lineAlpha": 2,
+                        "title": "Absent",
+                        "type": "column",
+                        "valueField": "Absent"
+                    },
+                    {
+                        "balloonText": "(Present): <b>[[value]]</b>",
+                        "fillAlphas": 1,
+                        "lineAlpha": 2,
+                        "title": "Present",
+                        "type": "column",
+                        "valueField": "Present"
+                    }],
+                    "plotAreaFillAlphas": 1,
+                    "depth3D": 40,
+                    "angle": 30,
+                    "categoryField": "Class",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                });
+            },
+        })
+    });
+</script>
+<script>
+    jQuery('.chart-input').off().on('input change', function () {
+        var property = jQuery(this).data('property');
+        var target = chart;
+        chart.startDuration = 0;
+
+        if (property == 'topRadius') {
+            target = chart.graphs[0];
+            if (this.value == 0) {
+                this.value = undefined;
+            }
+        }
+
+        target[property] = this.value;
+        chart.validateNow();
+    });
+</script>
+<style>
+    .hei_50 .box-footer.box-comments.slimScrollDiv_custom {
+        min-height: 400px;
+    }
+    .hei_50 .tab-content {
+         min-height: 393px;
+    }
+</style>

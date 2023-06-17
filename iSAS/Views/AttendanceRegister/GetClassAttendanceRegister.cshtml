@@ -1,0 +1,48 @@
+﻿@*@model ISas.Web.ViewModels.AttendanceRegisterViewModel*@
+@using System.Data;
+
+@{
+    ViewBag.Title = "Class Attendance Register";
+}
+
+<h2>Report</h2>
+<table>
+    <thead>
+        <tr>
+            @foreach (DataColumn col in Model.AttendanceDataTable.Columns)
+            {
+                <th>@col.ColumnName</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (DataRow row in Model.AttendanceDataTable.Rows)
+        {
+            if (Convert.ToInt32(row[8].ToString()) < 70)
+            {
+                <tr style="background-color:palevioletred">
+                    @foreach (DataColumn col in Model.AttendanceDataTable.Columns)
+                    {
+
+                        <td>@row[col.ColumnName]</td>
+
+                    }
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    @foreach (DataColumn col in Model.AttendanceDataTable.Columns)
+                    {
+
+                        <td>@row[col.ColumnName]</td>
+
+                    }
+                </tr>
+            }
+
+        }
+        
+    </tbody>
+</table>

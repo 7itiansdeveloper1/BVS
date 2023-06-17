@@ -1,0 +1,210 @@
+﻿@model ISas.Entities.DashboardEntities.StudentLedgerDetailsModel
+@{
+    string reportName = "Student Ledger";
+}
+<div style="display:none;">
+    @{
+        Html.RenderAction("_ReportHeader", "Common", new { tempReportName = reportName });
+    }
+</div>
+<div class="box-body table-responsive no-padding">
+    <table id="example1" class="table table-responsive table-bordered table-condensed nowrap" style="width:100%;overflow-y:auto;">
+        <thead>
+            <tr>
+                <th>#</th>
+                @*<th>Receipt Date</th>
+                <th>Receipt #</th>
+                <th>Mode</th>*@
+                <th>Installment</th>
+                <th>Due Date</th>
+                <th>Due</th>
+                <th>Conc.</th>
+                <th>Disc.</th>
+                <th>Adv.</th>
+                <th>Payable</th>
+                <th>Paid</th>
+                <th>Balance</th>
+                <th>Excess</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.FeeDetails)
+            {
+            <tr>
+                <td>@Html.DisplayFor(r => item.sno)</td>
+                @*<td>@Html.DisplayFor(r => item.ReceiptDate)</td>
+                <td>@Html.DisplayFor(r => item.ReceiptNo)</td>
+                <td>@Html.DisplayFor(r => item.Mode)</td>*@
+                <td>@Html.DisplayFor(r => item.Duration)</td>
+                <td>@Html.DisplayFor(r => item.DueDate)</td>
+                <td>@Html.DisplayFor(r => item.Due)</td>
+                <td>@Html.DisplayFor(r => item.Concession)</td>
+                <td>@Html.DisplayFor(r => item.Discount)</td>
+                <td>@Html.DisplayFor(r => item.Advance)</td>
+                <td>@Html.DisplayFor(r => item.Payable)</td>
+                <td>@Html.DisplayFor(r => item.Paid)</td>
+                <td>@Html.DisplayFor(r => item.Balance)</td>
+                <td>@Html.DisplayFor(r => item.Excess)</td>
+                <td>@Html.DisplayFor(r => item.Status)</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $("#example1 tr").click(function (evt) {
+        if (evt.ctrlKey) {
+            $(this).toggleClass("selected");
+        } else {
+            var selected = $(this).hasClass("selected");
+            $("#example1 tr").removeClass("selected");
+            if (!selected)
+                $(this).addClass("selected");
+        }
+    });
+
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 10,
+            "ordering": false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'Download Ledger',
+                    extension: ".pdf",
+                    //filename: "name",
+                    pageSize:"A4",
+                    title: "",
+                    orientation: 'landscape', //'portrait',
+                    customize: function (doc) {
+                        doc.styles.tableHeader = {
+                            color: 'black',
+                            background: 'grey',
+                            alignment: 'center'
+                        }
+
+
+                        var logo = '@ViewBag.ImageData';
+                        doc.pageMargins = [20, 60, 20, 30];
+                        doc['header'] = (function () {
+                            return {
+                                columns: [
+                                    {
+                                        image: logo,
+                                        width: 80,
+                                        height: 60,
+                                        alignment: 'center',
+                                    },
+                                    {
+                                        alignment: 'center',
+                                        italics: true,
+                                        text: '@ViewBag.HeaderInfo.Header1',
+                                        fontSize: 24,
+                                        margin: [10, 0]
+                                    }
+                                ],
+                                margin: 20
+                            }
+                        });
+
+
+                        doc.styles = {
+                            subheader: {
+                                fontSize: 10,
+                                bold: true,
+                                color: 'black'
+                            },
+                            tableHeader: {
+                                bold: true,
+                                fontSize: 10.5,
+                                color: 'black'
+                            },
+                            lastLine: {
+                                bold: true,
+                                fontSize: 11,
+                                color: 'blue'
+                            },
+                            defaultStyle: {
+                                fontSize: 10,
+                                color: 'black'
+                            },
+
+                        }
+
+                        var objLayout = {};
+                        objLayout['hLineWidth'] = function (i) { return .8; };
+                        objLayout['vLineWidth'] = function (i) { return .5; };
+                        objLayout['hLineColor'] = function (i) { return '#aaa'; };
+                        objLayout['vLineColor'] = function (i) { return '#aaa'; };
+                        objLayout['paddingLeft'] = function (i) { return 8; };
+                        objLayout['paddingRight'] = function (i) { return 8; };
+                        doc.content[0].layout = objLayout;
+
+                        // margin: [left, top, right, bottom]
+
+
+
+                        doc.content.splice(0, 0, {
+                            text: [
+                                { text: '@reportName - @Model.FeeStructureName ' + '(' + '@Model.SessionName' + ')', italics: true, fontSize: 14 }
+                            ],
+                            margin: [0, 0, 0, 2],
+                            alignment: 'center'
+                        });
+
+                        doc.content.splice(1, 0, {
+                            table: {
+                                widths: ["*", "*", "*", "*", "*"],
+                                body: [
+                                    [
+                                        { text: 'Adm No : @Model.AdmNo', bold: true, fontSize: 10 },
+                                        { text: 'Student : @Model.Student ', bold: true, fontSize: 10 },
+                                        { text: 'Father : @Model.Father', bold: true, fontSize: 10 },
+                                        { text: 'Class : @Model.Class', bold: true, fontSize: 10 },
+                                        { text: 'SMS No : @Model.SMSNo', bold: true, fontSize: 10 },
+                                    ]
+                                ]
+                            },
+
+                            margin: [0, 30, 0, 12],
+                            alignment: 'left'
+                        });
+
+                        doc.content.splice(3, 3, {
+                            table: {
+                                widths: ["*", "*", "*", "*", "*", "*"],
+                                body: [
+                                    [
+                                        { text: 'Opening : @Model.OpeningBalance', bold: true, fontSize: 10 },
+                                        { text: 'Discount : @Model.Discount', bold: true, fontSize: 10 },
+                                        { text: 'Fee Paid : @Model.FeePaid ', bold: true, fontSize: 10 },
+                                        { text: 'Transport Paid : @Model.TransportPaid', bold: true, fontSize: 10 },
+                                        { text: 'Credit Note : @Model.CreditNote', bold: true, fontSize: 10 },
+                                        { text: 'Closing : @Model.ClosingBalance', bold: true, fontSize: 10 },
+                                    ]
+                                ]
+                            },
+
+                            margin: [0, 5, 0, 12],
+                            alignment: 'left'
+                        });
+                        //doc.content[2].table.widths = [15, "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"];
+                        doc.content[2].table.widths = [15, 60, 60, 40, 40, 40, 40, 40, 40, 40, 40, 80, 40, 40, 150];
+                        //doc.content[2].table.widths = '*'
+                        //    Array(doc.content[2].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                //'colvis'
+            ],
+            select: true
+        });
+    });
+</script>
+

@@ -1,0 +1,31 @@
+J chemistry.
+Worked on Following points  Please check and verify.
+1. Fee Head wise filter on Misc. dues and concession report.
+3. Fee Concession form: 
+a. When we are editing data row wise, column positions are changed due to checkbox control.Edit is not working.
+--b. Discount column is required in grid.
+c. In case of 100% concession, it should be edit or delete by using this form.
+4.Link New student ledger on Fee Search form.
+
+
+Please update the daily task register.
+
+
+5. Invoice creation: click on pencil icon button: In case of partial payment,status should show 'Partial paid'
+6. Add ExamId column in Mark Entry table in Examination Module
+7. Route Master: Landing page: showing wrong data in 'No. of Stops' column. (WPS)
+
+
+
+
+2. Homework upload form : Multiple class-section control is required.
+10. TC required on crystal report.
+9. Cheque Dishonor Report: Columns will be
+S.N.,Adm No.,Name, Class/section,Father Name,Receipt No.,Receipt Date,,Duration,Cheque No.,Cheque Amount,Cheque Date,Bank Name, Branch,Dishonor Date, Dishonor Charges, Dishonor By
+8. Staff Attendance Register:  Configuration level setting for displaying IN and OUT timing.
+
+
+
+
+11.Student document upload form.
+12. TC linking with school website.

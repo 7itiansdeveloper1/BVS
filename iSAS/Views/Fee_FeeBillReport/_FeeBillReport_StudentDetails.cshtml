@@ -1,0 +1,40 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.FeesEntities.Fee_FeeBillReportModels
+<table class="table table-bordered table-hover table-responsive table-condensed" id="tblStudDetails">
+    <thead>
+        <tr>
+            <th>@Html.CheckBox("chkBoxAllStud", htmlAttributes: new { onchange = "fun_chekctoSelectAllStud()" })</th>
+            <th>#</th>
+            <th>Adm No</th>
+            <th>Student Name</th>
+            <th>Father Name</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.StudentList != null && Model.StudentList.Count > 0)
+        {
+            int count = 1;
+            for (int i = 0; i < Model.StudentList.Count; i++)
+            {
+                <tr>
+                    <td>@Html.CheckBoxFor(r => Model.StudentList[i].Selected, htmlAttributes: new { @class = "clsStud" })</td>
+                    <td>
+                        @Html.DisplayFor(r => count)
+                        @Html.HiddenFor(r => Model.StudentList[i].ERP)
+                        @Html.HiddenFor(r => Model.StudentList[i].AdmNo)
+                        @Html.HiddenFor(r => Model.StudentList[i].Student)
+                    </td>
+                    <td>@Html.DisplayFor(r => Model.StudentList[i].AdmNo)</td>
+                    <td>@Html.DisplayFor(r => Model.StudentList[i].Student)</td>
+                    <td>@Html.DisplayFor(r => Model.StudentList[i].Father)</td>
+                    <td class="text-center">
+                        <a href="#" onclick="print_FeeBillReport_SingleStudent('@Model.StudentList[i].ERP')" class="fa fa-print btnDefaultColor">&nbsp;</a>
+                        @*@Html.EncodedActionLink(" ", "GetFeeDocument_FeeBook_HtmlReport", "StudentFeeDetails", new { Mode = "FEEBOOK", erpno = Model.StudentList[i].ERP }, htmlAttributes: new { @class = "fa fa-print btnDefaultColor", target = "_blank", title = "Print Fee Book" })*@
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>

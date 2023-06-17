@@ -1,0 +1,767 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.DashboardEntities.StudentDozearModel
+@{
+    int paid = 0; int balance = 0; int due = 0;
+    if (Model != null && Model.FeeDetails.Count > 0)
+    {
+        paid = Model.FeeDetails.Sum(r => r.Paid);
+        balance = Model.FeeDetails.Sum(r => r.Balance);
+        due = Model.FeeDetails.Sum(r => r.Due);
+    }
+    int currentMonth = DateTime.Now.Month;
+    int currentYear = DateTime.Now.Year;
+    //Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+
+    string statusClass = "";
+}
+<link href="~/dist/css/Print.css" rel="stylesheet" />
+
+@helper DisplayColor(string input)
+{
+    if (input == "WO")
+    {
+        input = "background-color:#0099c6 !important; color:white !important;";
+        @input
+    }
+    else
+    {
+        input = "background-color:#109618 !important; color:white !important;;";
+        @input
+    }
+}
+
+<style>
+    #chartdiv_Attn {
+        width: 100%;
+        height: 400px;
+    }
+
+    #chartdiv {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+<section class="content-header">
+    <h1>Student Dossier <small>(VIEW)</small></h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li class="active">Student Dossier</li>
+    </ol>
+</section>
+<section class="content" style="font-size:13px;">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-widget">
+                        <div class="box-body box-profile">
+                            <img class="profile-user-img img-responsive img-circle" src="~/@Model.StudentDetails.S" alt="Student Image" title="Student Image, Click here to Change/View.">
+                            <h3 class="profile-username text-center">
+                                @Html.DisplayFor(r => Model.StudentDetails.StudentName) <small class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.Gender)</small>
+                                <br />
+                                <small>@Html.DisplayFor(r => Model.StudentDetails.Class), @Html.DisplayFor(r=> Model.StudentDetails.AdmNo)</small>
+                            </h3>
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>DOB</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.DOB)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>BG</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.BG)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Category</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.Category)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Religion</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.Religion)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Father</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.Father)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Mobile</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.SMSNo)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Email</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.FEmail)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Mother</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.Mother)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Mother Mobile</b> <a class="pull-right">@Html.DisplayFor(r => Model.StudentDetails.MMobile)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Siblings</b>
+                                    <ol class="pull-right">
+                                        @for (int i = 0; i < Model.SiblingNames.Count; i++)
+                                        {
+                                            string encodedPath = EncDecURL.EncodedPathString_ForStudentDossier(" ", "StudentDozear", "DashBoard_StudentStatatics", new { erpNo = Model.SiblingNames[i].ERPNo }, htmlAttributes: new { });
+                                            <li>
+                                                <a target="_blank" title="Click to view details.." href="@encodedPath">@Html.DisplayFor(r => Model.SiblingNames[i].SiblingName)</a>
+                                            </li>
+                                            @*@Html.EncodedActionLink(Model.SiblingNames[i].SiblingName, "StudentDozear", "DashBoard_StudentStatatics", new { erpNo = Model.SiblingNames[i].ERPNo }, htmlAttributes: new { @class = "pull-right", target = "_blank" })*@
+                                        }
+                                    </ol>
+                                </li>
+                            </ul>
+                            <div class="text-center">
+                                <strong><a href="#" onclick="viewMoreInfo()">More Info</a></strong>
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-widget">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Subject Teachers</h3>
+                        </div>
+                        <div class="box-body">
+                            <ul class="products-list product-list-in-box">
+                                @for (int i = 0; i < Model.SubjectTeachers.Count; i++)
+                                {
+                                    <li class="item">
+                                        <div class="product-img">
+                                            <img style="width:50px;height:50px;" src="~/@Model.SubjectTeachers[i].ImageURL" alt="@Model.SubjectTeachers[i].TeacherName">
+                                        </div>
+                                        <div class="product-info">
+                                            <a href="javascript:void(0)" class="product-title">
+                                                @Html.DisplayFor(r => Model.SubjectTeachers[i].TeacherName)
+                                            </a>
+                                            <span class="product-description">
+                                                @Html.DisplayFor(r => Model.SubjectTeachers[i].SubjectName)
+                                            </span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12  connectedSortable ui-sortable">
+                    <div class="nav-tabs-custom" style="cursor: move;">
+                        <ul class="nav nav-tabs pull-right ui-sortable-handle">
+                            <li class="active"><a href="#attBarGraph" data-toggle="tab" aria-expanded="true">Graphical View</a></li>
+                            <li class=""><a href="#attnCal" data-toggle="tab" aria-expanded="false">Calender View</a></li>
+                            <li class=""><a href="#attenDetails" data-toggle="tab" aria-expanded="false">Tabluar View</a></li>
+                            <li class="pull-left header"><i class="fa fa-inbox"></i>Attendance Details</li>
+                        </ul>
+                        <div class="tab-content no-padding">
+                            <div class="box box-widget chart tab-pane  active" id="attBarGraph">
+                                <div class="box-body no-padding">
+                                    <div id="chartdiv_Attn"></div>
+                                </div>
+                            </div>
+                            <div class="box box-widget chart tab-pane " id="attnCal">
+                                <div class="box-body">
+                                    <div id="showAttendanceCalMainDiv"></div>
+                                </div>
+                                <div class="box-footer text-center">
+                                    <ul class="products-list product-list-in-box">
+                                        <li class="item">
+                                            <table class="table-condensed table-responsive table-bordered" align="center" style="width:100%;">
+                                                <tr>
+                                                    <td class="WO">&nbsp;</td>
+                                                    <td class="text-left">WO</td>
+                                                    <td class="HD" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Half Day</td>
+                                                    <td class="P" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Present</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="HL" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Holiday</td>
+                                                    <td class="A" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Absent</td>
+                                                    <td class="L" style="width:30px;">&nbsp;</td>
+                                                    <td class="text-left">Leave</td>
+                                                </tr>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- /.box-footer -->
+                            </div>
+                            <div class="box box-widget chart tab-pane " id="attenDetails">
+                                @*<div class="box-header with-border">
+                                        <h5 class="box-title">Attendance Details</h5>
+                                    </div>*@
+                                <div class="box-body no-padding">
+                                    <table id="example2" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Month Name</th>
+                                                <th>Open Day</th>
+                                                <th>Present</th>
+                                                <th>Half Day</th>
+                                                <th>Absent</th>
+                                                <th>Leave</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < Model.AttenDetails.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>@Html.DisplayFor(r => Model.AttenDetails[i].MnthName)</td>
+                                                    <td>@Html.DisplayFor(r => Model.AttenDetails[i].OD)</td>
+                                                    <td>@Html.DisplayFor(r => Model.AttenDetails[i].P)</td>
+                                                    <td>@Html.DisplayFor(r => Model.AttenDetails[i].HalfDay)</td>
+                                                    <td>@Html.DisplayFor(r => Model.AttenDetails[i].A)</td>
+                                                    <td>@Html.DisplayFor(r => Model.AttenDetails[i].L)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#feeDetails" data-toggle="tab" aria-expanded="true">Fee Details</a></li>
+                            <li class=""><a href="#performance" data-toggle="tab" aria-expanded="false">Performance</a></li>
+                            <li class=""><a href="#timeTable" data-toggle="tab" aria-expanded="false">Time Table</a></li>
+                            <li><a href="#sendSMSDetails" data-toggle="tab">Sent SMS</a></li>
+                            <li><a href="#bookHistory" data-toggle="tab">Book(s) History</a></li>
+                            <li><a href="#transportDetails" data-toggle="tab">Transport Details</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="feeDetails">
+                                <div class="nav-tabs-custom" style="cursor: move;">
+                                    <ul class="nav nav-tabs pull-right ui-sortable-handle">
+                                        <li class="active"><a href="#feeChart" data-toggle="tab" aria-expanded="true">Graphical View</a></li>
+                                        <li class=""><a href="#feeDetailsInner" data-toggle="tab" aria-expanded="false">Tabluar View</a></li>
+                                    </ul>
+                                    <div class="tab-content no-padding">
+                                        <div class="box box-widget chart tab-pane  active" id="feeChart">
+                                            <div class="box-body no-padding">
+                                                <div id="chartdiv"></div>
+                                            </div>
+                                        </div>
+                                        <div class="box box-widget chart tab-pane " id="feeDetailsInner">
+                                            <div class="box-body no-padding">
+                                                <table id="example1" class="table table-responsive table-bordered table-condensed display nowrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Rec. No</th>
+                                                            <th>Due Date</th>
+                                                            <th>Duration</th>
+                                                            <th>Due</th>
+                                                            <th>Paid</th>
+                                                            <th>Balance</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @for (int i = 0; i < Model.FeeDetails.Count; i++)
+                                                        {
+                                                            if (Model.FeeDetails[i].Status == "Paid")
+                                                            {
+                                                                statusClass = "label label-success";
+                                                            }
+                                                            else if (Model.FeeDetails[i].Status == "FutureDue")
+                                                            {
+                                                                statusClass = "label label-info";
+                                                            }
+                                                            else if (Model.FeeDetails[i].Status == "Partial")
+                                                            {
+                                                                statusClass = "label label-warning";
+                                                            }
+                                                            else
+                                                            {
+                                                                statusClass = "label label-danger";
+                                                            }
+                                                            <tr>
+                                                                <td>@Html.DisplayFor(r => Model.FeeDetails[i].sno)</td>
+                                                                <td>@Html.DisplayFor(r => Model.FeeDetails[i].ReceiptNo)</td>
+                                                                <td>@Html.DisplayFor(r => Model.FeeDetails[i].DueDate)</td>
+                                                                <td>@Html.DisplayFor(r => Model.FeeDetails[i].Duration)</td>
+                                                                <td>@Html.DisplayFor(r => Model.FeeDetails[i].Due)</td>
+                                                                <td>@Html.DisplayFor(r => Model.FeeDetails[i].Paid)</td>
+                                                                <td>@Html.DisplayFor(r => Model.FeeDetails[i].Balance)</td>
+                                                                <td>
+                                                                    <label class="@statusClass">
+                                                                        @Html.DisplayFor(r => Model.FeeDetails[i].Status)
+                                                                    </label>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="performance">
+                                <div class="box box-widget">
+                                    <div class="box-header with-border">
+                                        <h5 class="box-title">Examination</h5>
+                                    </div>
+                                    <table class="table table-bordered table-condensed table-responsive text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Exam Name</th>
+                                                <th>Duration</th>
+                                                <th>Exam Status</th>
+                                                <th>Result Date</th>
+                                                <th>Result</th>
+                                                <th>View/Download</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Term 1</td>
+                                                <td>APR-SEP</td>
+                                                <td>Result Declared</td>
+                                                <td>20/03/2018</td>
+                                                <td>Passed</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-info btn-xs" title="View Report Card">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-success btn-xs" title="Download Report Card">
+                                                        <i class="fa fa-download"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Term 2</td>
+                                                <td>OCT-MAR</td>
+                                                <td>In Process</td>
+                                                <td>20/03/2018</td>
+                                                <td></td>
+                                                <td>
+                                                    <button disabled="" type="button" class="btn btn-info btn-xs" title="View Report Card">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    <button disabled="" type="button" class="btn btn-success btn-xs" title="Download Report Card">
+                                                        <i class="fa fa-download"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="timeTable">
+                                <table cellpadding="0" cellspacing="0" id="tblTimeTableMain" style="width:100%;border:1px solid black;text-align:center;">
+                                    <tr style="border:1px solid black;text-align:center;font-size:18px;">
+                                        <td style="border:1px solid black;">PERIOD/DAY</td>
+                                        @for (int i = 0; i < Model.DaysList.Count; i++)
+                                        {
+                                            <td style="border:1px solid black;text-align:center;">@Html.DisplayFor(r => Model.DaysList[i])</td>
+                                        }
+                                    </tr>
+
+                                    @for (int i = 0; i < Model.PeriodDetailsList.Count; i++)
+                                    {
+                                        string colorCls = "";
+                                        if (i % 2 == 0)
+                                        {
+                                            colorCls = "#aaf0f7";
+                                        }
+                                        else
+                                        {
+                                            colorCls = "#9af8a8";
+                                        }
+                                        <tr style="border:1px solid black;background-color:@colorCls;">
+                                            <td style="text-align: center;vertical-align: middle;border:1px solid black;width:10%;" class="time"> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodName) <small class="text-primary">(@Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodTime)) </small>  </td>
+                                            @for (int j = 0; j < Model.PeriodDetailsList[i].PeriodInfoList.Count; j++)
+                                            {
+                                                <td style="border:1px solid black;text-align:center;">
+                                                    <span> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].SubjectName)</span>
+                                                    <br />
+                                                    <span> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].TeacherName)</span>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="sendSMSDetails">
+                                <table id="example5" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Text</th>
+                                            <th>Send Date</th>
+                                            <th>Status</th>
+                                            <th>Delivery Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.SMSDetails.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(r => Model.SMSDetails[i].Sno)</td>
+                                                <td>@Html.DisplayFor(r => Model.SMSDetails[i].SMSTExt)</td>
+                                                <td>@Html.DisplayFor(r => Model.SMSDetails[i].SMSDate)</td>
+                                                <td>@Html.DisplayFor(r => Model.SMSDetails[i].SMSStatus)</td>
+                                                <td>@Html.DisplayFor(r => Model.SMSDetails[i].SMSDeliveryDate)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="bookHistory">
+                                <table id="example5" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Acc. No.</th>
+                                            <th>Book Title</th>
+                                            <th>Issue Date</th>
+                                            <th>Return Date</th>
+                                            <th>Fine</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.BookHistory.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@Html.DisplayFor(r => Model.BookHistory[i].Sno)</td>
+                                                <td>@Html.DisplayFor(r => Model.BookHistory[i].AccessionNo)</td>
+                                                <td>@Html.DisplayFor(r => Model.BookHistory[i].BookTitle)</td>
+                                                <td>@Html.DisplayFor(r => Model.BookHistory[i].IssueDate)</td>
+                                                <td>@Html.DisplayFor(r => Model.BookHistory[i].ReturnDate)</td>
+                                                <td>@Html.DisplayFor(r => Model.BookHistory[i].Fine)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="transportDetails">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-user margin-r-5"></i>Driver</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.Driver)
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-user margin-r-5"></i>Helper</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.Helper)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-bus margin-r-5"></i>Vehicle No</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.VehicleNo)
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-bus margin-r-5"></i>Vehicle Type</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.VehicleType)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-clock-o margin-r-5"></i>Pickup Time</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.PickupTime)
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-clock-o margin-r-5"></i>Drop Time</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.DropTime)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-map-marker margin-r-5"></i>Stop</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.Stop)
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-map margin-r-5"></i>Route</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.Route)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-check-square margin-r-5"></i>Facility</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.Facility)
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-rupee margin-r-5"></i>Charges</strong>
+                                        <br />@Html.DisplayFor(r => Model.TransportDetails.Charges)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display:none;" id="moreStudDetails">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-widget">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Father Details</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <img style="width:100px;height:100px;" src="~/@Model.StudentDetails.F" alt="@Model.StudentDetails.Father">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="text-black">Name : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.Father)</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="text-black">Mobile : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.FMobile)</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="text-black">Email : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.FEmail)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-black">Aadhar : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.FAddhar)</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-black">Income : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.Income)</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-black">Qulification : </span>  <span class="product-title text-primary">@Html.DisplayFor(r => Model.StudentDetails.FQuli)</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-black">Profession : </span>  <span class="product-title text-primary">@Html.DisplayFor(r => Model.StudentDetails.FProf)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-widget">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Mother Details</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <img style="width:100px;height:100px;" src="~/@Model.StudentDetails.M" alt="@Model.StudentDetails.Mother">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="text-black">Name : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.Mother)</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="text-black">Mobile : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.MMobile)</span>
+                                            </div>
+                                        </div>
+                                        @*<div class="row">
+                                                <div class="col-md-12">
+                                                    <span class="text-black">Email : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.Me)</span>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-black">Aadhar : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.MAddhar)</span>
+                                    </div>
+                                </div>
+                                @*<div class="row">
+                                        <div class="col-md-12">
+                                            <span class="text-black">Income : </span>  <span class="text-primary">@Html.DisplayFor(r => Model.StudentDetails.Income)</span>
+                                        </div>
+                                    </div>*@
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-black">Qulification : </span>  <span class="product-title text-primary">@Html.DisplayFor(r => Model.StudentDetails.MQuli)</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-black">Profession : </span>  <span class="product-title text-primary">@Html.DisplayFor(r => Model.StudentDetails.MProf)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-widget">
+                    <div class="box-body">
+                        <strong><i class="fa fa-map-marker margin-r-5"></i>Correspondence Address</strong>
+                        <br />
+                        @Html.DisplayFor(r => Model.StudentDetails.Address)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/bower_components/newchart.js/amcharts.js"></script>
+<script src="~/bower_components/newchart.js/export.min.js"></script>
+<script src="~/bower_components/newchart.js/light.js"></script>
+<script src="~/bower_components/newchart.js/pie.js"></script>
+<script src="~/bower_components/newchart.js/serial.js"></script>
+<link href="~/bower_components/newchart.css/export.css" rel="stylesheet" />
+
+<script>
+    $(function () {
+        fun_loadAttendence('@currentMonth', '@currentYear', '@Model.StudentDetails.ERP');
+    });
+    $('#example1').DataTable({
+        "pageLength": 10,
+    });
+    $('#example2').DataTable({
+        "pageLength": 10,
+    });
+    function viewMoreInfo() {
+        OpenMessegeModal($('#moreStudDetails').html(), 'Primary', 'lg', 'Student Details');
+    }
+</script>
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "../DashBoard_StudentStatatics/GetStudentAttendanceDetails",
+            data: { erpNo : '@Model.StudentDetails.ERP'},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                var chart = AmCharts.makeChart("chartdiv_Attn", {
+                    "theme": "light",
+                    "type": "serial",
+                    "dataProvider": result.staffAtten,
+                    "valueAxes": [{
+                        "stackType": "3d",
+                        "unit": "",
+                        "position": "left",
+                        "title": "No of Days",
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "(Leave): <b>[[value]]</b>",
+                        "fillAlphas": 2,
+                        "lineAlpha": 1,
+                        "title": "Leave",
+                        "type": "column",
+                        "valueField": "Leave"
+                    }, {
+                        "balloonText": "(Absent): <b>[[value]]</b>",
+                        "fillAlphas": 40,
+                        "lineAlpha": 2,
+                        "title": "Absent",
+                        "type": "column",
+                        "valueField": "Absent"
+                    },
+                    {
+                        "balloonText": "(Present): <b>[[value]]</b>",
+                        "fillAlphas": 1,
+                        "lineAlpha": 2,
+                        "title": "Present",
+                        "type": "column",
+                        "valueField": "Present"
+                    }],
+                    "plotAreaFillAlphas": 1,
+                    "depth3D": 40,
+                    "angle": 30,
+                    "categoryField": "Class",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                });
+            },
+        })
+    });
+</script>
+<script>
+    var chart = AmCharts.makeChart("chartdiv", {
+        "type": "pie",
+        "theme": "light",
+        "dataProvider": [{
+            "country": "Paid",
+            "value": '@paid'
+        }, {
+            "country": "Balance",
+            "value": '@balance'
+        }, {
+            "country": "Total Due",
+            "value": '@due'
+        }],
+        "valueField": "value",
+        "titleField": "country",
+        "outlineAlpha": 0.4,
+        "depth3D": 15,
+        "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+        "angle": 30,
+        "export": {
+            "enabled": true
+        }
+    });
+</script>

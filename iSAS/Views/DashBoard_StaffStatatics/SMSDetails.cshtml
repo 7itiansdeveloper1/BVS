@@ -1,0 +1,48 @@
+﻿@model List<ISas.Entities.DashboardEntities.SMSDetailsModel>
+
+<section class="content-header">
+    <h1>SMS Details</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li class="active">SMS Details</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-body">
+            <table id="example1" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>SMS</th>
+                        <th>SMS Date</th>
+                        <th>Status</th>
+                        <th>Delivery Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => Model[i].Sno)</td>
+                            <td>@Html.DisplayFor(r => Model[i].SMSTExt)</td>
+                            <td>@Html.DisplayFor(r => Model[i].SMSDate)</td>
+                            <td>@Html.DisplayFor(r => Model[i].SMSStatus)</td>
+                            <td>@Html.DisplayFor(r => Model[i].SMSDeliveryDate)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+    $('#example1').DataTable({
+
+    });
+</script>

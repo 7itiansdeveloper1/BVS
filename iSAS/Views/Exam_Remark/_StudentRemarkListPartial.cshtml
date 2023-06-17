@@ -1,0 +1,64 @@
+﻿@model ISas.Web.ViewModels.Exam_RemarkViewModel
+@{
+//List<SelectListItem> ab = new List<SelectListItem>();
+//ab.Add(new SelectListItem { Value = "1", Text = "1 .#Name  always tries to do things independently. #He/She is always ready to participate in co curricular activities. #His/Her memory is good and #he/she has the will to make #his/her work a great success.", Disabled = true });
+//ab.Add(new SelectListItem { Value = "3", Disabled = true });
+
+//List<string> preSelectedRem = new List<string>();
+//preSelectedRem.Add("27");
+//preSelectedRem.Add("6");
+}
+
+<div id="headerMain" style="display:none;">
+    <h4>
+        Client Name :- Bal Vikas School, Panipat<br />
+        Date        :- @DateTime.Now <br />
+        Report Name :- Remarks Entry For (@Html.DisplayFor(r => Model.TermName), @Html.DisplayFor(r => Model.ClassName) - @Html.DisplayFor(r => Model.SectionName))
+    </h4>
+</div>
+
+
+<table class="table table-bordered" id="AchievementTable" style="border:1px solid #808080;width:100%;" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr style="border:1px solid #808080;background-color:#dcce2e;">
+            <th hidden>ERP No.</th>
+            <th style="border:1px solid #808080;background-color:#dcce2e;">Adm No.</th>
+            <th style="border:1px solid #808080;background-color:#dcce2e;">Roll No.</th>
+            <th style="border:1px solid #808080;background-color:#dcce2e;">Student Name</th>
+            <th style="border:1px solid #808080;background-color:#dcce2e;">Remark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in @Model.StudentRemarkList)
+        {
+            <tr style="border:1px solid #808080;">
+                <td hidden>@item.Student.StudentERPNo </td>
+                <td style="border:1px solid #808080;text-align:center;">@item.Student.StudentAdmNo </td>
+                <td style="border:1px solid #808080;text-align:center;">@item.Student.StudentRollNo </td>
+                <td style="border:1px solid #808080;text-align:center;">@item.Student.StudentName </td>
+
+                @if (@Model.SelectedRemarkOption == "RemarkEntry")
+                {
+                    <td>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.SelectedRemarkId, new SelectList(Model.RemarkList, "Value", "Text", null, item.RemarkId, item.PreviousSelectedRemarksIds, null), new { @class = "select2 form-control", style = "width:100%;" })
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td style="border:1px solid #808080;text-align:center;">
+                        @*@Html.TextAreaFor(m => item.RemarkId, 3, 100, htmlAttributes: new { @readonly = true })*@
+                        @Html.DisplayFor(r => item.RemarkId)
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*<script>
+         $(function () {
+            $('.select2').select2()
+        })
+    </script>*@

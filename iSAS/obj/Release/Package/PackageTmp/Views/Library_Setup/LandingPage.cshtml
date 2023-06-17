@@ -1,0 +1,100 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.LibraryEntities.Library_SetupModels>
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Library List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Library Name</th>
+                    <th>Prefix</th>
+                    <th>Start Accession</th>
+                    <th>First Accession</th>
+                    <th>Last Accession</th>
+                    <th>Strength</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => count)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].LibName)</td>
+                            <td>@Html.DisplayFor(r => Model[i].LibPrefix)</td>
+                            <td>@Html.DisplayFor(r => Model[i].StartAccNo)</td>
+                            <td>@Html.DisplayFor(r => Model[i].FirstAccNo)</td>
+                            <td>@Html.DisplayFor(r => Model[i].LastAccNo)</td>
+                            <td>@Html.DisplayFor(r => Model[i].BookStrength)</td>
+
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteLibraryConfirm('@Model[i].LibId')" title="Delete Library" class="fa fa-trash btnDefaultColor"></a>
+                                    @Html.EncodedActionLink(" ", "Updation", "Library_Setup", new { LibraryId = Model[i].LibId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Library" })
+                                }
+                                else
+                                {
+                                    <span disabled="disabled" title="Delete Library" class="fa fa-trash btnDefaultColorFaded"></span>
+                                    <span disabled="disabled" title="Edit Library" class="fa fa-edit btnDefaultColorFaded"></span>
+                                }
+
+                                @Html.EncodedActionLink(" ", "New", "Library_FineSetup", new { LibId = Model[i].LibId, LibName = Model[i].LibName }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Fine Setup" })
+                                @Html.ActionLink(" ", "", "", new { }, htmlAttributes: new { @class = "fa fa-user btnDefaultColor", title = "Enrollment, Pending" })
+                            </td>
+                        </tr>
+
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable();
+    });
+
+    function DeleteLibraryConfirm(LibId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Library?", MyYesFunction, MyNoFunction, LibId);
+    }
+
+    function MyYesFunction(LibId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Library_Setup/Library_Setup_DELETE",
+            data: { LibraryId: LibId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../Library_Setup/New"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

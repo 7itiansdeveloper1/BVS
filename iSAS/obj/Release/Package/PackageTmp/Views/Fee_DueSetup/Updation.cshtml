@@ -1,0 +1,325 @@
+﻿@model ISas.Entities.FeesEntities.Fee_DueSetupModels
+
+<section class="content-header">
+    <h1>
+        Update Due Setup
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">Fee</a></li>
+        <li><a href="@Url.Action("New", "Fee_FeeStructureMaster")">Structure List</a></li>
+        <li><a href="#">Update Class Due</a></li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Fee_DueSetup_CRUD", "Fee_DueSetup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.StructId)
+        @Html.HiddenFor(r => Model.RecordId)
+        @Html.Hidden("hddnRowLenght")
+        @Html.Hidden("hddnCopyToClassIds", "")
+
+        <div class="box box-info collapsed-box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Class Due Summary</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                @{ Html.RenderAction("SummaryPage", "Fee_DueSetup", new { StructId = Model.StructId, StructName = Model.StructName }); }
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Structure Name : <span class="text-primary">@Html.DisplayFor(r => Model.StructName)</span></h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.ClassId)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.ClassId, new SelectList(Model.ClassList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionListByClass('ClassId','SectionId')" })
+                                        @Html.ValidationMessageFor(r => Model.ClassId, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.SectionId)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.SectionId, new SelectList(Model.SectionList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getClassDueList()" })
+                                        @Html.ValidationMessageFor(r => Model.SectionId, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.InstallName)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.InstallName, new SelectList(Model.InstallmentList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                        @Html.ValidationMessageFor(r => Model.InstallName, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.HeadName)</label>
+                                    <div class="select">
+                                        @Html.DropDownListFor(m => m.HeadName, new SelectList(Model.HeadList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                        @Html.ValidationMessageFor(r => Model.HeadName, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Amount)</label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Amount, htmlAttributes: new { @class = "form-control", onkeypress = "return NumericOnly(event)" })
+                                        @Html.ValidationMessageFor(r => Model.Amount, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <br />
+                                <h5>
+                                    <button class="btn btn-info" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">Save</button>
+                                    <button class="btn btn-default" type="button" onclick="window.location.reload()">Reset</button>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="" id="classDueMainDiv">
+                                    @{ Html.RenderAction("LandingPage", "Fee_DueSetup", new { StructId = Model.StructId, StructName = Model.StructName, ClassId = Model.ClassId, SectionId = Model.SectionId }); }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h5 class="box-title">Copy to Class</h5>
+                                <div class="box-title pull-right">
+                                    <input type="button" id="btnCopyToClass" disabled="disabled" value="Copy To Class" class="btn btn-success btn-xs" onclick="SaveCopyToClass()" />
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-bordered table-responsive table-hover table-condensed" id="tblCopyToClass">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" id="chkBoxSelectAll" onclick="CheckToSelectAll()" />
+                                            </th>
+                                            <th>Class</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.CopyToClassList.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.HiddenFor(r => Model.CopyToClassList[i].Value)
+                                                    @Html.HiddenFor(r => Model.CopyToClassList[i].Text)
+                                                    @Html.CheckBoxFor(r => Model.CopyToClassList[i].Selected, htmlAttributes: new { @class = "clssChkBoxCopyTo", onchange = "GetClassIdStr(" + @i + ")" })
+                                                </td>
+                                                <td>@Html.DisplayFor(r => Model.CopyToClassList[i].Text)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</section>
+<script>
+    function CheckToSelectAll() {
+        if ($('#chkBoxSelectAll').is(':checked')) {
+            $('.clssChkBoxCopyTo').prop('checked', true);
+        } else {
+            $('.clssChkBoxCopyTo').prop('checked', false);
+        }
+        GetClassIdStr();
+    }
+
+    function GetClassIdStr() {
+        var classIds = "";
+        $('#tblCopyToClass > tbody > tr').each(function (i) {
+            if ($('#CopyToClassList_' + i + '__Selected').is(':checked')) {
+                if (classIds == "") {
+                    classIds = $('#CopyToClassList_' + i + '__Value').val();
+                }
+                else {
+                    classIds += "," + $('#CopyToClassList_' + i + '__Value').val();
+                }
+            }
+        });
+        $('#hddnCopyToClassIds').val(classIds);
+    }
+
+    function SaveCopyToClass() {
+        if ($('#hddnCopyToClassIds').val() == "" || $('#hddnCopyToClassIds').val() == null) {
+            OpenMessegeModal("No Class is Selected to Copy..!", '', 'sm');
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_DueSetup/Fee_DueSetup_CRUD_CopyToClass",
+            data: { StructId: '@Model.StructId', FromClassId: $('#ClassId').val(), FromSectionId: $('#SectionId').val(), ToClass: $('#hddnCopyToClassIds').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function EnableEditableRow(selectedRow) {
+        var rowCount = $('#hddnRowLenght').val();
+        for (var i = 0; i < rowCount; i++) {
+            if (i == selectedRow) {
+                $('#displayOnly_' + i).css('display', 'none');
+                $('#editable_' + i).removeAttr('style');
+            } else {
+                $('#displayOnly_' + i).removeAttr('style');
+                $('#editable_' + i).css('display', 'none');
+            }
+        }
+    }
+
+    function UpdateClassDue(i) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_DueSetup/Fee_DueSetup_CRUD",
+            data: { RecordId: $('#RecordId_' + i).val(), Amount: $('#Amount_' + i).val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg);
+                getClassDueList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DeleteClassDueConfirm(RecordId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this due?", MyYesFunction, MyNoFunction, RecordId);
+    }
+
+    function MyYesFunction(RecordId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_DueSetup/Fee_DueSetup_Delete",
+            data: { RecordId: RecordId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg);
+                getClassDueList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function getClassDueList()
+    {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_DueSetup/LandingPage",
+            data: { StructId: '@Model.StructId', StructId: '@Model.StructId', ClassId: $('#ClassId').val(), SectionId: $('#SectionId').val() },
+            success: function (result) {
+                $('#classDueMainDiv').html(result);
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, 'Success');
+                    getClassDueList();
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+</script>
+

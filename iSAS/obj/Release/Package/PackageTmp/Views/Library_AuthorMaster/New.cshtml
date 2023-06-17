@@ -1,0 +1,142 @@
+﻿@model ISas.Entities.LibraryEntities.Library_AuthorMasterModels
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>Author/Co-Author Master</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="@Url.Action("New", "Library_Setup/New")">Library</a></li>
+        <li class="active">Author/Co-Author Master</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Library_AuthorMaster_CRUD", "Library_AuthorMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.AuthId)
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="radio">
+                                    <label>@Html.RadioButtonFor(r => Model.AuthorType, "AUT", htmlAttributes: new { onchange = "GetAuthorList()" }) Author</label>
+                                    <label>@Html.RadioButtonFor(r => Model.AuthorType, "COAUT", htmlAttributes: new { onchange = "GetAuthorList()" }) Co-Author</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.AuthName)<i class="mandateLbl">*</i></label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.AuthName, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(r => Model.AuthName, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Description)</label>
+                                    <div class="select">
+                                        @Html.TextAreaFor(m => m.Description, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(r => Model.Description, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-3">
+                                <div class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(r => Model.IsActive) Active
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                        <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="" id="authorListMainDiv">
+                    @{ Html.RenderAction("LandingPage", "Library_AuthorMaster", new { AuthorType = Model.AuthorType }); }
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function GetAuthorList() {
+        $('#authorListMainDiv').html('');
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Library_AuthorMaster/LandingPage",
+            data: { AuthorType: $("input[name='AuthorType']:checked").val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#authorListMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Library_AuthorMaster/New?AuthorType=" + $("input[name='AuthorType']:checked").val(); }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

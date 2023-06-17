@@ -1,0 +1,79 @@
+﻿@model ISas.Entities.LibraryEntities.Library_BookMasterModels
+
+<section class="content-header">
+    <h1>
+        Book Master
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="@Url.Action("New", "Library_Setup/New")">Library</a></li>
+        <li class="active">Book Master</li>
+    </ol>
+</section>
+
+@using (Html.BeginForm("Library_BookMaster_CRUD", "Library_BookMaster", FormMethod.Post, htmlAttributes: new { id = "form1" }))
+{
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="addNewBookMainDiv">
+                    @Html.Partial("_New", Model)
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<script>
+    function GetBookDetails(btnClick) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Library_BookMaster/_New',
+            data: { LibId: $('#LibID').val(), AccNo: $('#AccNo').val(), BtnClick: btnClick },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#addNewBookMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Library_BookMaster/New"; }, $('#hddnReloadTime').val());
+                } else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

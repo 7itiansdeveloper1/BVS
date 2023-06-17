@@ -1,0 +1,99 @@
+﻿@model ISas.Entities.RegistrationEntities.RegistrationSlipModel
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+<style>
+    h5 {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px dashed lightgrey;
+        line-height: 0.1em;
+        margin: 10px 0 20px;
+    }
+
+        h5 span {
+            background: #fff;
+            padding: 0 10px;
+        }
+</style>
+<link href="~/bower_components/pageSize/PageSize.css" rel="stylesheet" />
+<page size="A4">
+    <table style="height:100%;width:100%; border:1px solid lightgrey;">
+        <tr><td style="height:5px;">&nbsp;</td></tr>
+        <tr style="vertical-align:top;height:100px;">
+            <td style="padding:1%;">
+                @{
+                    Html.RenderAction("_ReportHeader", "Common", new { tempReportName = "Registraion Session : " + Model.SessionName });
+                }
+            </td>
+        </tr>
+        <tr style="vertical-align:top;text-align:center;">
+            <td style="padding:1%;height:15px;font-size:20px;"><label>Registration Slip</label></td>
+        </tr>
+        <tr style="vertical-align:top;">
+            <td style="padding:1%;height:200px;">
+                <table style="font-size:16px;width:100%;vertical-align:middle;" border="1">
+                    <tr>
+                        <td colspan="2" style="padding-left:1%;"><label>Registration  No. : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.RegID)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:1%;"><label>Registration  Date : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.RegDate)</td>
+                        <td style="padding-left:1%;"><label>Registration Category : </label>&nbsp;&nbsp; @Html.DisplayFor(r => Model.AdmCategoryName)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:1%;"><label>Student : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.Student)</td>
+                        <td style="padding-left:1%;"><label>Gender : </label>&nbsp;&nbsp; @Html.DisplayFor(r => Model.Gender)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:1%;"><label>Date of Birth : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.DOB)</td>
+                        <td style="padding-left:1%;"><label>Class : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.Class)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:1%;"><label>Father Name : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.Father)</td>
+                        <td style="padding-left:1%;"><label>Fahter Mobile : </label>&nbsp;&nbsp; @Html.DisplayFor(r => Model.FMobileNo)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:1%;"><label>Mother Name : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.Mother)</td>
+                        <td style="padding-left:1%;"><label>Mother Mobile : </label>&nbsp;&nbsp; @Html.DisplayFor(r => Model.MMobileNo)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-left:1%;"><label>Address : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.Address1)</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr style="vertical-align:top;">
+            <td style="padding:1%;">
+                <table style="font-size:16px;width:100%;">
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr>
+                        <td colspan="2" style="text-align:right;padding-right:1%;"><label>Authorised Signatory</label></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h5><span>For office use only</span></h5>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:1%;"><label>Registration  No : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.RegID)</td>
+                        <td style="text-align:right;padding-right:1%;"><label>Registration Date : </label>&nbsp;&nbsp; @Html.DisplayFor(r => Model.RegDate)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:1%;"><label>Registration  Amount : </label> &nbsp;&nbsp; @Html.DisplayFor(r => Model.RegAmount)</td>
+                        <td style="text-align:right;padding-right:1%;"><label>Student : </label>&nbsp;&nbsp; @Html.DisplayFor(r => Model.Student)</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</page>
+
+<script>
+    $(function () {
+        window.print();
+        //window.close();
+    });
+</script>
+

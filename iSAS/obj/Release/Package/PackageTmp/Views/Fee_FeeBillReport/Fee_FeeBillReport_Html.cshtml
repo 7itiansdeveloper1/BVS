@@ -1,0 +1,132 @@
+﻿@model  ISas.Entities.FeesEntities.Fee_FeeBillReportHtmlModel
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+<link href="~/bower_components/pageSize/PageSize.css" rel="stylesheet" />
+@for (int n = 0; n < Model.StudentList.Count; n++)
+{
+    List<string> distnictInvoiceNs = Model.HeadDetails.Where(r => r.ERPNo == Model.StudentList[n].ERP).Select(r => r.InvoiceNo).Distinct().ToList();
+    for (int m = 0; m < distnictInvoiceNs.Count; m++)
+    {
+        List<ISas.Entities.FeesEntities.HeadDetailsModel> currentHeadList = Model.HeadDetails.Where(r=> r.ERPNo == Model.StudentList[n].ERP).Where(r => r.InvoiceNo == distnictInvoiceNs[m]).ToList();
+        int totalDueAmount = currentHeadList.Sum(r => r.Due); int totalPaidAmount = currentHeadList.Sum(r => r.Paid);
+        int balanceAmount = totalDueAmount - totalPaidAmount;string currentFeeStatus = "";
+        if(totalPaidAmount >= totalDueAmount)
+        {
+            currentFeeStatus = "Paid";
+        }else if(totalPaidAmount < totalDueAmount && totalPaidAmount > 0)
+        {
+            currentFeeStatus = "Partial Paid";
+        }
+        else if(totalPaidAmount == 0)
+        {
+            currentFeeStatus = "Un-Paid";
+        }
+
+
+        if (m > 0)
+        {
+            <div style="page-break-after:always;">&nbsp;</div>
+        }
+
+        <page size="A4">
+            <table class="" style="border:1px solid black;font-size:16px;width:100%;">
+                <tr>
+                    <td style="width:110px;padding-top:2%;"> <img src="~/@Model.ReportHeader.LogoURL" height="100" width="100" /></td>
+                    <td colspan="3" class="text-center" style="font-size:21px;padding-top:2%;text-align:center;">
+                        <strong>
+                            @Html.DisplayFor(r => Model.ReportHeader.Header1)
+                            <br /><span style="font-size:16px;">Email : @Html.DisplayFor(r => Model.ReportHeader.Header3)</span>
+                            <br /><span style="font-size:18px;">Fee Receipt Invoice</span>
+                        </strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="padding-left:2%;"><strong>Invoice No. : &nbsp;&nbsp; @Html.DisplayFor(r => currentHeadList[0].InvoiceNo)</strong></td>
+                                <td class="text-right" style="padding-right:2%;"><strong>Invoice Status : &nbsp;&nbsp; @Html.DisplayFor(r=> currentFeeStatus)</strong></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="padding-left:2%;"><strong>Period. : &nbsp;&nbsp; @Html.DisplayFor(r => currentHeadList[0].Period)</strong></td>
+                                <td class="text-right" style="padding-right:2%;"><strong>Receipt No : &nbsp;&nbsp; @Html.DisplayFor(r => currentHeadList[0].ReceiptNo)</strong></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="padding-left:2%;"><strong>Student's Name :. : &nbsp;&nbsp; @Html.DisplayFor(r=> Model.StudentList[n].Student)</strong></td>
+                                <td class="text-right" style="padding-right:2%;"><strong>Adm No : &nbsp;&nbsp; @Html.DisplayFor(r => Model.StudentList[n].AdmNo) </strong></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="padding-left:2%;"><strong>Father's Name : &nbsp;&nbsp; @Html.DisplayFor(r => Model.StudentList[n].Father)</strong></td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+                <tr>
+                    <td colspan="4" style="padding-left:2%;padding-right:2%;">
+                        <table style="width:100%;" border="1">
+                            <thead>
+                                <tr>
+                                    <th style="width:80%;padding-left:2%;">Particulars</th>
+                                    <th class="text-right" style="padding-right:2%;">Due Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < currentHeadList.Count; i++)
+                                {
+                                    <tr>
+                                        <td style="padding-left:2%;">@Html.DisplayFor(r => currentHeadList[i].HeadName)</td>
+                                        <td class="text-right" style="padding-right:2%;">@Html.DisplayFor(r => currentHeadList[i].Due)</td>
+                                    </tr>
+                                }
+
+                                <tr>
+                                    <td colspan="2" style="padding-left:2%;">
+                                        <table style="width:100%;font-weight:600;">
+                                            <tr>
+                                                <td class="text-right" style="width:80%;padding-left:2%;">Total Due Amount : </td>
+                                                <td class="text-right" style="padding-right:2%;">@Html.DisplayFor(r => totalDueAmount) </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right" style="width:80%;padding-left:2%;">Total Paid Amount : </td>
+                                                <td class="text-right" style="padding-right:2%;">@Html.DisplayFor(r => totalPaidAmount) </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right" style="width:80%;padding-left:2%;">Outstanding Balance : </td>
+                                                <td class="text-right" style="padding-right:2%;">@Html.DisplayFor(r => balanceAmount) </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td colspan="4">&nbsp;</td></tr>
+            </table>
+        </page>
+    }
+}
+
+<script>
+    if ('@ViewBag.PrintOnly' == "YES") {
+        $(function () {
+            window.print();
+            window.close();
+        });
+    }
+</script>

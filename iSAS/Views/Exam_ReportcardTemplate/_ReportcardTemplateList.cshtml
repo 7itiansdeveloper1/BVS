@@ -1,0 +1,128 @@
+﻿@model ISas.Entities.Exam_Entities.ExamReportcardTemplateModels
+<div>
+    <table id="example2" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Term Start Date</th>
+                <th>Term End Date</th>
+                <th>Reportcard Date</th>
+                <th>Orientation</th>
+                <th>Term First PTM Date</th>
+                <th>Term Last PTM Date</th>
+                <th>Lock Term for Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.reportcardTemplateList.Count; i++)
+            {
+            <tr>
+                <td>
+                    @Html.HiddenFor(r => Model.reportcardTemplateList[i].classId)
+                    @Html.DisplayFor(r => Model.reportcardTemplateList[i].className)
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(r => Model.reportcardTemplateList[i].termStartDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                        </div>
+                    </div>
+
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(r => Model.reportcardTemplateList[i].termEndDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                        </div>
+                    </div>
+
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(r => Model.reportcardTemplateList[i].reportCardDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    @Html.CheckBoxFor(r => Model.reportcardTemplateList[i].haveOrientation)
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(r => Model.reportcardTemplateList[i].termFirstPTMDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(r => Model.reportcardTemplateList[i].termLastPTMDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                        </div>
+                    </div>
+
+                </td>
+                <td class="text-center">
+                    @if (Model.reportcardTemplateList[i].isTermLockforClass)
+                    {
+                        <label class="switch">
+                            <input id="Locked_@i" type="checkbox" checked="checked" onchange="LockTerm('@Model.reportcardTemplateList[i].classId','@Model.reportcardTemplateList[i].examId','@i')">
+                            <span class="slider round"></span>
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="switch">
+                            <input id="Locked_@i" type="checkbox" onchange="LockTerm('@Model.reportcardTemplateList[i].classId','@Model.reportcardTemplateList[i].examId','@i')">
+                            <span class="slider round"></span>
+                        </label>
+                    }
+                </td>
+
+
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+
+    function LockTerm(classid, examid, i) {
+        var activeStatus = false;
+
+        if ($('#Locked_' + i).is(':checked')) {
+            activeStatus = true;
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: "../Exam_ReportcardTemplate/TermLock_CRUD",
+            data: { classId: classid, examId: examid, value: activeStatus },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+            },
+
+        });
+    }
+    
+</script>

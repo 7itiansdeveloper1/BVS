@@ -1,0 +1,106 @@
+﻿@model ISas.Entities.FeesEntities.Fee_FeeStructureMasterModels
+@{
+    ViewBag.Title = "New";
+}
+
+<section class="content-header">
+    <h1>
+        Fee Structure Master <small>(UPDATE)</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li><a href="@Url.Action("New", "Fee_FeeStructureMaster")">Fee Structure Master</a></li>
+        <li class="active">Update</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Fee_FeeStructureMaster_CRUD", "Fee_FeeStructureMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.StructId)
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h5 class="box-title">Fee Head</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.StructName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.StructName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.StructName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.PrintOrder)</label>
+                            <div class="select">
+                                <input type="number" id="PrintOrder" name="PrintOrder" class="form-control" value="@Model.PrintOrder" />
+                                @Html.ValidationMessageFor(r => Model.PrintOrder, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="checkbox">
+                            <br /><label>
+                                @Html.CheckBoxFor(r => Model.IsActive)@Html.LabelFor(r => Model.IsActive)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="checkbox">
+                            <br /><label>
+                                @Html.CheckBoxFor(r => Model.Default)@Html.LabelFor(r => Model.Default)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-warning" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">UPDATE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+
+    @{ Html.RenderAction("LandingPage", "Fee_FeeStructureMaster"); }
+</section>
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Fee_FeeStructureMaster/New"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

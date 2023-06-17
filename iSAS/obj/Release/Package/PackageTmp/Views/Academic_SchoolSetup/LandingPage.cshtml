@@ -1,0 +1,99 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.Academic.Academic_SchoolSetupModels>
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">School List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Client Name</th>
+                    <th>Alias</th>
+                    <th>Add</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Logo</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].ClientName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].Alias)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Add)</td>
+                            <td>@Html.DisplayFor(r => Model[i].City)</td>
+                            <td>@Html.DisplayFor(r => Model[i].State)</td>
+                            <td>
+                                <img src="~/@Model[i].Logo" style="height:100px;width:100px;" />
+                            </td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeletable)
+                                {
+                                    <a href="#" onclick="DeleteClientConfirm('@Model[i].SchoolId')" style="cursor:pointer;" title="Delete School" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span title="Delete School" style="cursor:not-allowed;" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+                                @Html.EncodedActionLink(" ", "Updation", "Academic_SchoolSetup", new { SchoolId = Model[i].SchoolId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit School", style = "margin-left:5%;" })
+
+                                @Html.EncodedActionLink(" ", "New", "Academic_WingSetup", new { SchoolName = Model[i].ClientName, SchoolId = Model[i].SchoolId }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Wing Setup", style = "margin-left:5%;" })
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteClientConfirm(schoolId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Client?", MyYesFunction, MyNoFunction, schoolId);
+    }
+
+    function MyYesFunction(schoolId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_SchoolSetup/Academic_SchoolSetup_Delete",
+            data: { SchoolId: schoolId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color );
+                setTimeout(function () { window.location = "../Academic_SchoolSetup/New"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

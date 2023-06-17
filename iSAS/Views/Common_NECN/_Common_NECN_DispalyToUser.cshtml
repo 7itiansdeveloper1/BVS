@@ -1,0 +1,60 @@
+﻿@model ISas.Entities.DashboardEntities.Common_NECN_MainModel
+
+<h2 style="padding-right:5px;padding-left:5px;"><span class="">Title :-</span> <span class="text-primary text-justify"> @Html.DisplayFor(r => Model.BasicDetails.UploadTitle)</span> </h2>
+@if (!string.IsNullOrEmpty(Model.BasicDetails.UploadDescription))
+{
+    <p class="text-info text-justify" style="padding-right:5px;padding-left:5px;"><span class="text-warning">Description :-</span> @Html.DisplayFor(r => Model.BasicDetails.UploadDescription)</p>
+}
+
+@if (Model != null && Model.UploadDocList != null && Model.UploadDocList.Count > 0)
+{
+    <div style="overflow-y:auto;height:150px;">
+        <table class="table table-bordered table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>Document Name</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.UploadDocList.Count; i++)
+                {
+                    string currentPath =  Model.UploadDocList[i].AttachPath;
+                    string ext = Path.GetExtension(Model.UploadDocList[i].AttachPath).ToLower();
+
+                    if (ext == ".pdf")
+                    {
+                        currentPath = "../Images/System/pdfImage.jpg";
+                    }
+                    else if (ext == ".txt")
+                    {
+                        currentPath = "../Images/System/textIcon.png";
+                    }
+                    else if (ext == ".xlsx" || ext == ".xls")
+                    {
+                        currentPath = "../Images/System/excelImage.png";
+
+                    }
+                    else if (ext == ".docx" || ext == ".doc")
+                    {
+                        currentPath = "../Images/System/wordImage.png";
+
+                    }
+                    else if (ext == ".ppt" || ext == ".pptx")
+                    {
+                        currentPath = "../Images/System/pptImage.png";
+                    }
+                    <tr>
+                        <td style="width:90%">@Model.UploadDocList[i].FileName</td>
+                        <td style="width:10%">
+                            <a download="@Model.UploadDocList[i].FileName" href="~/@Model.UploadDocList[i].AttachPath" target="_blank" title="Click to download">
+                                <img class="example-image" style="width:40px;height:40px;" src=~/@currentPath />
+                            </a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+}

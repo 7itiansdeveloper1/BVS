@@ -1,0 +1,30 @@
+﻿@model ISas.Entities.DashboardEntities.Common_NECN_MainModel
+<table class="table table-bordered table-responsive table-hover" id="tblStudentList">
+    <thead>
+        <tr>
+            <th>@Html.CheckBox("allStudentSelectChkBox", false, htmlAttributes: new { onchange = "funSelectAllStudent()" })</th>
+            <th>Student Name</th>
+            <th>Class</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.SelectionGroups.StudentDetailsList.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Html.CheckBoxFor(r => Model.SelectionGroups.StudentDetailsList[i].Selected, htmlAttributes: new { @class = "studentSelectchkBox", onchange = "funGetSelectedStudentCount()" })
+                    @Html.HiddenFor(r => Model.SelectionGroups.StudentDetailsList[i].ERPNo)
+                    @Html.HiddenFor(r => Model.SelectionGroups.StudentDetailsList[i].StudentName)
+                    @Html.HiddenFor(r => Model.SelectionGroups.StudentDetailsList[i].ClassName)
+                    @Html.HiddenFor(r => Model.SelectionGroups.StudentDetailsList[i].ERPNo)
+                </td>
+                <td>@Html.DisplayFor(r => Model.SelectionGroups.StudentDetailsList[i].StudentName)</td>
+                <td>@Html.DisplayFor(r => Model.SelectionGroups.StudentDetailsList[i].ClassName)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $('#tblStudentList').DataTable({});
+</script>

@@ -1,0 +1,96 @@
+﻿@model ISas.Entities.LibraryEntities.eLibraryModels
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>
+        E-Library: Book Master
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Library</li>
+        <li class="active">E-Library</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="form-group">
+                    <div class="select">
+                        @Html.DropDownListFor(r => Model.classIds, Model.classList, htmlAttributes: new { @class = "form-control multiSelectWithSelectOptGrp", multiple = true })
+                        @Html.ValidationMessageFor(r => Model.classIds, null, htmlAttributes: new { style = "color:red;" })
+                    </div>
+                </div>
+            </div>
+            <span class="box-title">
+
+                <input type="button" value="GO" class="btn btn-success" onclick="getEBookDetails()" />
+            </span>
+            <span class="pull-right box-title">
+                @Html.ActionLink("ADD NEW BOOK", "NeweBook", "eLibrary", new { }, htmlAttributes: new { @class = "btn btn-primary btn-sm" })
+            </span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h5 class="box-title">Search Details</h5>
+                    </div>
+                    <div class="box-body">
+                        <div class="" id="eLibraryMainDiv">
+                            @{
+                                Html.RenderPartial("_SearchResult");
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+
+<script>
+    function getEBookDetails() {
+        var classids = $("#classIds").val().join(",");
+        console.log(classids);
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../eLibrary/_SearchResult",
+            data: {
+                classid: classids,
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+
+                $('#eLibraryMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

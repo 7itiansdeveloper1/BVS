@@ -1,0 +1,39 @@
+﻿@model ISas.Entities.Exam_MarksVerificationModel
+
+<div id="marksVeriHeader" style="display:none;">
+    <h4>
+        School Name :- Bal Vikas School, Panipat <br />
+        Date        :- @DateTime.Now <br />
+        Report Name :- Marks Verification For @Html.DisplayFor(r => Model.SelectedTermName), (@Html.DisplayFor(r => Model.SelectedClassName)-@Html.DisplayFor(r => Model.SelectedSectionName), @Html.DisplayFor(r => Model.SelectedSubjectName))
+    </h4>
+</div>
+
+<div class="col-xs-12">
+    <div class="table-responsive searchtable table_ev_od" style="min-height:400px;">
+        <table class="table table-bordered table-responsive" id="MarkTable" style="border:1px solid #808080;width:100%;" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr style="border:1px solid #808080;background-color:#dcce2e;">
+                    @for (int i = 0; i < Model.TitleList.Count; i++)
+                    {
+                        <th style="border:1px solid #808080;background-color:#dcce2e;">@Html.DisplayFor(r => Model.TitleList[i].Text)</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ValuesList != null && Model.ValuesList.Count > 0)
+                {
+                    for (int i = 0; i < Model.ValuesList.Count; i++)
+                    {
+                        <tr style="border:1px solid #808080;">
+                            @for (int j = 0; j < Model.ValuesList[i].Count; j++)
+                            {
+                                <td style="border:1px solid #808080;text-align:center;"> @Html.DisplayFor(r => Model.ValuesList[i][j].Value) </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

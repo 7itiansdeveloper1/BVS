@@ -1,0 +1,120 @@
+﻿@model ISas.Entities.Academic.Academic_FOD
+
+
+<section class="content-header">
+    <h1>
+        Food for Thought <small>(UPDATE)</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>School</li>
+        <li class="active">Food for Thought</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Academic_FOD_CRUD", "Academic_FOD", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.FODId)
+        @Html.Hidden("hddnRowLenght")
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.MessageText)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextAreaFor(m => m.MessageText, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.MessageText, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.MonthDay)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                <input type="number" id="MonthDay" name="MonthDay" class="form-control" value="@Model.MonthDay" />
+                                @Html.ValidationMessageFor(r => Model.MonthDay, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="checkbox">
+                            <br /><label>
+                                @Html.CheckBoxFor(r => Model.IsActive)@Html.LabelFor(r => Model.IsActive)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-warning" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">UPDATE</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+            </div>
+        </div>
+    }
+
+    <div class="" id="FODMainDiv">
+        @{ Html.RenderAction("LandingPage", "Academic_FOD"); }
+    </div>
+</section>
+
+<script>
+    function emptyFODDetails() {
+        $('#MessageText').val("");
+    }
+    function getFODList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_FOD/LandingPage",
+            data: {  },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#FODMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Academic_FOD/New"; }, $('#hddnReloadTime').val());
+                    //getFODList();
+                    //emptyFODDetails();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

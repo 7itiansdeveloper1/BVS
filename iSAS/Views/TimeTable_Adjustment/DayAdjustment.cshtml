@@ -1,0 +1,110 @@
+﻿@model ISas.Entities.TimeTable_Entities.TimeTable_Adjustment_FormLoadModel
+
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+
+<section class="content-header">
+    <h1>Time Table Adjustment</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>TimeTable </li>
+        <li>Adjustment</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.AdjustmentDate)</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(m => m.AdjustmentDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                            @Html.ValidationMessageFor(r => Model.AdjustmentDate, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-5">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.wingId)</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.wingId, Model.wingList,"----ALL----", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.wingId, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-1">
+                    <div class="form-group">
+                        <br />
+                        <div class="select">
+                            <h5>
+                                <button type="button" class="btn btn-success" onclick="getAdjustment()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="width:100%;overflow-y:auto;">
+            <div id="DayAdjustmentDiv">
+                @*@Html.RenderAction("_DayAdjustment", "TimeTable_Adjustment", new { adjustmentDate=Model.AdjustmentDate })*@
+                @*@Html.Action("_DayAdjustment", "TimeTable_Adjustment", new { adjustmentDate = Model.AdjustmentDate })*@
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    function getAdjustment() {
+        $.ajax({
+            type: "Get",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../TimeTable_Adjustment/_DayAdjustment",
+            data: {
+                adjustmentDate: $('#AdjustmentDate').val(),
+                wingid: $('#wingId').val(),
+                reportname: "Wingwise Report for Adjustment (" + $('#wingId :selected').text() + ");Date :" +'@DateTime.Now.Date.ToString("dd/MM/yyyy")'
+            },
+            error: function (xhr, status, error) { 
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#DayAdjustmentDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

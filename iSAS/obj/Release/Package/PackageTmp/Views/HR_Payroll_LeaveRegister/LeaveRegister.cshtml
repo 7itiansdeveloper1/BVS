@@ -1,0 +1,332 @@
+﻿@model ISas.Entities.HR_Payroll_Entities.HR_Payroll_LeaveRegisterModels
+@{
+    string _today = DateTime.Now.ToShortDateString().Replace("-", "/");
+}
+
+<style>
+    tr.selected td {
+        background-color: #333;
+        color: #fff;
+    }
+</style>
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>Leave Register</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>HR & Payroll</li>
+        <li class="active">Leave Register</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <input class="form-control" type="text" id="searchEmp" placeholder="Enter Employee Name" />
+                    <br />
+                    <div class="" style="max-height:450px;overflow:auto;">
+                        <table id="tblEmployeeList" class="tblEmployee table table-condensed table-hover table-responsive table-bordered">
+                            <tbody>
+                                @for (int i = 0; i < Model.StaffList.Count; i++)
+                                {
+                                    <tr style="cursor:pointer;" class="table_row" onclick="GetLeaveDetails('@Model.StaffList[i].Value','@Model.StaffList[i].Text')">
+                                        <td onclick="">@Html.DisplayFor(r => Model.StaffList[i].Text)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("HR_Payroll_LeaveRegister_CRUD", "HR_Payroll_LeaveRegister", FormMethod.Post, htmlAttributes: new { }))
+                            {
+                                @Html.HiddenFor(r => Model.SelectedEmpID)
+                                @Html.HiddenFor(r => Model.LeaveType)
+
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h5 class="box-title">
+                                            <span id="lbltitle">Avail Leave</span>
+                                        </h5>
+                                        <h5 class="box-title pull-right">
+                                            <button class="btn btn-success btn-sm" disabled id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                                            <button class="btn btn-default btn-sm" type="button" onclick="window.location.reload()">RESET</button>
+                                        </h5>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-6 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="" id="lblLvCode">@Html.LabelFor(r => Model.LeaveCode)</label>
+                                                    <div class="select">
+                                                        @Html.DropDownListFor(m => m.LeaveCode, new SelectList(Model.LeaveCodeList, "Value", "Text"), "Select", htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "GetNoOfDaysCount()" })
+                                                        @Html.ValidationMessageFor(r => Model.LeaveCode, null, htmlAttributes: new { style = "color:red;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                <div class="form-group">
+                                                    <label for="" id="lblFDate">@Html.LabelFor(r => Model.FromDate)</label>
+                                                    <div class="input-group date">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </div>
+                                                        @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @class = "form-control pull-right date", onchange = "$('#ToDate').val($('#FromDate').val());  GetNoOfDaysCount()" })
+                                                        @Html.ValidationMessageFor(r => Model.FromDate, null, htmlAttributes: new { style = "color:red;" })
+                                                    </div>
+                                                    <!-- /.input group -->
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                <div class="form-group">
+                                                    <label for="" id="lblTDate">@Html.LabelFor(r => Model.ToDate)</label>
+                                                    <div class="input-group date">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </div>
+                                                        @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @class = "form-control pull-right date", onchange = "GetNoOfDaysCount()" })
+                                                        @Html.ValidationMessageFor(r => Model.ToDate, null, htmlAttributes: new { style = "color:red;" })
+                                                    </div>
+                                                    <!-- /.input group -->
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-6 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="" id="lblBalance">@Html.LabelFor(r => Model.BalanceDays)</label>
+                                                    <div class="select">
+                                                        @Html.TextBoxFor(m => m.BalanceDays, htmlAttributes: new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(r => Model.BalanceDays, null, htmlAttributes: new { style = "color:red;" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h5 class="box-title">Leave Details</h5>
+                                </div>
+                                <div class="box-body">
+                                    <div id="leaveDetailsMainDiv">
+                                        @Html.Partial("_LeaveDetails", Model)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-primary">
+                                <table class="table table-bordered table-hover table-responsive text-center">
+                                    <tbody>
+                                        <tr>
+                                            <td> <input onclick="setBtnStatus(this, 'OPENED ON')" class="btn btn-default btn-sm btnButtonOpt" type="button" value="Open Balance" style="width:120px;" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <input onclick="setBtnStatus(this, 'CREDITED ON')" class="btn btn-default btn-sm btnButtonOpt" type="button" value="Credit Leave" style="width:120px;" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <input onclick="setBtnStatus(this, 'AVAILED ON')" class="btn btn-success btn-sm btnButtonOpt" type="button" value="Avail Leave" style="width:120px;" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <input onclick="setBtnStatus(this, 'ENCASHED ON')" class="btn btn-default btn-sm btnButtonOpt" type="button" value="Encashment" style="width:120px;" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h5 class="box-title">Local Leave</h5>
+                                </div>
+                                <div class="box-body">
+                                    <div id="localLeaveMainDiv">
+                                        @Html.Partial("_LocalLeave", Model)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function emptyValues() {
+        $('#LeaveCode').val(null);
+        $('#select2-LeaveCode-container').html('Select');
+        $('#select2-LeaveCode-container').prop('title', 'Select');
+        $('#BalanceDays').val(0);
+        $('#FromDate').val('@_today');
+        $('#ToDate').val('@_today');
+    }
+
+    function GetNoOfDaysCount() {
+        var leaveType = $('#LeaveType').val();
+        if (leaveType == 'OPENED ON' || leaveType == 'CREDITED ON') {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: '../HR_Payroll_LeaveRegister/GetAnnQuota',
+                data: { LeaveID: $('#LeaveCode').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    $('#BalanceDays').val(response);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        }
+        else if (leaveType == 'AVAILED ON' || leaveType == 'ENCASHED ON') {
+            GetDaysBetweenDays('FromDate', 'ToDate', 'BalanceDays');
+        }
+    }
+    function setBtnStatus(evt, leaveType) {
+        $('#LeaveType').val(leaveType);
+        $('.btnButtonOpt').removeClass('btn-success');
+        $(evt).addClass('btn-success');
+        //$('#savebutton').attr('disabled', false);
+
+        if (leaveType == 'OPENED ON') {
+            $('#lbltitle').html('Open Balance');
+        }
+        else if (leaveType == 'CREDITED ON') {
+            $('#lbltitle').html('Credit Leave');
+        }
+
+        else if (leaveType == 'AVAILED ON') {
+            $('#lbltitle').html('Avail Leave');
+        }
+
+        else if (leaveType == 'ENCASHED ON') {
+            $('#lbltitle').html('Encash Leave');
+        }
+    }
+
+    $(function () {
+        $("#searchEmp").on("keyup", function () {
+            if (this.value.length > 0) {
+                $("#tblEmployeeList > tbody > tr").hide().filter(function () {
+                    return $(this).text().toLowerCase().indexOf($("#searchEmp").val().toLowerCase()) != -1;
+                }).show();
+            }
+            else {
+                $("#tblEmployeeList > tbody > tr").show();
+            }
+        });
+    });
+
+    $('.table_row').click(function () { //Once any element with class "table_row" is clicked
+        $('.table_row').removeClass('selected'); // "Unselect" all the rows
+        $(this).addClass('selected'); // Select the one clicked
+
+    });
+
+
+    function GetLeaveDetails(EmpID, StaffName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../HR_Payroll_LeaveRegister/_LeaveDetails',
+            data: { EmpID: EmpID, StaffName: StaffName },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#leaveDetailsMainDiv').html(response);
+                $('#SelectedEmpID').val(EmpID);
+
+                $('#savebutton').attr('disabled', false);
+
+                $.ajax({
+                    type: "GET",
+                    url: '../HR_Payroll_LeaveRegister/_LocalLeave',
+                    data: { EmpID: EmpID },
+                    error: function (xhr, status, error) {
+                        OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                    },
+                    success: function (response) {
+                        $('#localLeaveMainDiv').html(response);
+                    },
+                });
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    GetLeaveDetails($('#hddnStaffCode').val(), $('#hddnStaffName').val());
+                    emptyValues();
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

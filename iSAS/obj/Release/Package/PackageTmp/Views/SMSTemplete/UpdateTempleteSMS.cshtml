@@ -1,0 +1,87 @@
+﻿@model ISas.Entities.SMSManagement.SMSTempleteModel
+
+
+<section class="content-header">
+    <h1>SMS Template Setup<small>(UPDATE)</small></h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>SMS</li>
+        <li><a href="@Url.Action("SMS_TemplateLandingPage", "SMSTemplete")">SMS Template Setup</a></li>
+        <li class="active">UPDATE</li>
+    </ol>
+</section>
+
+
+@using (Html.BeginForm("TempleteSMS_CRUD", "SMSTemplete", FormMethod.Post, htmlAttributes: new { }))
+{
+    <section class="content">
+        <div class="box box-warning">
+            <div class="box-body">
+
+                @Html.HiddenFor(r => Model.SMSID)
+                @Html.HiddenFor(r => Model.Function)
+                @Html.HiddenFor(r => Model.TemplateID)
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-12">
+                        <div class="form-group">
+                            <label for="">Messages Template</label>
+                            <div class="select">
+                                @Html.DropDownListFor(r => Model.TemplateID, Model.TempleteTypeList, "--Select--", htmlAttributes: new { @class = "from-control select2", style = "width:100%;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-12">
+                        <div class="form-group">
+                            <label for="">Messages Template</label>
+                            <div class="select">
+                                @Html.TextAreaFor(r => Model.SmsText, htmlAttributes: new { style = "height:200px;width:100%;" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-warning" type="button" onclick="DoAjaxPostAndMore(this)">UPDATE</button>
+            </div>
+        </div>
+    </section>
+}
+
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../SMSTemplete/SMS_TemplateLandingPage"; }, $('#hddnReloadTime').val());
+                } else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

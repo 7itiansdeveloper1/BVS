@@ -1,0 +1,110 @@
+﻿@model ISas.Entities.FeesEntities.paytmEntities
+<html>
+<head>
+    <title>Blink Checkout Demo</title>
+</head>
+
+<body>
+    <div id="paytm-checkoutjs"></div>
+    <div id="blink-response"></div>
+    <script>
+        function onScriptLoad() {
+            var txnToken = @Model.tnxId;
+            var amount = @Model.amount;
+            var orderId = @Model.orderId;
+
+            var config = {
+                "root": "",
+                "flow": "DEFAULT",
+                "data": {
+                    "orderId": orderId,
+                    "token": txnToken,
+                    "tokenType": "TXN_TOKEN",
+                    "amount": amount
+                },
+                merchant: {
+                    redirect: false
+                },
+                "handler": {
+                    notifyMerchant: function(eventName, data) {
+                        console.log("notifyMerchant handler function called");
+                        console.log("eventName => ", eventName);
+                        console.log("data => ", data);
+                        if (eventName == 'SESSION_EXPIRED') {
+                            location.reload();
+                        }
+                    },
+                    transactionStatus: function(data) {
+                        console.log("payment status ", data);
+                        window.Paytm.CheckoutJS.close();
+                        var result = "<h2>Response: </h2><table>";
+                        for (var key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                result += "<tr><td>" + key + "</td><td>" + data[key] + "</td></tr>";
+                            }
+                        }
+                        result += "</table>";
+                        document.getElementById("blink-response").innerHTML = result;
+                    }
+                }
+            };
+
+            if (window.Paytm && window.Paytm.CheckoutJS) {
+                window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
+                    // initialze configuration using init method
+                    window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+                        // after successfully updating configuration, invoke Blink Checkout
+                        window.Paytm.CheckoutJS.invoke();
+                    }).catch(function onError(error) {
+                        console.log("error => ", error);
+                    });
+                });
+            }
+        }
+    </script>
+    @*<script type="application/javascript" crossorigin="anonymous" src="~/paytm/paytm.js" onload="onScriptLoad();"></script>*@
+
+    <script type="application/javascript" crossorigin="anonymous" src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/Eduver73645354801101.js" onload="onScriptLoad();"></script>
+</body>
+
+</html>
+
+
+@*<html>
+<body>
+    <script type="application/javascript"  onload="onScriptLoad();" crossorigin="anonymous"></script>
+    <script>
+        function onScriptLoad() {
+            var config = {
+                "root": "",
+                "flow": "DEFAULT",
+                "data": {
+                    "orderId": @Model.orderId, /* update order id */
+                    "token": @Model.tnxId, /* update token value */
+                    "tokenType": "TXN_TOKEN",
+                    "amount": @Model.amount /* update amount */
+                },
+                "handler": {
+                    "notifyMerchant": function (eventName, data) {
+                        console.log("notifyMerchant handler function called");
+                        console.log("eventName => ", eventName);
+                        console.log("data => ", data);
+                    }
+                }
+            };
+            if (window.Paytm && window.Paytm.CheckoutJS) {
+                window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
+                    // initialze configuration using init method
+                    window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+                        // after successfully updating configuration, invoke Blink Checkout
+                        window.Paytm.CheckoutJS.invoke();
+                    }).catch(function onError(error) {
+                        console.log("error => ", error);
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+</html>*@
+

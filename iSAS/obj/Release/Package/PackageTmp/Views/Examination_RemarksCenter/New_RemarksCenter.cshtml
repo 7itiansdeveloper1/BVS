@@ -1,0 +1,117 @@
+﻿@model ISas.Entities.Examination_Entities.Examination_RemarksCenterModels
+
+<section class="content-header">
+    <h1>@Html.DisplayFor(r=> Model.TempleteName) <small>(Remarks)</small> </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Examination</li>
+        <li><a href="@Url.Action("New_RemarksTemplete", "Examination_RemarksCenter")">Remarks Center</a></li>
+        <li class="active">Remarks Templete</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("RemarksCenter_CRUD", "Examination_RemarksCenter", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.TempleteId)
+        @Html.HiddenFor(r => Model.RemarkId)
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box box-primary">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Remark)<i class="mandateLbl">*</i></label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Remark, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
+                                        @Html.ValidationMessageFor(r => Model.Remark, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="" class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(r => Model.IsActive, htmlAttributes: new { }) Is Active
+                                    </label>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button class="btn btn-success" id="savebutton" type="button" onclick="CommonAjaxPost(this); setTimeout(function () { $('#TemplateName').val(''); GetRemarksTempleteList();}, 1500);">SAVE</button>
+                        <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h5 class="box-title">Remarks List</h5>
+                    </div>
+                    <div class="box-body">
+                        <div id="remarksListMainDiv">
+                            @{ Html.RenderAction("_LandingPage_RemarksCenter", "Examination_RemarksCenter", new { TempleteId = Model.TempleteId });}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function Fun_checkToSelectAllClases() {
+        if ($('#checkBoxselectAllClasses').is(':checked')) {
+            $('.checkBoxclass').prop('checked', true);
+        } else {
+            $('.checkBoxclass').prop('checked', false);
+        }
+    }
+
+    function GetRemarksTempleteList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Examination_RemarksCenter/_LandingPage_RemarksCenter',
+            data: { TempleteId : '@Model.TempleteId'},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#remarksListMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function EditTempleteRemarks(RemarksId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Examination_RemarksCenter/_Edit_RemarksCenter',
+            data: { TempleteId: '@Model.TempleteId', RemarksId: RemarksId},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenModalWithSave(response, 'Edit Remarks');
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

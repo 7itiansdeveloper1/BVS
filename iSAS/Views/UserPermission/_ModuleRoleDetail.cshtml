@@ -1,0 +1,67 @@
+﻿@model ISas.Entities.UserEntities.UserPermissionModels
+
+<table id="example2" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Html.CheckBox("chkBoxSelectAllMenu", false, htmlAttributes: new { onchange = "Fun_CheckToSelectAllMenu()" }) </th>
+            <th>Menu Name </th>
+            <th>Is Active </th>
+            <th>@Html.CheckBox("chkBoxSelectAllCanSAVE", false, htmlAttributes: new { onchange = "Fun_CheckToSelectAllCan_Permission('SAVE')" }) Can SAVE</th>
+            <th>@Html.CheckBox("chkBoxSelectAllCanDELETE", false, htmlAttributes: new { onchange = "Fun_CheckToSelectAllCan_Permission('DELETE')" }) Can DELETE</th>
+            <th>@Html.CheckBox("chkBoxSelectAllCanUPDATE", false, htmlAttributes: new { onchange = "Fun_CheckToSelectAllCan_Permission('UPDATE')" }) Can UPDATE</th>
+            <th>@Html.CheckBox("chkBoxSelectAllCanVIEW", false, htmlAttributes: new { onchange = "Fun_CheckToSelectAllCan_Permission('VIEW')" }) Can VIEW</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.ModuleRoleList.Count(); i++)
+        {
+        <tr>
+            <td>@Html.CheckBox("chkBoxMenu_" + @i, false, htmlAttributes: new { @class = "menu", onchange = "Fun_CheckToSelectAllPermission('" + @i + "')" })</td>
+            <td>
+                @Html.HiddenFor(r => Model.ModuleRoleList[i].RoleID)
+                @Html.DisplayFor(r => Model.ModuleRoleList[i].MenuName)
+            </td>
+            <td class="text-center">
+                @if (Model.ModuleRoleList[i].IsActive)
+                {
+                    <label class="switch">
+                        <input id="Active_@i" type="checkbox" checked="checked" onchange="ConfirmToUpdateStatus(@i)">
+                        <span class="slider round"></span>
+                    </label>
+                }
+                else
+                {
+                    <label class="switch">
+                        <input id="Active_@i" type="checkbox" onchange="ConfirmToUpdateStatus(@i)">
+                        <span class="slider round"></span>
+                    </label>
+                }
+            </td>
+            <td>@Html.CheckBoxFor(r => Model.ModuleRoleList[i].canSAVE, htmlAttributes: new { @class = "SAVE" })</td>
+            <td>@Html.CheckBoxFor(r => Model.ModuleRoleList[i].canDELETE, htmlAttributes: new { @class = "DELETE" })</td>
+            <td>@Html.CheckBoxFor(r => Model.ModuleRoleList[i].canUPDATE, htmlAttributes: new { @class = "UPDATE" })</td>
+            <td>@Html.CheckBoxFor(r => Model.ModuleRoleList[i].canVIEW, htmlAttributes: new { @class = "VIEW" })</td>
+        </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function ConfirmToUpdateStatus(i) {
+        var activeStatus = false;
+        if ($('#Active_' + i).is(':checked')) {
+            activeStatus = true;
+        }
+        $.ajax({
+            type: "POST",
+            url: "../UserPermission/UserRoleMaster_CRUD",
+            data: { isActive: activeStatus, roleId: $('#ModuleRoleList_' + i + '__RoleID').val()},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+            },
+        });
+    }
+
+</script>

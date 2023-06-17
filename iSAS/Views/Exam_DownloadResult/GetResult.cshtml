@@ -1,0 +1,55 @@
+﻿@model List<ISas.Entities.Exam_Entities.Exam_DownloadResultModels>
+<section class="content-header">
+<h1> Download Result </h1>
+</section>
+<section class="content">
+    <div class="box box-success">
+        <div class=" box-header">
+
+        </div>
+        <diiv class="box-body">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                @if (Model.Count > 0)
+                {
+                    <label style="color:red">Please wait this may take a minute or more to download...!</label>
+                }
+
+                <table id="example1" class="table table-responsive table-bordered table-condensed display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th> Sno.</th>
+                            <th>Exam Name</th>
+                            <th class="text-center">View Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            int count = 1;
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(r => Model[i].SessionId)
+                                    @Html.HiddenFor(r => Model[i].ClassId)
+                                    @Html.HiddenFor(r => Model[i].SectionId)
+                                    @Html.HiddenFor(r => Model[i].ExamId)
+                                    @Html.HiddenFor(r => Model[i].ERPNo)
+                                    @Html.HiddenFor(r => Model[i].Student)
+                                    @Html.DisplayFor(r => count)
+                                </td>
+                                <td>@Html.DisplayFor(r => Model[i].ExamName)</td>
+                                <td class="text-center">@Html.ActionLink(" ", "StudentReportCard", "Exam_ReportCard", new { sessionId = Model[i].SessionId, classId = Model[i].ClassId, sectionId = Model[i].SectionId, examId = Model[i].ExamId, erpno = Model[i].ERPNo, studentname = Model[i].Student, SelectedExamName = Model[i].ExamName }, htmlAttributes: new { @class = "fa fa-download btnDefaultColor", title = "Download Report" })</td>
+                            </tr>
+                            count++;
+                        }
+
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+
+        </diiv>
+    </div>
+</section>

@@ -1,0 +1,308 @@
+﻿@model ISas.Entities.TransportEntities.Transport_VehicleSetupModel
+
+<section class="content-header">
+    <h1>
+        Vehicle Setup <small>(ADD)</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Transport</li>
+        <li><a href="@Url.Action("LandingPage", "Transport_VehicleSetup")">Vehicle Setup</a></li>
+        <li class="active">Add New</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Transport_VehicleSetup_CRUD", "Transport_VehicleSetup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.VehID)
+
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Vehicle Details</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.VehName)<i class="mandateLbl">*</i></label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.VehName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.VehName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.VehType)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.VehType, new SelectList(Model.VehicleTypeList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.VehType, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.VehNo)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.VehNo, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.VehNo, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.SCapacity)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.SCapacity, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.SCapacity, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-widget">
+            <div class="box-header with-border">
+                <h5 class="box-title">Driver Details</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.DName)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.DName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.DName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.DBldGrp)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.DBldGrp, new SelectList(Model.BloodGrpList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.DBldGrp, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.DMob)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.DMob, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.DMob, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.DDLNo)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.DDLNo, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.DDLNo, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.DBedgeNo)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.DBedgeNo, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.DBedgeNo, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-9">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.DAddress)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.DAddress, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.DAddress, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+        <div class="box box-widget">
+            <div class="box-header with-border">
+                <h5 class="box-title">Helper Details</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HName)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HBldGrp)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.HBldGrp, new SelectList(Model.BloodGrpList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.HBldGrp, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HMob)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HMob, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HMob, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HBedgeNo)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HBedgeNo, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HBedgeNo, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-9">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HAddress)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HAddress, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HAddress, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+        <div class="box box-widget">
+            <div class="box-header with-border">
+                <h5 class="box-title">Incharges Details</h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.InchargeName)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.InchargeName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.InchargeName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.InchargeMobile)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.InchargeMobile, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.InchargeMobile, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.Parent1Name)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.Parent1Name, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.Parent1Name, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.Parent1Mobile)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.Parent1Mobile, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.Parent1Mobile, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.Parent2Name)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.Parent2Name, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.Parent2Name, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.Parent2Mobile)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.Parent2Mobile, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.Parent2Mobile, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-footer">
+                    <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">SAVE</button>
+                    <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location = "../Transport_VehicleSetup/LandingPage"; }, $('#hddnReloadTime').val());
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

@@ -1,0 +1,374 @@
+﻿@model ISas.Entities.TimeTable_Entities.TimeTable_SetupModels
+<script type="text/javascript" src="../bower_components/newCustomJS/jquery.easyui.min.js"></script>
+@{
+    int colspanCount = @Model.DaysList.Count + 2;
+}
+<style>
+    .item {
+        text-align: center;
+        border: 1px solid #499B33;
+    }
+</style>
+
+<section class="content-header">
+    <h1>Class Time Table Setup</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="@Url.Action("LandingPage", "TimeTable_Setup")">Timetable Setup</a></li>
+        <li class="active">Class Time Table Setup</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("TimeTable_Setup_CRUD", "TimeTable_Setup", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.ClassSectionId)
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Class : @Html.DisplayFor(r => Model.ClassSectionName), Class Teacher : <span class="text-primary"> @Html.DisplayFor(r => Model.ClassTeacherName) </span> </h5>
+                <h5 class="box-title pull-right">
+                    <input type="button" class="btn btn-primary btn-sm" value="SAVE" onclick="DoAjaxPostAndMore(this)" />
+                </h5>
+                <span class="box-title pull-right" style="padding-right:1%;padding-top:0.5%;">
+                    <a href="#" onclick="printTimeTable()" title="Print Time Table" class="fa fa-print btnDefaultColor"></a>
+                </span>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-12 left">
+                                <table class="table table-bordered">
+                                    @for (int i = 0; i < Model.SubjectList.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div id="@Model.SubjectList[i].Value" subjectName="@Model.SubjectList[i].Text" subjectId="@Model.SubjectList[i].Value" class="item">@Html.DisplayFor(r => Model.SubjectList[i].Text)</div>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="#" onclick="GetStaffTimeTable('@Model.SubjectList[i].StaffId', '@Model.SubjectList[i].StaffName')" title="View Time Table" class="glyphicon glyphicon-calendar btnDefaultColor"></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="col-md-12 right">
+                            <table id="mytable" class="table table-responsive table-bordered table-condensed" border="1" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="blank" style="height:50px;background-color:#cea5ef;color:white;text-align:center;vertical-align:middle;">PERIOD/DAY</th>
+                                        @for (int i = 0; i < Model.DaysList.Count; i++)
+                                        {
+                                            <th class="title" style="height:50px;background-color:#cea5ef;color:white;text-align:center;vertical-align:middle;">@Html.DisplayFor(r => Model.DaysList[i])</th>
+                                        }
+                                    </tr>
+                                </thead>
+
+                                @for (int i = 0; i < Model.PeriodDetailsList.Count; i++)
+                                {
+                                    @Html.HiddenFor(r => Model.PeriodDetailsList[i].PeriodName)
+                                    <tr>
+                                        <td style="width:100px;height:60px;text-align: center;vertical-align: middle;background-color:#cea5ef;color:white;" class="time"> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodName) <small>(@Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodTime)) </small>  </td>
+                                        @for (int j = 0; j < Model.PeriodDetailsList[i].PeriodInfoList.Count; j++)
+                                        {
+                                            <td style="max-width:100px;min-width:100px;" valueofI="@i" valueofJ="@j" class="drop text-center">
+                                                @Html.HiddenFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].SubjectId)
+                                                @Html.HiddenFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].TeacherId)
+
+                                                <span id="SubjectNamespan_@i@j"> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].SubjectName)</span>
+
+                                                @if (string.IsNullOrEmpty(Model.PeriodDetailsList[i].PeriodInfoList[j].SubjectId))
+                                                {
+                                                    <label id="btnRemSub_@i@j" class="text-danger pull-right" style="cursor:pointer;display:none;" title="Remove Subject" onclick="removeSubject('@i', '@j')"> <i class="fa fa-remove "></i> </label><br />
+                                                }
+                                                else
+                                                {
+                                                    <label id="btnRemSub_@i@j" class="text-danger pull-right" style="cursor:pointer;" title="Remove Subject" onclick="removeSubject('@i', '@j')"> <i class="fa fa-remove "></i> </label><br />
+                                                }
+
+                                                @*<span id="TeacherNamespan_@i@j"> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].TeacherName)</span>
+
+                                                    @if (string.IsNullOrEmpty(Model.PeriodDetailsList[i].PeriodInfoList[j].TeacherId))
+                                                    {
+                                                        <label id="btnRemTech_@i@j" class="text-danger pull-right" style="cursor:pointer;display:none;" title="Remove Teacher" onclick="removeTeacher('@i', '@j')"> <i class="fa fa-remove "></i> </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label id="btnRemTech_@i@j" class="text-danger pull-right" style="cursor:pointer;" title="Remove Teacher" onclick="removeTeacher('@i', '@j')"> <i class="fa fa-remove "></i> </label>
+                                                    }*@
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="text-danger">Note/Abbreviation :</label>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <ul>
+                                    <li>OL :- Overloaded</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-2">
+                                <ul>
+                                    <li>FL :- Fully Loaded</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<div style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { ReportName = "Class Time Table" });}
+</div>
+<table cellpadding="0" cellspacing="0" id="tblTimeTableMain" style="display:none;width:100%;border:1px solid black;text-align:center;">
+    <tr>
+        <td colspan="@colspanCount" style="border:1px solid black;text-align:center;font-size:22px;">
+            Class : @Html.DisplayFor(r => Model.ClassSectionName),
+            Class Teacher : @Html.DisplayFor(r => Model.ClassTeacherName)
+        </td>
+    </tr>
+    <tr style="border:1px solid black;text-align:center;font-size:18px;">
+        <td style="border:1px solid black;">PERIOD/DAY</td>
+        @for (int i = 0; i < Model.DaysList.Count; i++)
+        {
+            <td style="border:1px solid black;text-align:center;">@Html.DisplayFor(r => Model.DaysList[i])</td>
+        }
+    </tr>
+
+    @for (int i = 0; i < Model.PeriodDetailsList.Count; i++)
+    {
+        <tr style="border:1px solid black;">
+            <td style="width:100px;height:60px;text-align: center;vertical-align: middle;border:1px solid black;" class="time"> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodName) <small class="text-primary">(@Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodTime)) </small>  </td>
+            @for (int j = 0; j < Model.PeriodDetailsList[i].PeriodInfoList.Count; j++)
+            {
+                <td style="max-width:150px;min-width:150px;border:1px solid black;text-align:center;">
+                    <span> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].SubjectName)</span>
+                    <br />
+                    <span> @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodInfoList[j].TeacherName)</span>
+                </td>
+            }
+        </tr>
+    }
+</table>
+
+<script>
+    function GetStaffTimeTable(StaffId, StaffName) { //, StaffName
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Staff_StaffDetailMaster/_StaffTimeTable",
+            data: { StaffId: StaffId, StaffName: StaffName },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenModalWithSave(result, 'Time Table For :- ' + StaffName);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function printTimeTable() {
+        var html = $('#reportHeaderDiv').html();
+        html += '<table cellpadding="0" cellspacing="0" style="width:100%;border:1px solid black;text-align:center;">'
+        html += $('#tblTimeTableMain').html();
+        html += '</table>';
+        var w = window.open();
+        $(w.document.body).html(html);
+        w.print();
+        //w.close();
+    }
+
+
+    $(function () {
+        $('.left .item').draggable({
+            revert: true,
+            proxy: 'clone'
+        });
+        $('.right td.drop').droppable({
+            accept: '.item',
+            onDragEnter: function () {
+                $(this).addClass('over');
+            },
+            onDragLeave: function () {
+                $(this).removeClass('over');
+            },
+            onDrop: function (e, source) {
+                var subjectId = $(source).attr('subjectId');
+                var subjectName = $(source).attr('subjectName');
+
+                var teacherId = $(source).attr('teacherId');
+                var teacherName = $(source).attr('teacherName');
+
+                var i = $(this).attr('valueofI');
+                var j = $(this).attr('valueofJ');
+
+                if (subjectId == null || subjectId == "") { //Teacher Calling
+                    var result = $('#' + teacherId).html().match(/\((.*)\)/);
+                    if (result[1].indexOf('FL') != -1 || result[1].indexOf('OL') != -1) {
+                        OpenMessegeAutoHideDiv('Teacher overloaded..!', 'Info');
+                    }
+                    else {
+                        $('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__TeacherId').val(teacherId);
+                        $('#TeacherNamespan_' + i + '' + j + '').html(teacherName.replace(/ *\([^)]*\) */g, ""));
+                        $('#btnRemTech_' + i + '' + j + '').css('display', '');
+                    }
+
+                } else if (teacherId == '' || teacherId == null) { //Subject Calling
+                    if ($('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val().indexOf(subjectId) == -1) {
+                        var onlyEmpId = subjectId.substring(10, 20);
+                        $.ajax({
+                            type: "GET",
+                            beforeSend: function () {
+                                spinnerShow();
+                            },
+                            url: "../TimeTable_Setup/CheckStaffAvailabilityForTimeTable",
+                            data: { StaffId: onlyEmpId, Period: 'P' + i , DayNo : j },
+                            error: function (xhr, status, error) {
+                                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                            },
+                            success: function (result) {
+                                if (result.status == true || result.status == 'True') {
+                                    var result = $('#' + subjectId).html().match(/\((.*)\)/);
+                                    var newVal = parseInt(result[1]) + 1;
+                                    $('#' + subjectId).html(subjectName.replace(/ *\([^)]*\) */g, "") + ' (' + newVal + ')');
+
+                                    if ($('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val() == '') {
+                                        $('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val(subjectId);
+                                    } else {
+                                        $('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val($('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val() + '_' + subjectId);
+                                    }
+
+                                    var subIds = $('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val();
+                                    var splitlen = subIds.split('_').length;
+                                    if (splitlen == 1) {
+                                        $('#SubjectNamespan_' + i + '' + j + '').append(subjectName.replace(/ *\([^)]*\) */g, ""));
+                                    }
+                                    else {
+                                        $('#SubjectNamespan_' + i + '' + j + '').append('  ||   ' + subjectName.replace(/ *\([^)]*\) */g, ""));
+                                    }
+                                    $('#btnRemSub_' + i + '' + j + '').css('display', '');
+                                } else {
+                                    OpenMessegeModal(result.Msg, 'Info', 'sm', 'Info..!' );
+                                }
+                            },
+                            complete: function () {
+                                spinnerHide();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        $('.left').droppable({
+            accept: '.assigned',
+            onDragEnter: function (e, source) {
+                $(source).addClass('trash');
+            },
+            onDragLeave: function (e, source) {
+                $(source).removeClass('trash');
+            },
+            onDrop: function (e, source) {
+                $(source).remove();
+            }
+        });
+    });
+
+
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location.reload(); }, $('#hddnReloadTime').val());
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function getTeacherList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../TimeTable_Setup/_TeacherList',
+            data: { ClassSectionId: $('#ClassSectionId').val(), SubjectId: $('#SubjectId').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#teacherDetailsMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function removeSubject(i, j) {
+        var subjectIds = $('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val();
+        var res = subjectIds.split("_");
+        var htmlText = $('#SubjectNamespan_' + i + '' + j + '').html();
+        var htmlTextList = htmlText.split(' || ');
+        if (res.length >= 1) {
+            for (var k = 0; k < res.length; k++) {
+                var subjectId = res[k];
+                var result = $('#' + subjectId).html().match(/\((.*)\)/);
+                var newVal = parseInt(result[1]) - 1;
+                $('#' + subjectId).html(htmlTextList[k].replace(/ *\([^)]*\) */g, "") + ' (' + newVal + ')');
+            }
+        }
+        $('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__SubjectId').val(null);
+        $('#SubjectNamespan_' + i + '' + j + '').html('');
+        $('#btnRemSub_' + i + '' + j + '').css('display', 'none');
+    }
+
+    function removeTeacher(i, j) {
+        $('#PeriodDetailsList_' + i + '__PeriodInfoList_' + j + '__TeacherId').val(null);
+        $('#TeacherNamespan_' + i + '' + j + '').html('');
+        $('#btnRemTech_' + i + '' + j + '').css('display', 'none');
+    }
+</script>

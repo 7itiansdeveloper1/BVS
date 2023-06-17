@@ -1,0 +1,92 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.HR_Payroll_Entities.HR_Payroll_SalaryHeadModels>
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Salary Head List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped dt-responsive nowrap">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Head Name</th>
+                    <th>Head Description</th>
+                    <th>Head Type</th>
+                    <th>Exp. to School</th>
+                    <th>Day wise Calculation</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>@Html.DisplayFor(r => Model[i].HeadName)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Discrption)</td>
+                            <td>@Html.DisplayFor(r => Model[i].HeadType)</td>
+                            <td>@Html.DisplayFor(r => Model[i].ExpansetoComp)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Daywise)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeletable)
+                                {
+                                    <a href="#" onclick="DeleteSalaryHeadConfirm('@Model[i].HeadID')" title="Delete Salary Head" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span disabled="disabled" title="Delete Salary Head" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                @Html.EncodedActionLink(" ", "Updation", "HR_Payroll_SalaryHead", new { HeadID = Model[i].HeadID }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Salary Head" })
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteSalaryHeadConfirm(HeadID) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Salary Head..?", MyYesFunction, MyNoFunction, HeadID);
+    }
+
+    function MyYesFunction(HeadID) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../HR_Payroll_SalaryHead/HR_Payroll_SalaryHead_CRUD",
+            data: { HeadID: HeadID },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../HR_Payroll_SalaryHead/New"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

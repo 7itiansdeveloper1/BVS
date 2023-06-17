@@ -1,0 +1,199 @@
+﻿@model List<ISas.Entities.StaffEntities.TeacherDetailModel>
+
+<section class="content-header">
+    <h1>Teacher Workload</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Time Table</li>
+        <li class="active">Teacher Workload</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">Staff List</h5>
+        </div>
+        <div class="box-body">
+            <table class="table table-responsive table-bordered table-condensed table-hover" id="example1">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Staff Code</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].StaffName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].Mob)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].StaffCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].DeptName)
+                            </td>
+                            <td>
+                                <a href="#" onclick="StaffClassSetup('@Model[i].StaffID', '@Model[i].StaffName')" title="Class Setup" class="fa fa-gear btnDefaultColor"></a>
+
+                                <a href="#" onclick="StaffSubjectSetup('@Model[i].StaffID', '@Model[i].StaffName')" title="Subject Setup" class="fa fa-gear btnDefaultColor"></a>
+
+                                <a href="#" onclick="GetStaffTimeTable('@Model[i].StaffID', '@Model[i].StaffName')" title="View Time Table" class="glyphicon glyphicon-calendar btnDefaultColor"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+    function GetStaffTimeTable(StaffId, StaffName) { //, StaffName
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Staff_StaffDetailMaster/_StaffTimeTable",
+            data: { StaffId: StaffId, StaffName: StaffName },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenModalWithSave(result, 'Time Table For :- ' + StaffName);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    $(function () {
+        $('#example1').dataTable({
+            "pageLength": 50
+        });
+    });
+
+    function Fun_checkToSelectAllsubjects() {
+        if ($('#checkBoxselectAllsubjects').is(':checked')) {
+            $('.checkBoxsubject').prop('checked', true);
+        } else {
+            $('.checkBoxsubject').prop('checked', false);
+        }
+    }
+
+    function Fun_checkToSelectAllClases() {
+        if ($('#checkBoxselectAllClasses').is(':checked')) {
+            $('.checkBoxclass').prop('checked', true);
+        } else {
+            $('.checkBoxclass').prop('checked', false);
+        }
+    }
+
+    function StaffClassSetup(StaffId, StaffName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../TimeTable_StaffWorkLoadSetup/_StaffClassSetup",
+            data: { StaffId: StaffId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenModalWithSave(result, 'Class Setup For :-' + StaffName);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function StaffSubjectSetup(StaffId, StaffName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../TimeTable_StaffWorkLoadSetup/_StaffSubjectSetup",
+            data: { StaffId: StaffId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenModalWithSave(result,  'Subject Setup For :-' + StaffName);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function getSubjectList(StaffId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../TimeTable_StaffWorkLoadSetup/_SubjectList",
+            data: { StaffId: StaffId, ClassSecId: $('#ClassSecId').val() },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#subjectListMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color );
+                }
+                else {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnModelStateNotValid').val());
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

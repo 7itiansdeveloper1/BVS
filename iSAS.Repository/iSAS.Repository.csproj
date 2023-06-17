@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{33288F08-851F-4AB4-BEC0-0FE210F1BA48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ISas.Repository</RootNamespace>
+    <AssemblyName>iSAS.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\..\..\..\MAHESHA\Projects\GYMONE\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Academic\IRepository\IAcademic_DocumentMappingRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_DocumentMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_BankMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_ClassSetupRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_DepartmentMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_DesignationMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_DirectoryMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_DynamicReportWizardRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_ERPBill_Repo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_FODRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_HolidayAllocationRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_HolidayDeclarationRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_HolidayMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_HomeWorkMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_HouseMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_ProfessionMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_PTMOpendDayRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_QualificationMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_SchoolSetupRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_SectionMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_SectionSetupRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_SessionMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_SyllabusMasterRepo.cs" />
+    <Compile Include="Academic\IRepository\IAcademic_WingSetupRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_BankMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_ClassSetupRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_DepartmentMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_DesignationMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_DirectoryMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_DocumentMappingRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_DocumentMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_DynamicReportWizardRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_ERPBill_Repo.cs" />
+    <Compile Include="Academic\Repository\Academic_FODRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_HolidayAllocationRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_HolidayDeclarationRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_HolidayMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_HomeWorkMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_HouseMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_ProfessionMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_PTMOpendDayRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_QualificationMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_SchoolSetupRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_SectionMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_SectionSetupRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_SessionMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_SyllabusMasterRepo.cs" />
+    <Compile Include="Academic\Repository\Academic_WingSetupRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\ICertificateRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\ICommon_NECNRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IDashboardRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IDashBoard_ParentRequestMasterRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IDashBoard_StaffStataticsRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IDashBoard_StudentStataticsRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IOnlineClass_StaffRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IOnlineClass_StudentRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IStudentFeeDetailsRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IStudentHomeworkRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IStudentProfileRepo.cs" />
+    <Compile Include="DashboardRepository\IRepository\IToDo_TaskRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\CertificateRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\Common_NECNRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\DashboardRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\DashBoard_ParentRequestMasterRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\DashBoard_StaffStataticsRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\DashBoard_StudentStataticsRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\OnlineClass_StaffRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\OnlineClass_StudentRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\StudentFeeDetailsRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\StudentHomeworkRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\StudentProfileRepo.cs" />
+    <Compile Include="DashboardRepository\Repository\ToDo_TaskRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_AssessmentSetupRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_ChildSubjectSetupRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_MarksEntryRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_RemarksCenterRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_ProfileEntryRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_RemarksEntryRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_ReportCardRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExamination_SubjectMasterRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_ClassSubjectSetupRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_LockingRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_AssessmentSetupRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_ChildSubjectSetupRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_MarksEntryRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_RemarksCenterRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_ProfileEntryRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_RemarksEntryRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_SubjectMasterRepo.cs" />
+    <Compile Include="ExaminationRepository\IRepository\IExam_TemplateSetupRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Exam_TemplateSetupRepo.cs" />
+    <Compile Include="ExaminationRepository\Repository\Examination_ReportCardRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExamReportcardTemplateRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_AnswersheetRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_DownloadResultRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_OnlineAssessmentRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_QuestionMasterRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_QuestionPaperRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_ReportsRepo.cs" />
+    <Compile Include="ExamRepository\IRepository\IExam_TargetListRepo.cs" />
+    <Compile Include="ExamRepository\Repository\ExamReportcardTemplateRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_AnswersheetRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_ClassSubjectSetupRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_DownloadResultRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_LockingRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_OnlineAssessmentRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_QuestionMasterRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_QuestionPaperRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_ReportsRepo.cs" />
+    <Compile Include="ExamRepository\Repository\Exam_TargetListRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_ConcessionPolicyRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_ConcessionRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_DefaulterDetailsRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_DueSetupRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_FeeBillReportRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_FeeHeadMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_FeeStructureMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_FinePolicyRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_InstallmentSetupRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_InvoiceCreationRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_MiscDuesRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_OnlineSettlementRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_OnlineTransactionRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_PaymentGatewayMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_ReceiptCancellationRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_ReceiptHeaderMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_ReportRepo.cs" />
+    <Compile Include="FeeModuleRepo\IRepository\IFee_TransactionRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_ConcessionPolicyRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_ConcessionRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_DefaulterDetailsRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_DueSetupRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_FeeBillReportRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_FeeHeadMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_FeeStructureMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_FinePolicyRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_InstallmentSetupRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_InvoiceCreationRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_MiscDuesRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_OnlineSettlementRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_OnlineTransactionRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_PaymentGatewayMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_ReceiptCancellationRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_ReceiptHeaderMasterRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_ReportRepo.cs" />
+    <Compile Include="FeeModuleRepo\Repository\Fee_TransactionRepo.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_AttendanceProcessRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_CTC_SetupRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_FinalCTSRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_PayBandMasterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_SalaryHeadRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_LeaveMasterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_LeaveRegisterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_SalaryRegisterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\IRepository\IHR_Payroll_StaffEnrollmentRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_AttendanceProcessRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_CTC_SetupRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_FinalCTSRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_PayBandMasterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_SalaryHeadRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_LeaveRegisterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_LeaveMasterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_SalaryRegisterRepo.cs" />
+    <Compile Include="HR_PayrollRepo\Repository\HR_Payroll_StaffEnrollmentRepo.cs" />
+    <Compile Include="Implementation\AreaRepository.cs" />
+    <Compile Include="Implementation\AttendanceRegisterRepository.cs" />
+    <Compile Include="Implementation\CityRepository.cs" />
+    <Compile Include="Implementation\CommonRepo.cs" />
+    <Compile Include="Implementation\Common_AttachmentRefRepo.cs" />
+    <Compile Include="Implementation\Exam_MarksVerificationRepo.cs" />
+    <Compile Include="Implementation\Exam_ResultRepo.cs" />
+    <Compile Include="Implementation\Exam_StudentProfileRepo.cs" />
+    <Compile Include="Implementation\MarksEntry_StudentWiseRepo.cs" />
+    <Compile Include="Implementation\Student_AttendanceReportRepo.cs" />
+    <Compile Include="Interface\ICommonRepo.cs" />
+    <Compile Include="Interface\ICommon_AttachmentRefRepo.cs" />
+    <Compile Include="Interface\IExam_MarksVerificationRepo.cs" />
+    <Compile Include="Interface\IExam_Result.cs" />
+    <Compile Include="Interface\IExam_StudentProfileRepo.cs" />
+    <Compile Include="Interface\IMarksEntry_StudentWiseRepo.cs" />
+    <Compile Include="Interface\IStudent_AttendanceReportRepo.cs" />
+    <Compile Include="Library\IRepository\IeLibraryRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_AuthorMasterRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_BookMasterRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_BookTitleMasterRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_FineSetupRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_GenerateBarcodeRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_PublisherMasterRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_ReportRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_SetupRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_SubjectMasterRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_SupplierMasterRepo.cs" />
+    <Compile Include="Library\IRepository\ILibrary_TransactionRepo.cs" />
+    <Compile Include="Library\Repository\eLibraryRepo.cs" />
+    <Compile Include="Library\Repository\Library_AuthorMasterRepo.cs" />
+    <Compile Include="Library\Repository\Library_BookMasterRepo.cs" />
+    <Compile Include="Library\Repository\Library_BookTitleMasterRepo.cs" />
+    <Compile Include="Library\Repository\Library_FineSetupRepo.cs" />
+    <Compile Include="Library\Repository\Library_GenerateBarcodeRepo.cs" />
+    <Compile Include="Library\Repository\Library_PublisherMasterRepo.cs" />
+    <Compile Include="Library\Repository\Library_ReportRepo.cs" />
+    <Compile Include="Library\Repository\Library_SetupRepo.cs" />
+    <Compile Include="Library\Repository\Library_SubjectMasterRepo.cs" />
+    <Compile Include="Library\Repository\Library_SupplierMasterRepo.cs" />
+    <Compile Include="Library\Repository\Library_TransactionRepo.cs" />
+    <Compile Include="SMSManagement\IRepository\ISMSTempleteRepo.cs" />
+    <Compile Include="SMSManagement\IRepository\ISMS_ReportRepo.cs" />
+    <Compile Include="SMSManagement\Repository\SMSManagementRepo.cs" />
+    <Compile Include="Implementation\StudentTCRepositroy.cs" />
+    <Compile Include="Implementation\CountryRepository.cs" />
+    <Compile Include="Implementation\Exam_ReportCardRepository.cs" />
+    <Compile Include="Implementation\Exam_RemarkRepository.cs" />
+    <Compile Include="Implementation\Exam_AchievementRepository.cs" />
+    <Compile Include="Implementation\SchoolAdmissionCategoryRepo.cs" />
+    <Compile Include="Implementation\School_DocumentMasterRepo.cs" />
+    <Compile Include="Implementation\StateRepository.cs" />
+    <Compile Include="Implementation\Student_NSORepo.cs" />
+    <Compile Include="Implementation\Student_OptionalSubjectRepository.cs" />
+    <Compile Include="Implementation\StudentUpdationRepository.cs" />
+    <Compile Include="Implementation\ExamRepository.cs" />
+    <Compile Include="Implementation\LoginData.cs" />
+    <Compile Include="Implementation\PtmAttendanceRepository.cs" />
+    <Compile Include="Implementation\StudentAttendanceRepository.cs" />
+    <Compile Include="Implementation\StudentClassRepositroy.cs" />
+    <Compile Include="Implementation\StudentSectionRepository.cs" />
+    <Compile Include="Implementation\StudentSessionRepository.cs" />
+    <Compile Include="SMSManagement\IRepository\ISMSManagementRepo.cs" />
+    <Compile Include="Interface\IStudentTC.cs" />
+    <Compile Include="Interface\ISchoolAdmissionCategoryRepo.cs" />
+    <Compile Include="Interface\ISchool_DocumentMasterRepo.cs" />
+    <Compile Include="Interface\IAreaRepository.cs" />
+    <Compile Include="Interface\ICityRepository.cs" />
+    <Compile Include="Interface\ICountryRepository.cs" />
+    <Compile Include="Interface\IExam_ReportCard.cs" />
+    <Compile Include="Interface\IExam_RemarkRepository.cs" />
+    <Compile Include="Interface\IExam_AchievementRepository.cs" />
+    <Compile Include="Interface\IStateRepository.cs" />
+    <Compile Include="Interface\IStudent_NSORepo.cs" />
+    <Compile Include="Interface\IStudent_OptionalSubject.cs" />
+    <Compile Include="Interface\IStudentUpdation.cs" />
+    <Compile Include="Interface\IAttendanceRegister.cs" />
+    <Compile Include="Interface\IExam.cs" />
+    <Compile Include="Interface\ILoginData.cs" />
+    <Compile Include="Interface\IPtmAttendance.cs" />
+    <Compile Include="Interface\IStudentAttendance.cs" />
+    <Compile Include="Interface\IStudentClass.cs" />
+    <Compile Include="Interface\IStudentSection.cs" />
+    <Compile Include="Interface\IStudentSession.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMSManagement\Repository\SMSTempleteRepo.cs" />
+    <Compile Include="SMSManagement\Repository\SMS_ReportRepo.cs" />
+    <Compile Include="StaffRepository\IRepository\IStaff_AttendanceRegisterRepo.cs" />
+    <Compile Include="StaffRepository\IRepository\IStaff_AttendanceReportsRepo.cs" />
+    <Compile Include="StaffRepository\IRepository\IStaff_DocumentUploadRepo.cs" />
+    <Compile Include="StaffRepository\IRepository\IStaff_ReportsRepo.cs" />
+    <Compile Include="StaffRepository\IRepository\IStaff_StaffDetailMasterRepo.cs" />
+    <Compile Include="StaffRepository\Repository\Staff_AttendanceRegisterRepo.cs" />
+    <Compile Include="StaffRepository\Repository\Staff_AttendanceReportsRepo.cs" />
+    <Compile Include="StaffRepository\Repository\Staff_DocumentUploadRepo.cs" />
+    <Compile Include="StaffRepository\Repository\Staff_ReportsRepo.cs" />
+    <Compile Include="StaffRepository\Repository\Staff_StaffDetailMasterRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\IMyClassRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\IRouteStopRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\IStudentAdmissionRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\IStudentRegistrationRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\IStudent_CertificateRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\IStudent_IdentityCardRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\IStudent_ReportRepo.cs" />
+    <Compile Include="StudentRepository\Repository\MyClassRepo.cs" />
+    <Compile Include="StudentRepository\Repository\RouteStopRepo.cs" />
+    <Compile Include="StudentRepository\Repository\StudentAdmissionRepo.cs" />
+    <Compile Include="StudentRepository\Repository\StudentRegistrationRepo.cs" />
+    <Compile Include="StudentRepository\Repository\Student_CertificateRepo.cs" />
+    <Compile Include="StudentRepository\Repository\Student_IdentityCardRepo.cs" />
+    <Compile Include="StudentRepository\Repository\Student_ReportRepo.cs" />
+    <Compile Include="StudentRepository\IRepository\ISiblingAllotmentRepo.cs" />
+    <Compile Include="StudentRepository\Repository\SiblingAllotmentRepo.cs" />
+    <Compile Include="TimeTable Repo\IRepository\ITimeTable_AdjustmentRepo.cs" />
+    <Compile Include="TimeTable Repo\IRepository\ITimeTable_PeriodMatrixRepo.cs" />
+    <Compile Include="TimeTable Repo\IRepository\ITimeTable_PeriodTimingSetupRepo.cs" />
+    <Compile Include="TimeTable Repo\IRepository\ITimeTable_SetupRepo.cs" />
+    <Compile Include="TimeTable Repo\IRepository\ITimeTable_StaffWorkLoadSetupRepo.cs" />
+    <Compile Include="TimeTable Repo\IRepository\ITimeTable_SubjectMasterRepo.cs" />
+    <Compile Include="TimeTable Repo\Repository\TimeTable_AdjustmentRepo.cs" />
+    <Compile Include="TimeTable Repo\Repository\TimeTable_PeriodMatrixRepo.cs" />
+    <Compile Include="TimeTable Repo\Repository\TimeTable_PeriodTimingSetupRepo.cs" />
+    <Compile Include="TimeTable Repo\Repository\TimeTable_SetupRepo.cs" />
+    <Compile Include="TimeTable Repo\Repository\TimeTable_StaffWorkLoadSetupRepo.cs" />
+    <Compile Include="TimeTable Repo\Repository\TimeTable_SubjectMasterRepo.cs" />
+    <Compile Include="TransportRepo\IRepository\IAvailTransportRepo.cs" />
+    <Compile Include="TransportRepo\IRepository\ITransport_ReportRepo.cs" />
+    <Compile Include="TransportRepo\IRepository\ITransport_RouteMasterRepo.cs" />
+    <Compile Include="TransportRepo\IRepository\ITransport_StopSetupRepo.cs" />
+    <Compile Include="TransportRepo\IRepository\ITransport_VehicleSetupRepo.cs" />
+    <Compile Include="TransportRepo\Repository\AvailTransportRepo.cs" />
+    <Compile Include="TransportRepo\Repository\Transport_ReportRepo.cs" />
+    <Compile Include="TransportRepo\Repository\Transport_RouteMasterRepo.cs" />
+    <Compile Include="TransportRepo\Repository\Transport_StopSetupRepo.cs" />
+    <Compile Include="TransportRepo\Repository\Transport_VehicleSetupRepo.cs" />
+    <Compile Include="UserRepo\IRepository\IStudentPermissionRepo.cs" />
+    <Compile Include="UserRepo\IRepository\IUserCreationRepo.cs" />
+    <Compile Include="UserRepo\IRepository\IUserPermissionRepo.cs" />
+    <Compile Include="UserRepo\Repository\StudentPermissionRepo.cs" />
+    <Compile Include="UserRepo\Repository\UserCreationRepo.cs" />
+    <Compile Include="UserRepo\Repository\UserPermissionRepo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iSAS.Entities\iSAS.Entities.csproj">
+      <Project>{524fb45e-69fd-46c3-ab39-f8036a94aa59}</Project>
+      <Name>iSAS.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

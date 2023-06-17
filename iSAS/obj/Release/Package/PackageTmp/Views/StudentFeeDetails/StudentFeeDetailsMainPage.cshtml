@@ -1,0 +1,159 @@
+﻿@using ISas.Web.Models;
+@model  List<ISas.Entities.DashboardEntities.StudentFeeStatusModel>
+    @{
+        int paid = 0; int balance = 0; int due = 0;
+        if (Model != null && Model.Count > 0)
+        {
+            paid = Model.Sum(r => r.Paid);
+            balance = Model.Sum(r => r.Balance);
+            due = Model.Sum(r => r.Due);
+        }
+    }
+    <style>
+        #chartdiv {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+    <section class="content-header">
+        <h1>
+            Student Fee Details
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+                <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+                <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+            </li>
+            <li>Students</li>
+            <li class="active">Fee Details</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-body">
+                <div id="chartdiv"></div>
+            </div>
+        </div>
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Fee Installment Details</h5>
+                <h5 class="box-title pull-right"> <small> @Html.ActionLink("Download Fee Book ", "GetFeeDocument", "StudentFeeDetails", new { TransRefNo = "", Mode = "FEEBOOK", erpno = Session["UserID"].ToString() }, htmlAttributes: new { @class = "", title = "Download Fee Book" }) <i class="fa fa-download"></i> </small> </h5>
+            </div>
+            <div class="box-body">
+                @*@{Html.RenderAction("_ReceiptDetails", "StudentFeeDetails", new { erpno = Session["UserID"].ToString() });}*@
+                <table class="table table-bordered table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Due Date</th>
+                            <th>Duration</th>
+                            <th>Due</th>
+                            <th>Paid</th>
+                            <th>Balance</th>
+                            <th>Receipt No</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(r => Model[i].DueDate)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Duration)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Due)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Paid)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Balance)</td>
+                                <td>@Html.DisplayFor(r => Model[i].ReceiptNo)</td>
+                                <td>
+                                    @if (@Model[i].Status == "Paid")
+                                    {
+                                        <label class="label label-success">@Html.DisplayFor(r => Model[i].Status)</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="label label-warning">@Html.DisplayFor(r => Model[i].Status)</label>
+                                    }
+                                </td>
+                                <th>
+                                    @Html.ActionLink(" ", "GetFeeDocument", "StudentFeeDetails", new { TransRefNo = Model[i].Bill == "RECEIPT" ? Model[i].ReceiptNo : Model[i].InvoiceNo, Mode = Model[i].Bill, erpno = Session["UserID"].ToString(), MonthName = Model[i].Duration }, htmlAttributes: new { @class = "fa fa-download", title = "Download Receipt/Invoice..!" })
+
+                                    @if (@Model[i].Status != "Paid")
+                                    {
+                                        <i onclick="GetStudentFeeDetails('@Model[i].DueDate')" class="fa fa-eye" title="View Receipt/Invoice Details" style="cursor:pointer;color:#3c8dbc;padding-left:3%;"></i>
+                                        @Html.EncodedActionLink(" ", "BillingInfo", "StudentFeeDetails", new { ERPNo = Model[i].ERPNo, DueDate = Model[i].DueDate }, htmlAttributes: new { @class = "fa fa-credit-card", style = "padding-left:3%;", title = "Make Payment" })
+                                    }
+                                    else
+                                    {
+                                        <i style="color:red;cursor:not-allowed;padding-left:3%;" class="fa fa-eye-slash"></i>
+                                        <i style="color:red;cursor:not-allowed;padding-left:3%;" class="fa fa-credit-card"></i>
+                                    }
+                                </th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </section>
+
+
+    <script src="~/bower_components/newchart.js/amcharts.js"></script>
+    <script src="~/bower_components/newchart.js/export.min.js"></script>
+    <script src="~/bower_components/newchart.js/light.js"></script>
+    <script src="~/bower_components/newchart.js/pie.js"></script>
+    <script src="~/bower_components/newchart.js/serial.js"></script>
+    <link href="~/bower_components/newchart.css/export.css" rel="stylesheet" />
+
+    <script>
+    var chart = AmCharts.makeChart("chartdiv", {
+        "type": "pie",
+        "theme": "light",
+        "dataProvider": [{
+            "country": "Paid",
+            "value": '@paid'
+        }, {
+            "country": "Balance",
+            "value": '@balance'
+        }, {
+            "country": "Total Due",
+            "value": '@due'
+        }],
+        "valueField": "value",
+        "titleField": "country",
+        "outlineAlpha": 0.4,
+        "depth3D": 15,
+        "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+        "angle": 30,
+        "export": {
+            "enabled": true
+        }
+    });
+    </script>
+
+    <script>
+        function GetStudentFeeDetails(dueDate) {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../StudentFeeDetails/_FeeDetails",
+                data: { DueDate: dueDate },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (response) {
+                    //   $('#FeeDetailsMainDiv').html(response);
+                    OpenMessegeModal(response, 'Primary', 'lg', 'Receipt Details')
+                    //   return false;
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+            //        return false;
+        }
+    </script>

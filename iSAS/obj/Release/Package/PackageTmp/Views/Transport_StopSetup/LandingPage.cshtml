@@ -1,0 +1,94 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.TransportEntities.Transport_StopSetupModels>
+
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Stop List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Stop</th>
+                    <th>Pick-Up Charge</th>
+                    <th>Drop Charge</th>
+                    <th>Pick & Drop Charge</th>
+                    <th>Strength</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>@Html.DisplayFor(r => Model[i].StopName)</td>
+                            <td>@Html.DisplayFor(r => Model[i].PCharge)</td>
+                            <td>@Html.DisplayFor(r => Model[i].DCharge)</td>
+                            <td>@Html.DisplayFor(r => Model[i].PDCharge)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Strength)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteStopConfirm('@Model[i].StopID')" title="Delete Stop" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span style="cursor:not-allowed;" disabled="disabled" title="Delete Stop" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                @Html.EncodedActionLink(" ", "Updation", "Transport_StopSetup", new { RouteId = Model[i].RouteId, StopId = Model[i].StopID }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Stop" })
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+@*@Html.Hidden("hddnRedirectRoute")*@
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteStopConfirm(StopId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Stop?", MyYesFunction, MyNoFunction, StopId);
+    }
+
+    function MyYesFunction(StopId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Transport_StopSetup/Transport_StopSetup_Delete",
+            data: { StopId: StopId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                var routeID = $('#RouteId').val(); var routeName = $('#RouteName').val();
+                setTimeout(function () { window.location = "../Transport_StopSetup/New?RouteId=" + routeID + "&RouteName=" + routeName + ""; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

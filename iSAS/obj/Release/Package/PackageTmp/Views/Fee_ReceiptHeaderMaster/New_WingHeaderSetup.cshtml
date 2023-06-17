@@ -1,0 +1,129 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.FeesEntities.Fee_WingHeaderSetupModel>
+
+<section class="content-header">
+    <h1>Wing Header Setup</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li><a href="@Url.Action("LandingPage", "Fee_ReceiptHeaderMaster")">Receipt Header</a></li>
+        <li class="active">Wing Header Setup</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">Wing List</h5>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Wing Name</th>
+                        <th>Header1</th>
+                        <th>Header2</th>
+                        <th>Header3</th>
+                        <th>Header4</th>
+                        <th>Logo</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        int count = 1;
+                        for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(r => count)</td>
+                                <td>@Html.DisplayFor(r => Model[i].WingName)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Header1)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Header2)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Header3)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Header4)</td>
+                                <td>
+                                    <img style="width:100px;height:100px;" src="~/@Model[i].Logo" alt="Logo" />
+                                </td>
+                                <td class="text-center">
+                                    @if (Model[i].IsEditable)
+                                    {
+                                        <a href="#" onclick="getWingDetails('@Model[i].WingID')" class="fa fa-edit btnDefaultColor"></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" class="fa fa-edit btnDefaultColorFaded"></a>
+                                    }
+
+                                    @if (Model[i].IsDeleteable)
+                                    {
+                                        <a href="#" onclick="RemoveWingHeaderConfirmation('@Model[i].WingID', '@Model[i].Logo')" class="fa  fa-times btnDefaultColor"></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" class="fa  fa-times btnDefaultColorFaded"></a>
+                                    }
+                                </td>
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="wingHeaderUpdateMainDiv"></div>
+</section>
+
+<script>
+    function getWingDetails(wingId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_ReceiptHeaderMaster/_Update_WingHeaderSetup",
+            data: { WingId: wingId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#wingHeaderUpdateMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function RemoveWingHeaderConfirmation(wingId, logo) {
+        var params = [wingId, logo];
+        AsyncConfirmYesNo("Confirmation", "Are you sure to remove this wing header details?", RemoveWingHeader, MyNoFunction, params);
+    }
+    function RemoveWingHeader(params) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_ReceiptHeaderMaster/Fee_WingHeaderSetup_RemoveHeader",
+            data: { WingId: params[0], Logo: params[1]},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location.reload(); }, 3000);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

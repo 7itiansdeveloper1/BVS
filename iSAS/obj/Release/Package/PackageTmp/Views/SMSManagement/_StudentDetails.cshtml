@@ -1,0 +1,75 @@
+﻿@model ISas.Entities.SMSManagement.SMS_MainModel
+@{
+    int totalStudentResutlCount = 0;
+    if (Model != null && Model.StudentList != null && Model.StudentList.Count > 0)
+    {
+        totalStudentResutlCount = Model.StudentList.Count;
+    }
+}
+
+<table class="table table-responsive table-bordered table-condensed table-hover" id="tblStudentList">
+    <thead>
+        <tr>
+            <th>@Html.CheckBox("chkBoxSelectAllStudent", false, htmlAttributes: new { onchange = "chekBoxAllStudent()" })</th>
+            <th>UID</th>
+            <th>Adm No</th>
+            <th>Student Name</th>
+            <th>Class</th>
+            <th id="use_studentMobile" class="btn btn-info" title="Click here to copy all mobile nos..!" style="width:100%;">Mobile</th>
+            <th>Father</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.StudentList != null && Model.StudentList.Count > 0)
+        {
+            for (int i = 0; i < Model.StudentList.Count; i++)
+            {
+                <tr>
+                    <td class="unselectable">
+                        @Html.HiddenFor(r => Model.StudentList[i].ERP)
+                        @Html.HiddenFor(r => Model.StudentList[i].AdmNo)
+                        @Html.HiddenFor(r => Model.StudentList[i].Student)
+                        @Html.HiddenFor(r => Model.StudentList[i].SMSNo)
+
+                        @Html.CheckBoxFor(r => Model.StudentList[i].IsSelected, htmlAttributes: new { @class = "studentSelectchkBox", onchange = "getSelectedCount()" })
+                    </td>
+                    <td class="unselectable">
+                        @Html.DisplayFor(r => Model.StudentList[i].ERP)
+                    </td>
+                    <td class="unselectable">
+                        @Html.DisplayFor(r => Model.StudentList[i].AdmNo)
+                    </td>
+                    <td class="unselectable">
+                        @Html.DisplayFor(r => Model.StudentList[i].Student)
+                    </td>
+                    <td class="unselectable">
+                        @Html.DisplayFor(r => Model.StudentList[i].Class)
+                    </td>
+                    <td class="selectable">
+                        @Html.DisplayFor(r => Model.StudentList[i].SMSNo)
+                    </td>
+                    <td class="unselectable">
+                        @Html.DisplayFor(r => Model.StudentList[i].Father)
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#studentresultCount').html('@totalStudentResutlCount');
+    });
+
+    $("#use_studentMobile").click(function () {
+        var allstudentMobileNos = "";
+        $('#tblStudentList > tbody > tr').each(function () {
+            if ($(this).find('td').eq(5).html().trim() != "") {
+                allstudentMobileNos += $(this).find('td').eq(5).html().trim() + "\n";
+            }
+        });
+        copyTextToClipboard(allstudentMobileNos);
+        OpenMessegeAutoHideDiv('Mobile nos copied successfully..!', 'Info');
+    });
+</script>

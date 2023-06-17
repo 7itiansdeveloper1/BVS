@@ -1,0 +1,86 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Exam_Entities.Exam_QuestionMasterModels
+<section class="content-header">
+    <h1> Attend Assessment</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Online Assessment <a href="@Url.Action("Exam_QuestionPaperMaster", "Exam_QuestionPaper")" title="Question Paper"></a></li>
+        <li>Attend Questions</li>
+    </ol>
+</section>
+<section class="content">
+
+
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h5 class="box-title">Subject :- <strong class="text-primary">@Html.DisplayFor(r => Model.subjectName)</strong></h5>
+            <h5 class="box-title">Max Mark :- <strong class="text-primary">@Html.DisplayFor(r => Model.maxMark)</strong></h5>
+        </div>
+        <div id="addNewBookMainDiv">
+            @Html.Partial("_Exam_BrowseAssessment", Model)
+        </div>
+
+    </div>
+@*@{ Html.RenderAction("Exam_BrowseAssessment", "Exam_OnlineAssessment", new { qpId = Model.qpId, qNo = Model.qNo, subjectName = Model.subjectName, maxMark = Model.maxMark }); }*@
+</section>
+<script>
+
+    //function getQuestion(qpId1, qId1, qNo1, btnclick1, qNature1, ansText1) {
+
+    //    //alert($(ansText1).val());
+
+    //    $.ajax({
+    //        url: '../Exam_OnlineAssessment/_Exam_BrowseAssessment',
+    //        data: {
+    //            qpId: qpId1, qId: qId1, qNo: qNo1, btnclick: btnclick1, qNature: qNature1, ansText: ansText1
+    //        },
+    //        type: 'get',
+    //        success: (function (data) {
+    //            $('#addNewBookMainDiv').empty();
+    //            $('#addNewBookMainDiv').html(data);
+    //            //alert(data);
+    //        })
+    //    })
+    //};
+    function ConfirmToUpdateStatus(qid, i) {
+        //alert(qid);
+        $.ajax({
+            type: "POST",
+            url: "../Exam_OnlineAssessment/Exam_StudentResult_CRUD",
+            data: { qId:qid, ans:i },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                //OpenMessegeAutoHideDiv(result.Msg, result.Color);
+            },
+        });
+    }
+    function SubmitAssessment(qId,qNature) {
+
+        //alert('@Model.qNature');
+
+        if (qNature== 'DI') {
+        ans1 = $('#ansText').val();
+        $.ajax({
+            type: "POST",
+            url: "../Exam_OnlineAssessment/submit",
+            data: { qId: qId, ans: ans1 },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                //OpenMessegeAutoHideDiv(result.Msg, result.Color);
+            },
+            });
+        }
+        setTimeout(function () { OpenMessegeAutoHideDiv('Your Assessment is finished...! Please check your result', 'Success'), $('#hddnReloadTime').val()});
+        setTimeout(function () { window.location = "../Exam_OnlineAssessment/Exam_StudentOnlineAssessment/", 5000 });
+    }
+    
+</script>
+

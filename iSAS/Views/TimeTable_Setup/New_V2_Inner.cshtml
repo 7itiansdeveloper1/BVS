@@ -1,0 +1,67 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.TimeTable_Entities.TimeTable_SetupModels
+<script type="text/javascript" src="../bower_components/newCustomJS/jquery.easyui.min.js"></script>
+@{
+    int colspanCount = @Model.DaysList.Count + 2;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12 right">
+            <table id="mytable" class="table table-responsive table-bordered table-condensed" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="blank" style="height:50px;background-color:#cea5ef;color:white;text-align:center;vertical-align:middle;">PERIOD/DAY</th>
+
+
+                        @for (int i = 0; i < Model.PeriodDetailsList.Count; i++)
+                        {
+                            <th class="title" style="height:50px;background-color:#cea5ef;color:white;text-align:center;vertical-align:middle;">
+
+                                @Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodName) <small>(@Html.DisplayFor(r => Model.PeriodDetailsList[i].PeriodTime)) </small>
+
+
+                            </th>
+                        }
+
+
+                    </tr>
+                </thead>
+
+
+
+
+
+                @for (int i = 0; i < Model.DaysList.Count; i++)
+                {
+                    @Html.HiddenFor(r => Model.DaysList[i])
+                    <tr>
+                        <td style="width:100px;height:60px;text-align: center;vertical-align: middle;background-color:#cea5ef;color:white;" class="time">  @Html.DisplayFor(r => Model.DaysList[i]) </td>
+                        @for (int j = 0; j < Model.PeriodDetailsList.Count; j++)
+                        {
+                            <td style="max-width:100px;min-width:100px;" valueofI="@j" valueofJ="@i" class="drop text-center">
+                                @Html.HiddenFor(r => Model.PeriodDetailsList[j].PeriodInfoList[i].SubjectId)
+                                @Html.HiddenFor(r => Model.PeriodDetailsList[j].PeriodInfoList[i].TeacherId)
+
+                                <span id="SubjectNamespan_@j@i"> @Html.DisplayFor(r => Model.PeriodDetailsList[j].PeriodInfoList[i].SubjectName)</span>
+
+
+
+                                @if (string.IsNullOrEmpty(Model.PeriodDetailsList[j].PeriodInfoList[i].SubjectId))
+                                {
+                                    <label id="btnRemSub_@j@i" class="text-danger pull-right" style="cursor:pointer;display:none;" title="Remove Subject" onclick="RemoveSubject_v1('@j', '@i')"> <i class="fa fa-remove "></i> </label>
+                                    <label id="btnAddSub_@j@i" class="text-success pull-right-container" style="cursor:pointer;" title="Add Subject" onclick="AddSubject_v1('@j', '@i')"> <i class="fa fa-plus "></i> </label><br />
+                                }
+                                else
+                                {
+                                    <label id="btnRemSub_@j@i" class="text-danger pull-right" style="cursor:pointer;" title="Remove Subject" onclick="RemoveSubject_v1('@j', '@i')"> <i class="fa fa-remove "></i> </label><br />
+
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

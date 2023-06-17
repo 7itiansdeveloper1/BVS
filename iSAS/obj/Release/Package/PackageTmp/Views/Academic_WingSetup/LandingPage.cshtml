@@ -1,0 +1,100 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.Academic.Academic_WingSetupModels>
+@{
+    string SchoolName = ""; int SchoolId = 0;
+    if (Model != null && Model.Count > 0)
+    {
+        SchoolName = Model[0].SchoolName;
+        SchoolId = Model[0].SchoolId;
+    }
+}
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Wing List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Wing Name</th>
+                    <th>Print Order</th>
+                    <th>Is Default</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].WingName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].PrintOrder)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Default)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteWingConfirm('@Model[i].WingId')" title="Delete Wing" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span title="Delete Wing" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                @Html.EncodedActionLink(" ", "Updation", "Academic_WingSetup", new { SchoolName = Model[i].SchoolName, SchoolId = Model[i].SchoolId, WingId = Model[i].WingId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Wing", style = "margin-left:4%;" })
+
+                                @Html.EncodedActionLink(" ", "New", "Academic_ClassSetup", new { WingName = Model[i].WingName, WingId = Model[i].WingId, SchoolId = Model[i].SchoolId, SchoolName = Model[i].SchoolName }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Class Setup", style = "margin-left:4%;" })
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteWingConfirm(wingId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Wing?", MyYesFunction, MyNoFunction, wingId);
+    }
+
+    function MyYesFunction(wingId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_WingSetup/Academic_WingSetup_Delete",
+            data: { WingId: wingId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location = "../Academic_WingSetup/New?SchoolName=@SchoolName&SchoolId=@SchoolId"; }, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

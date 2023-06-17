@@ -1,0 +1,49 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.FeesEntities.StudentDetailsModel>
+@{
+    ViewBag.Title = "Student Details";
+}
+
+<div class="">
+    <table class="table table-hover table-bordered table-responsive table-condensed" id="tblStudentDetails">
+        <thead>
+            <tr>
+                <th>S. No</th>
+                <th>Adm No</th>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Father</th>
+                <th>Mother</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(r => Model[i].SNo)</td>
+                        <td>@Html.DisplayFor(r => Model[i].AdmNo)</td>
+                        <td>@Html.DisplayFor(r => Model[i].StudentName)</td>
+                        <td>@Html.DisplayFor(r => Model[i].ClassName)</td>
+                        <td>@Html.DisplayFor(r => Model[i].FatherName)</td>
+                        <td>@Html.DisplayFor(r => Model[i].MotherName)</td>
+                        <td>
+                            <a href="#" onclick="getReceiptDetails_ByERPNo(@Model[i].ERPNo)" title="Receipts/Invoice" class="fa fa-rupee btnDefaultColor"></a>
+
+                            <a href="#" onclick="getLedgerDetails_ByERPNo(@Model[i].ERPNo)" title="Student Ledger" class="fa fa-book btnDefaultColor"></a>
+
+                            @Html.EncodedActionLink(" ", "NewFeeReceipt", "Fee_Transaction", new { erpNo = Model[i].ERPNo }, htmlAttributes: new { @class = "fa fa-plus-square btnDefaultColor", title = "Go to Receipt" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#tblStudentDetails').DataTable();
+    });
+</script>

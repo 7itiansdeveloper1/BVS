@@ -1,0 +1,83 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.DashboardEntities.Common_NECN_LandingModel>
+@{
+    var controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+}
+
+<section class="content-header">
+    <h1>
+        @controllerName List
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">School</a></li>
+        <li class="active">@controllerName</li>
+    </ol>
+</section>
+
+<section class="content">
+    <!-- /.box -->
+    <div class="box">
+        <!-- /.box-header -->
+        <div class="box-header with-border">
+            <span class="pull-right box-title">
+                @Html.ActionLink("ADD NEW", "New", controllerName, htmlAttributes: new { @class = "btn btn-block btn-primary" })
+            </span>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Headline</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Disable</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].UploadTitle)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].UploadStartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].UploadEndDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].IsExpiry)
+                            </td>
+                            <td class="text-center">
+                                @Html.EncodedActionLink(" ", "Updation", controllerName, new { UploadId = Model[i].UploadID }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</section>
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+</script>
+
+
+
+
+
+
+
+
+

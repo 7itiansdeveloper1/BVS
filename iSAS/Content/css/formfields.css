@@ -1,0 +1,69 @@
+.checkbox label, .radio label  {
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	padding-left: 25px;
+	margin-right: 15px;
+	font-size: 13px;
+}
+
+.radio{position:relative;}
+.radio input[type="radio"]{display:none;}
+.radio label{padding:0 5px 0 25px; position:relative; margin:0 15px 0 0; line-height: normal;}
+.radio label:before{position:absolute; left:0; top:1px; width:15px; height:15px; line-height:15px; text-align:center; border:1px solid #ccc; background:#fff; content:''; border-radius:50px;}
+
+.radio input[type="radio"]:checked + label:before{content:''; padding:0; background:url(../images/chk_r.png) no-repeat 2px 2px;}
+
+.checkbox{position:relative;}
+.checkbox input[type="checkbox"]{display:none;}
+.checkbox label{padding:0 5px 0 25px; position:relative; margin:0 15px 0 0; line-height:18px; font-weight:normal;}
+.checkbox label:before{position:absolute; left:0; top:1px; width:18px; height:18px; line-height:18px; text-align:center; border:1px solid #ccc; background:#fff; padding:1px; content:'';}
+
+.checkbox input[type="checkbox"]:checked + label:before{content:''; padding:1px; background:url(../images/chk.png) no-repeat 1px 1px;}
+
+.file{margin:20px 0; position:relative;}
+.file input[type="file"]{display:none;}
+.file label{padding:5px 7px; position:relative; margin-left:0; border:1px solid #ccc;}
+
+.file1{position:relative;}
+.file1 input[type="file"]{border:1px solid #ccc; padding:5px;}
+.file1 label{position:absolute; left:5px; top:5px; background:#333; color:#fff; padding:0; font-size:12px; height:24px; width:77px; line-height:24px; text-align:center;}
+
+.file3{position:relative; margin:20px 0;}
+.file3 .fileUpload{cursor:pointer; opacity:0; position:absolute; right:5px; top:5px; width:77px; height:auto; z-index:10;}
+.file3 label{border:1px solid #ccc; padding:7px 90px 7px 7px; width:auto; display:block; position:relative; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.file3 label:after{position:absolute; right:5px; top:5px; width:auto; height:auto; line-height:15px; font-size:13px; text-align:center; border:0; background:#333333; color:#fff; padding:4px 7px; content:'Browse File';}
+
+.select{margin:0;}
+.select select{ 
+    line-height:normal;
+	-webkit-appearance:none; 
+	-moz-appearance:none; 
+	-ms-appearance: none;
+	appearance:none;
+	padding:5px; height:34px;
+    border:1px solid #ccc; 
+    background:#fff url("../images/arw.png") center right no-repeat;
+    border-radius: 4px !important;
+    -moz-border-radius: 4px !important;
+    -ms-border-radius: 4px !important;
+    -webkit-border-radius: 4px !important;
+    -o-border-radius: 4px !important;
+    width:100%; /* box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset; -moz-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset; -webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset; */}
+.select select.input-sm{
+    height: 26px;
+    line-height: 26px;
+    padding: 0 5px
+}
+.login-wrapper .select select{ 
+    line-height:normal;
+	-webkit-appearance:none; 
+	-moz-appearance:none; 
+	-ms-appearance: none;
+	appearance:none;
+	padding:5px; height:34px; 
+    border: 0;
+    border-bottom:1px dashed #b2bfc7; 
+    background:#f5f5f5 url("../images/arw.png") center right no-repeat; 
+    width:100%; /* box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset; -moz-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset; -webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset; */}
+.select select > option{background:#fff; padding:0; border-bottom:1px solid #ccc; padding:5px;}

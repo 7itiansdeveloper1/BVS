@@ -1,0 +1,371 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Exam_Entities.Exam_QuestionPaperModels
+@{
+    ViewBag.Title = "Question Paper Master";
+}
+<style>
+    .image-upload > input {
+        display: none;
+    }
+
+    .image-upload span {
+        width: 80px;
+        cursor: pointer;
+    }
+</style>
+<section class="content-header">
+    <h1>Question Paper Master</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Exam Module</li>
+        <li class="active">Question Paper</li>
+    </ol>
+</section>
+
+<section class="content">
+
+    <div class="box box-primary">
+        <!--/.box-header -->
+        <div class="box-header with-border">
+            <div class="box-title">
+                <h5 class="box-title">Available Question Paper List</h5>
+            </div>
+        </div>
+        <div class="box-body pad table-responsive">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Assessment</th>
+                        <th>Max Mark</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.availablePaperList != null && Model.availablePaperList.Count > 0)
+                    {
+                        int count = 1;
+                        for (int i = 0; i < Model.availablePaperList.Count(); i++)
+                        {
+                            <tr class="editable" id="editable_@i">
+                                <td>
+                                    @Html.DisplayFor(r => count)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(r => Model.availablePaperList[i].ClassName)
+                                    @Html.HiddenFor(r => Model.availablePaperList[i].ClassId, htmlAttributes: new { })
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(r => Model.availablePaperList[i].SubjectName)
+                                    @Html.HiddenFor(r => Model.availablePaperList[i].subjectId, htmlAttributes: new { })
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(r => Model.availablePaperList[i].AssessmentName)
+                                    @Html.HiddenFor(r => Model.availablePaperList[i].AssessmentId, htmlAttributes: new { })
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(r => Model.availablePaperList[i].MM)
+                                    @Html.HiddenFor(r => Model.availablePaperList[i].MM)
+                                </td>
+
+                                @*<td class="text-center">@Html.EncodedActionLink(" ", "UpdateTempleteSMS", "SMSTemplete", new {  }, htmlAttributes: new { @class = "fa fa-plus btnDefaultColor", title = "Create Paper" })</td>*@
+                                <td>
+
+                                    @if (Model.availablePaperList[i].isQPCreated)
+                                    {
+                                        <span href="#" title="Create Paper" class="fa fa-plus-square btnDefaultColorFaded"></span>
+
+                                    }
+                                    else
+                                    {
+                                        <a href="#" onclick="CreatePaperConfirm_Single(@i);" title="Create Paper" class="fa fa-plus-square btnDefaultColor"></a>
+                                    }
+                                </td>
+                            </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    @Html.Hidden("currenthddnQId", "")
+
+
+    <div class="box box-success">
+        <!--/.box-header -->
+        <div class="box-header with-border">
+            <div class="box-title">
+                <h5 class="box-title">Created Question Paper List</h5>
+            </div>
+        </div>
+        <div class="box-body pad table-responsive">
+            <table id="tblPaperList" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Assessment</th>
+                        <th>Max Mark</th>
+                        <th>Created By</th>
+                        <th>Public to students</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.qPaperList != null && Model.qPaperList.Count > 0)
+                    {
+                        int count = 1;
+                        for (int i = 0; i < Model.qPaperList.Count(); i++)
+                        {
+                    <tr class="editable" id="">
+                        <td class="qpIdValue">
+                            @Html.DisplayFor(r => count)
+                            @Html.HiddenFor(r => Model.qPaperList[i].qpId)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(r => Model.qPaperList[i].ClassName)
+                            @Html.HiddenFor(r => Model.qPaperList[i].classId, htmlAttributes: new { })
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(r => Model.qPaperList[i].SubjectName)
+                            @Html.HiddenFor(r => Model.qPaperList[i].SubjectId, htmlAttributes: new { })
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(r => Model.qPaperList[i].AssessmentName)
+                            @Html.HiddenFor(r => Model.qPaperList[i].assessmentId, htmlAttributes: new { })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(r => Model.qPaperList[i].MaxMark)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(r => Model.qPaperList[i].createdBy)
+                        </td>
+                        <td class="text-center">
+                            @if (Model.qPaperList[i].isActive)
+                            {
+                                <label class="switch">
+                                    <input id="Active_@i" type="checkbox" checked="checked" onchange="ConfirmToUpdateStatus(@i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="switch">
+                                    <input id="Active_@i" type="checkbox" onchange="ConfirmToUpdateStatus(@i)">
+                                    <span class="slider round"></span>
+                                </label>
+                            }
+                        </td>
+                        @*Set Question Paper*@
+                        <td class="text-center">
+             @Html.EncodedActionLink(" ", "New", "Exam_QuestionMaster", new {
+        className = Model.qPaperList[i].ClassName,
+        subjectName = Model.qPaperList[i].SubjectName,
+        assessmentName = Model.qPaperList[i].AssessmentName,
+        maxMark = Model.qPaperList[i].MaxMark,
+        qpId = Model.qPaperList[i].qpId}, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Set Questions" })
+         </td>
+
+                        @*Upload Question Paper*@
+                        @*<td>
+
+                            @if (!string.IsNullOrEmpty(Model.qPaperList[i].docPath))
+                            {
+                                <a title="Click here to download Uploaded  Pdf" class="btnDefaultColor" href="~/@Model.qPaperList[i].docPath" download="@Model.qPaperList[i].docPath"><i class="fa fa-file-pdf-o"></i></a>
+                                <a href="#" onclick="DeleteQuestionPaperConfirm('@Model.qPaperList[i].qpId')" title="Delete Question Paper" class="fa fa-trash btnDefaultColor"></a>
+
+                                @Html.EncodedActionLink(" ", "Answersheets", "Exam_QuestionPaper", new {
+                           qpId= @Model.qPaperList[i].qpId,
+                           className = @Model.qPaperList[i].ClassName,
+                           subjectName= @Model.qPaperList[i].SubjectName,
+                           assessmentName= @Model.qPaperList[i].AssessmentName,
+
+                       }, htmlAttributes: new { @class = "fa fa-newspaper-o btnDefaultColor", title = "Go to Answer sheet" })
+                            }
+                            else
+                            {
+                                <div class="image-upload">
+                                    <label for="file-input_@i">
+                                        <span class="fa fa-upload btnDefaultColor" title="Upload Question Paper"></span>
+                                    </label>
+                                    <input id="file-input_@i" type="file" class="upload" onclick="$('#currenthddnQId').val('@Model.qPaperList[i].qpId');" accept="image/png, image/jpeg ,application/pdf" />
+                                </div>
+                            }
+
+
+
+
+
+                        </td>*@
+                    </tr>
+                            count++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+</section>
+<script>
+    $(function () {
+        $('#example1').DataTable();
+        $('#hddnRowLenght').val('50');
+    });
+
+
+
+    function DeleteQuestionPaperConfirm(qpId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete uploaded question paper?", MyYesFunction, MyNoFunction, qpId);
+    };
+
+    function MyYesFunction(qpId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Exam_QuestionPaper/DeleteQuestionPaper",
+            data: { qpId: qpId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                setTimeout(function () { window.location.reload();}, $('#hddnReloadTime').val());
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function CreatePaperConfirm_Single(i) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to create paper ?", YES_CreatePaperConfirm_Single, MyNoFunction, i);
+    }
+
+    function YES_CreatePaperConfirm_Single(i) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Exam_QuestionPaper/Exam_QuestionPaperMaster_CRUD",
+            data: {
+                qpId: 0,
+                classId: $('#availablePaperList_' + i + '__ClassId').val(),
+                subjectId: $('#availablePaperList_' + i + '__subjectId').val(),
+                assessmentId: $('#availablePaperList_' + i + '__AssessmentId').val(),
+                maxMark: $('#availablePaperList_' + i + '__MM').val(),
+                isActive: "False"
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                window.location.reload();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+    function ConfirmToUpdateStatus(i) {
+        var activeStatus = false;
+        var qpId1 = false;
+        if ($('#Active_' + i).is(':checked')) {
+            activeStatus = true;
+        }
+        //qpId1: $('#availablePaperList_' + i + '__qpId').val();
+        //alert(qpId1);
+        $.ajax({
+            type: "POST",
+            url: "../Exam_QuestionPaper/Exam_QuestionPaperMaster_CRUD",
+            data: {
+
+                qpId: $('#qPaperList_' + i + '__qpId').val(),
+                isActive: activeStatus,
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+            },
+        });
+    }
+
+    $('.upload').on('change', function (e) {
+         if (this.files && this.files[0]) {
+             var reader = new FileReader();
+             reader.readAsDataURL(this.files[0]);
+         }
+         var files = e.target.files;
+         if (files.length > 0 && this.files[0].size < 4194304) {
+
+             if (window.FormData !== undefined) {
+
+                 var data = new FormData();
+                 for (var x = 0; x < files.length; x++) {
+                     data.append("id" + x, files[x]);
+                 }
+                 //alert($('#currenthddnQId').val());
+                 data.append('qpId', $('#currenthddnQId').val());
+                 $.ajax({
+                     type: "POST",
+                     beforeSend: function () {
+                         spinnerShow();
+                     },
+                     url: '@Url.Action("UploadQuestionPaper", "Exam_QuestionPaper")',
+                     dataType: 'json',
+                     contentType: false,
+                     processData: false,
+                     data: data,
+                     success: function (result) {
+                         OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                         window.location.reload();
+                     },
+                     error: function () {
+                         OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                     },
+                     complete: function () {
+                         spinnerHide();
+                     }
+                 });
+             } else {
+
+                 OpenMessegeAutoHideDiv("This browser does not support HTML5 file uploads!", 'Warning');
+             }
+         }
+         else {
+             OpenMessegeAutoHideDiv("Invalid file or file is to big to upload (Max 4 MB)...!", 'Danger');
+         }
+
+     });
+
+</script>

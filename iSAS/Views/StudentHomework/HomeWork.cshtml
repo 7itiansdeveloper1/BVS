@@ -1,0 +1,149 @@
+﻿@model ISas.Entities.DashboardEntities.StudentHomeworkModels
+@{ 
+    List<SelectListItem> statusList = new List<SelectListItem>();
+    statusList.Add(new SelectListItem { Text = "--All--", Value = "ALL", Selected = true });
+    statusList.Add(new SelectListItem { Text = "Not Submitted", Value = "NS"});
+    statusList.Add(new SelectListItem { Text = "Submitted", Value = "S" });
+    List<SelectListItem> hwcategoryList = new List<SelectListItem>();
+    hwcategoryList.Add(new SelectListItem { Text = "ACTIVITY", Value = "AC", Selected = true });
+
+}
+<section class="content-header">
+    <h1>
+        My Activity 
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li class="active">My Activity Portfolio</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-primary">
+        @*<div class="box box-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">Category</label>
+                        <div class="select">
+                            @Html.DropDownList("hwCategoryId", hwcategoryList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        
+        
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.fromDate)</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(m => m.fromDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                            @Html.ValidationMessageFor(r => Model.fromDate, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.toDate)</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            @Html.TextBoxFor(m => m.toDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                            @Html.ValidationMessageFor(r => Model.toDate, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.selectedSubjectId)</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.selectedSubjectId, Model.subjectList,"--All--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.selectedSubjectId, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.selectedStatus)</label>
+                        <div class="select">
+                            @Html.DropDownListFor(m => m.selectedStatus, statusList, htmlAttributes: new { @class = "form-control select2",onchange= "getHomeworkList()", style = "width:100%;" })
+                            @Html.ValidationMessageFor(r => Model.selectedStatus, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="col-xs-12 col-sm-6 col-md-1">
+                    <div class="form-group">
+                        <br />
+                        <div class="select">
+                            <h5>
+                                <button type="button" class="btn btn-success" onclick="getHomeworkList()">   <i class="fa fa-search btnDefaultColor"></i> </button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+            
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div style="width:100%;overflow-y:auto;">
+                        <div id="homeWorkMainDiv">
+                            @{ Html.RenderAction("_GetHomeWorkList", "StudentHomework", new { fromDate = Model.fromDate,toDate=Model.toDate}); }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-footer">
+
+        </div>
+
+    </div>
+</section>
+<script src="~/bower_components/validations/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    
+    function getHomeworkList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../StudentHomework/_GetHomeWorkList",
+            data: {
+                fromDate: $('#fromDate').val(), toDate: $('#toDate').val(), subjectid: $('#selectedSubjectId').val(), status: $('#selectedStatus').val(), hwcategory: $('#hwCategoryId').val(),
+                
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#homeWorkMainDiv').empty();
+                $('#homeWorkMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

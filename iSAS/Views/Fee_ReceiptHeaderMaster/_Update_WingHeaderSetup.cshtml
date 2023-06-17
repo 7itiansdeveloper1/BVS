@@ -1,0 +1,147 @@
+﻿@model ISas.Entities.FeesEntities.Fee_WingHeaderSetupModel
+@using (Html.BeginForm("Fee_WingHeaderSetup_CRUD", "Fee_ReceiptHeaderMaster", FormMethod.Post, htmlAttributes: new { }))
+{
+    @Html.HiddenFor(r => Model.WingID)
+    @Html.HiddenFor(r => Model.Logo)
+
+    <div class="box box-warning">
+        <div class="box-header ui-sortable-handle" style="cursor: move;">
+            <i class="fa fa-edit"></i>
+            <h3 class="box-title">Update Wing Details For "@Html.DisplayFor(r => Model.WingName)"</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.Header1)<i class="mandateLbl">*</i></label>
+                                <div class="select">
+                                    @Html.TextBoxFor(m => m.Header1, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.Header1, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.Header2)</label>
+                                <div class="select">
+                                    @Html.TextBoxFor(m => m.Header2, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.Header2, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.Header3)</label>
+                                <div class="select">
+                                    @Html.TextBoxFor(m => m.Header3, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.Header3, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label for="">@Html.LabelFor(r => Model.Header4)</label>
+                                <div class="select">
+                                    @Html.TextBoxFor(m => m.Header4, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(r => Model.Header4, null, htmlAttributes: new { style = "color:red;" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="">@Html.LabelFor(r => Model.Logo)</label>
+                        <div class="select">
+                            <img style="border:1px solid black;" id="imgLogo" src="~/@Model.Logo" width="120" height="115" />
+                            <input style="display:none;" name="UploadFile" id="UploadFile" type="file" class="upload" />
+                            @Html.ValidationMessageFor(r => Model.Logo, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-warning" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">UPDATE</button>
+            <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+    $('#imgLogo').click(function () { $('#UploadFile').trigger('click'); });
+    var data = new FormData();
+    $('.upload').on('change', function (e) {
+        var currentImageID = "imgLogo";
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#' + currentImageID)
+                    .attr('src', e.target.result)
+                    .width(120)
+                    .height(115);
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+
+        var files = e.target.files;
+        if (files.length > 0) {
+            data = new FormData();
+            if (window.FormData !== undefined) {
+                for (var x = 0; x < files.length; x++) {
+                    data.append("id" + x, files[x]);
+                }
+            } else {
+                OpenMessegeAutoHideDiv("This browser doesn't support HTML5 file uploads!", 'Info');
+            }
+        }
+    });
+</script>
+
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+
+        $.each($form.serializeArray(), function (key, input) {
+            if (data.has(input.name)) {
+                data.set(input.name, input.value);
+            } else {
+                data.append(input.name, input.value);
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: data,
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, response.Color);
+                    setTimeout(function () { window.location.reload(); }, 3000);
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>
+

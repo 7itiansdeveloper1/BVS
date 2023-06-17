@@ -1,0 +1,41 @@
+﻿@model List<ISas.Entities.FeesEntities.StudentDetailsModel>
+
+<div class="">
+    <table class="table table-hover table-bordered table-responsive table-condensed" id="tblStudentDetails">
+        <thead>
+            <tr>
+                <th>S. No</th>
+                <th>Adm No</th>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Father</th>
+                <th>Mother</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(r => Model[i].SNo)</td>
+                        <td>@Html.DisplayFor(r => Model[i].AdmNo)</td>
+                        <td>
+                            <a onclick="addSiblingTemp('@Model[i].ERPNo', '@Model[i].StudentName', '@ViewBag.SelectedRow')" style="cursor:pointer;" title="Add as sibling..!">
+                                <i><strong>@Html.DisplayFor(r => Model[i].StudentName)</strong></i>
+                            </a>
+                        </td>
+                        <td>@Html.DisplayFor(r => Model[i].ClassName)</td>
+                        <td>@Html.DisplayFor(r => Model[i].FatherName)</td>
+                        <td>@Html.DisplayFor(r => Model[i].MotherName)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#tblStudentDetails').DataTable();
+    });
+</script>

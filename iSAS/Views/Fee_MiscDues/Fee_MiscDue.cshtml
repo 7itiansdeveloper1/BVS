@@ -1,0 +1,35 @@
+﻿
+<section class="content-header">
+    <h1>
+        Apply Snacks
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">Fee</a></li>
+        <li class="active">Apply Snacks</li>
+    </ol>
+</section>
+<section class="content">
+    
+            @{ Html.RenderAction("Fee_MiscDue_StudentWise", new { erpNo = @ViewBag.erpNo }); }
+        
+    @*<div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#tab1" data-toggle="tab">Class Wise</a></li>
+                <li><a href="#tab2" data-toggle="tab">Student Wise</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                        @{ Html.RenderAction("Fee_MiscDue_ClassWise", new { erpNo = @ViewBag.erpNo } ); }
+                    </div>
+                <div class="tab-pane active" id="tab2">
+                    @{ Html.RenderAction("Fee_MiscDue_StudentWise", new { erpNo = @ViewBag.erpNo }); }
+                </div>
+            </div>
+        </div>*@
+</section>

@@ -1,0 +1,105 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.FeesEntities.ReceiptDetailModel>
+
+<div style="overflow-y:auto;">
+    <table id="example1" class="table table-responsive table-bordered table-condensed display text-nowrap" style="width:100%;">
+        <thead>
+            <tr>
+                <th>S. No</th>
+                <th>Rec. No</th>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Adm No</th>
+                <th>Class</th>
+                <th>Mode</th>
+                <th>Amt.</th>
+                <th>Ref. No</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                int count = 1;
+                for (int i = 0; i < Model.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(r => Model[i].ERPNo)
+                            @Html.DisplayFor(r => count)
+                        </td>
+                        <td>@Html.DisplayFor(r => Model[i].ReceiptNo)</td>
+                        <td>@Html.DisplayFor(r => Model[i].Date)</td>
+                        <td>@Html.DisplayFor(r => Model[i].StudentName)</td>
+                        <td>@Html.DisplayFor(r => Model[i].AdmNo)</td>
+                        <td>@Html.DisplayFor(r => Model[i].ClassName)</td>
+                        <td>@Html.DisplayFor(r => Model[i].Mode)</td>
+                        <td>@Html.DisplayFor(r => Model[i].Amount)</td>
+                        <td>@Html.DisplayFor(r => Model[i].TransReferenceNo)</td>
+                        <td>@Html.DisplayFor(r => Model[i].Status)</td>
+
+                        <td>
+                            @if (Model[i].IsEditable)
+                            {
+                                <a href="#" onclick="OpenUpdateReceiptDialog('@Model[i].FeeType', '@Model[i].ERPNo', '@Model[i].ReceiptNo', '@Model[i].StudentName')" title="Update Receipt" class="fa fa-edit btnDefaultColor"></a>
+                            }
+
+
+                            @if (Model[i].IsCancel)
+                            {
+                                <a href="#" onclick="CancelReceiptConfirm('@Model[i].ReceiptNo', '@Model[i].ERPNo')" title="Cancel Receipt" class="fa fa-remove btnDefaultColor"></a>
+                            }
+                            else
+                            {
+                                <a href="#" title="Cancel Receipt" class="fa fa-remove btnDefaultColorFaded"></a>
+                            }
+
+
+                            @if (Model[i].IsDishon)
+                            {
+                                <a href="#" onclick="GetDishonurReceiptDetails('@Model[i].ReceiptNo', '@Model[i].TransReferenceNo', '@Model[i].ERPNo', '@Model[i].StudentName')" title="Cheque Dishonour" class="fa fa-money btnDefaultColor"></a>
+                            }
+                            else
+                            {
+                                <a href="#" disabled="disabled" title="Cheque Dishonour" class="fa fa-money btnDefaultColorFaded"></a>
+                            }
+
+                            @*<a href="#" onclick="PrintReceipt_ByReceiptNo('@Model[i].ReceiptNo', '@Model[i].ERPNo')" title="Print Receipt" class="fa fa-print btnDefaultColor"></a>*@
+                            @Html.EncodedActionLink(" ", "GetFeeDocument_View_HtmlReport", "StudentFeeDetails", new { TransRefNo = Model[i].ReceiptNo, Mode = "RECEIPT", erpno = Model[i].ERPNo, PrintOnly = "YES" }, htmlAttributes: new { @class = "fa fa-print btnDefaultColor", target = "_blank" })
+
+                            @Html.EncodedActionLink(" ", "GetFeeDocument_View_HtmlReport", "StudentFeeDetails", new { TransRefNo = Model[i].ReceiptNo, Mode = "RECEIPT", erpno = Model[i].ERPNo }, htmlAttributes: new { @class = "fa fa-eye btnDefaultColor", target = "_blank" })
+                        </td>
+                    </tr>
+                    count++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function OpenUpdateReceiptDialog(FeeType, ERPNo, RecNo, studentName) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_ReceiptCancellation/_UpdateFeeReceipt",
+            data: { FeeType: FeeType, ERPNo: ERPNo, RecNo: RecNo  },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenModalWithSave(result, 'Change Receipt Defails For :- ' + studentName + ', Receipt No (' + RecNo + ")");
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,41 @@
+﻿@using ISas.Web.Models;
+@model ISas.Entities.Exam_Entities.Exam_QuestionMasterModels
+<section class="content-header">
+    <h1> Attend Assessment</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Online Assessment <a href="@Url.Action("Exam_QuestionPaperMaster", "Exam_QuestionPaper")" title="Question Paper"></a></li>
+        <li>Attend Questions</li>
+    </ol>
+</section>
+<section class="content">
+
+    <div id="divAttendanceList">
+        @Html.Partial("Exam_BrowseAssessment", Model)
+    </div>
+    @*@{ Html.RenderAction("Exam_BrowseAssessment", "Exam_OnlineAssessment", new { qpId = Model.qpId, qNo = Model.qNo, subjectName = Model.subjectName, maxMark = Model.maxMark }); }*@
+</section>
+<script>
+
+    function getQuestion(qpId, qNo, subjectName, maxMark) {
+        $.ajax({
+            url: '../Exam_OnlineAssessment/Exam_BrowseAssessment',
+            data: {
+
+                qpId = qpId, qNo=qNo, subjectName=subjectName, maxMark= maxMark
+            },
+            type: 'get',
+            success: (function (data) {
+                $('#divAttendanceList').empty();
+                $('#divAttendanceList').html(data);
+                //alert(data);
+            })
+    })
+    };
+
+</script>
+

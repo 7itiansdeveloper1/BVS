@@ -1,0 +1,60 @@
+﻿@model ISas.Entities.Student_Entities.SiblingAllotmentModels
+
+<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>S. No</th>
+            <th>Admission No</th>
+            <th>Roll No</th>
+            <th>Student</th>
+            <th>Sibling</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.StudentDetailList != null)
+        {
+            int count = 1;
+            for (int i = 0; i < Model.StudentDetailList.Count(); i++)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(r => count)</td>
+                    <td>
+                        @Html.DisplayFor(r => Model.StudentDetailList[i].AdmNo)
+                    </td>
+                    <td>@Html.DisplayFor(r => Model.StudentDetailList[i].RollNo)</td>
+                    <td>@Html.DisplayFor(r => Model.StudentDetailList[i].Student)</td>
+                    <td id="lblSiblingName_@i" class="clsSiblingName">@Html.DisplayFor(r => Model.StudentDetailList[i].SiblingName)</td>
+                    <td>
+
+                        @if (Model.StudentDetailList[i].IsSiblingStudent)
+                        {
+
+                            @*<button type="button" class="btn btn-primary btn-xs" title="Find Sibling" onclick="getSiblingFilter('@i', '@Model.StudentDetailList[i].ERPNo')">
+                                <i class="fa fa-search"></i>
+                            </button>*@
+
+                            <button type="button" class="btn btn-primary btn-xs" title="Find Sibling" onclick="getSiblingFilter_V1('@Model.StudentDetailList[i].ERPNo','@Model.StudentDetailList[i].Student')">
+                                <i class="fa fa-search"></i>
+                            </button>
+
+                        }
+
+                        @*<button id="btnSiblingAttotment_@i" disabled type="button" class="btn btn-success btn-xs clsBtnSiblingAllotment" title="Add Sibling" onclick="addSiblingConfirm()">
+            <i class="fa fa-plus"></i>
+        </button>*@
+                    </td>
+                </tr>
+                count++;
+            }
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        $('#example1').DataTable({
+            "pageLength": 50
+        });
+    });
+</script>

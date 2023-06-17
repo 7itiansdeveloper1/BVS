@@ -1,0 +1,269 @@
+﻿@model ISas.Entities.FeesEntities.Fee_ReportModels
+@{
+    Model.FeeModeList.Add(new SelectListItem { Text = "ALL", Value = "ALL", Selected = true });
+    Model.FeeModeList.Add(new SelectListItem { Text = "CASH", Value = "CH" });
+    Model.FeeModeList.Add(new SelectListItem { Text = "CHEQUE", Value = "CE" });
+    Model.FeeModeList.Add(new SelectListItem { Text = "ONLINE", Value = "OE" });
+
+
+    List<SelectListGroup> classGroupList = Model.ClassSectionList.Select(r => r.ClassName).Distinct().Select(r => new SelectListGroup
+    {
+        Name = r,
+        Disabled = false
+    }).ToList();
+
+    List<SelectListItem> FeeHeadList = Model.FeeHeadList.Select(r => new SelectListItem
+    {
+        Text = r.Text,
+        Value = r.Value,
+        Selected = true,
+    }).ToList();
+
+    List<SelectListItem> classSecList = Model.ClassSectionList.Select(r => new SelectListItem
+    {
+        Text = r.ClassSectionName,
+        Value = r.ClassSectionId,
+        Selected = true,
+    }).ToList();
+
+    for (int i = 0; i < classSecList.Count; i++)
+    {
+        string className = classSecList[i].Text.Substring(0, classSecList[i].Text.Length - 2);
+        classSecList[i].Group = classGroupList.Where(r => className == r.Name).FirstOrDefault();
+    }
+}
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>Fee Reports</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Fee</li>
+        <li>Reports</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("Report_Crystal", "Fee_Report", FormMethod.Post, htmlAttributes: new { id = "fee_ReportForm", target = "_blank" }))
+    {
+        //@Html.HiddenFor(r => Model.ClassSectionIds)
+
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ReportName)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ReportName, new SelectList(Model.ReportNameList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+
+                                @Html.ValidationMessageFor(r => Model.ReportName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FeeCategory)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.FeeCategory, Model.FeeCategoryList, htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.FeeCategory, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FromDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.FromDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.FromDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ToDate)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(m => m.ToDate, htmlAttributes: new { @class = "form-control pull-right date" })
+                                @Html.ValidationMessageFor(r => Model.ToDate, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-1">
+                        <div class="form-group">
+                            <br />
+                            <div class="select">
+                                <h5>
+                                    <button type="button" class="btn btn-success" onclick="getFeeDetailReport()">   <i class="fa fa-search btnDefaultColor"></i> </button>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ReportType)</label>
+                            <div class="radio">
+                                <label>@Html.RadioButtonFor(r => r.ReportType, "Detail", htmlAttributes: new { }) Detail</label>
+                                <label>@Html.RadioButtonFor(r => r.ReportType, "Statical", htmlAttributes: new { }) Statical</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FeeMode)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.FeeMode, new SelectList(Model.FeeModeList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.FeeMode, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FeeType)</label>
+                            <div class="radio">
+                                <label>@Html.RadioButtonFor(r => r.FeeType, "FT", htmlAttributes: new { }) Both</label>
+                                <label>@Html.RadioButtonFor(r => r.FeeType, "F", htmlAttributes: new { }) Fee</label>
+                                <label>@Html.RadioButtonFor(r => r.FeeType, "T", htmlAttributes: new { }) Transport</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="">Select Class</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ClassSectionIds, classSecList, htmlAttributes: new { @class = "form-control multiSelectWithSelectOptGrp", multiple = true })
+                                @Html.ValidationMessageFor(r => Model.ClassSectionIds, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="">Select Fee Head</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedFeeHeadsId, FeeHeadList, htmlAttributes: new { @class = "form-control multiSelectWithSelectOptGrp", multiple = true })
+                                @Html.ValidationMessageFor(r => Model.SelectedFeeHeadsId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="width:100%;overflow-y:auto;">
+                            <div id="studentReportMainDiv"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function getFeeDetailReport() {
+        var classSecIds = $('#ClassSectionIds').val();
+        var selectedFeeHeadsId = $('#SelectedFeeHeadsId').val();
+        //$("#hddnClassSectionId").val()
+        if (classSecIds == null || classSecIds == "") {
+            OpenMessegeAutoHideDiv("Class not selected", 'Warning');
+            return;
+        } else {
+            classSecIds = classSecIds.toString();
+        }
+        if (selectedFeeHeadsId == null || selectedFeeHeadsId == "") {
+            OpenMessegeAutoHideDiv("Fee Head not selected", 'Warning');
+            return;
+        } else {
+            selectedFeeHeadsId = selectedFeeHeadsId.toString();
+        }
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_Report/_Fee_ReportDetail",
+            data: {
+                FromDate: $('#FromDate').val(), ToDate: $('#ToDate').val(),
+                ReportName: $('#ReportName').val(), ClassSectionIds: classSecIds, SelectedFeeHeadsId: selectedFeeHeadsId,
+                FeeCategory: $('#FeeCategory').val(), FeeType: $("input[name='FeeType']:checked").val(),
+                FeeMode: $('#FeeMode').val(), Print: 'NO'
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#studentReportMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function getFeeDetailReport1() {
+        alert('Mahesh');
+        var classSecIds = $('#ClassSectionIds').val();
+        var selectedFeeHeadsId = $('#SelectedFeeHeadsId').val();
+        //$("#hddnClassSectionId").val()
+        if (classSecIds == null || classSecIds == "") {
+            OpenMessegeAutoHideDiv("Class not selected", 'Warning');
+            return;
+        } else {
+            classSecIds = classSecIds.toString();
+        }
+        if (selectedFeeHeadsId == null || selectedFeeHeadsId == "") {
+            OpenMessegeAutoHideDiv("Fee Head not selected", 'Warning');
+            return;
+        } else {
+            selectedFeeHeadsId = selectedFeeHeadsId.toString();
+        }
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Fee_Report/Report_Crystal",
+            data: {
+                FromDate: $('#FromDate').val(), ToDate: $('#ToDate').val(),
+                ReportName: $('#ReportName').val(), ClassSectionIds: classSecIds, SelectedFeeHeadsId: selectedFeeHeadsId,
+                FeeCategory: $('#FeeCategory').val(), FeeType: $("input[name='FeeType']:checked").val(),
+                FeeMode: $('#FeeMode').val(), Print: 'NO'
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                //$('#studentReportMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

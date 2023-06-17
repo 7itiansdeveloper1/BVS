@@ -1,0 +1,159 @@
+﻿@model ISas.Entities.Academic.Academic_DirectoryMasterModels
+
+<section class="content-header">
+    <h1>Directory Master</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>School</li>
+        <li class="active">Directory Master</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("Academic_DirectoryMaster_CRUD", "Academic_DirectoryMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.DirectoryId)
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box box-primary">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Name)<i class="mandateLbl">*</i></label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Name, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
+                                        @Html.ValidationMessageFor(r => Model.Name, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.Contact)<i class="mandateLbl">*</i></label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.Contact, htmlAttributes: new { @class = "form-control", autocomplete = "off", onkeypress = "return NumericOnly(event)" })
+                                        @Html.ValidationMessageFor(r => Model.Contact, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="">@Html.LabelFor(r => Model.EmailId)</label>
+                                    <div class="select">
+                                        @Html.TextBoxFor(m => m.EmailId, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
+                                        @Html.ValidationMessageFor(r => Model.EmailId, null, htmlAttributes: new { style = "color:red;" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="" class="checkbox">
+                                    <label>
+                                        @Html.CheckBoxFor(r => Model.IsActive, htmlAttributes: new { }) Is Active
+                                    </label>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button class="btn btn-success" id="savebutton" type="button" onclick="CommonAjaxPost(this); setTimeout(function () { $('#Name').val(null); $('#Contact').val(null);$('#EmailId').val(null); GetDirectoryList();}, 1500);">SAVE</button>
+                        <button class="btn btn-default" type="button" onclick="window.location.reload()">RESET</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h5 class="box-title">Directory List</h5>
+                    </div>
+                    <div class="box-body">
+                        <div id="remarksListMainDiv">
+                            @{ Html.RenderAction("_LandingPage", "Academic_DirectoryMaster");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    function GetDirectoryList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Academic_DirectoryMaster/_LandingPage',
+            data: {},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#remarksListMainDiv').html(response);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function EditDirectory(DirectoryId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Academic_DirectoryMaster/_Update',
+            data: { DirectoryId: DirectoryId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                OpenModalWithSave(response, 'Edit Direcotry');
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+
+    function DeleteDirectoryConfirm(DirecotryId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Direcotry?", MyYesFunction, MyNoFunction, DirecotryId);
+    }
+
+    function MyYesFunction(DirectoryId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_DirectoryMaster/Academic_DirectoryMaster_Delete",
+            data: { DirectoryId: DirectoryId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                GetDirectoryList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

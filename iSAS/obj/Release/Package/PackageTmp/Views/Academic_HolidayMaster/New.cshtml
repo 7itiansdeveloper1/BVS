@@ -1,0 +1,206 @@
+﻿@model ISas.Entities.Academic.Academic_HolidayMasterModel
+
+<section class="content-header">
+    <h1>
+        Holiday Master
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li><a href="#">Academic</a></li>
+        <li><a href="#">Holiday Master</a></li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("Academic_HolidayMaster_CRUD", "Academic_HolidayMaster", FormMethod.Post, htmlAttributes: new { }))
+    {
+        @Html.HiddenFor(r => Model.HolidayId)
+        @Html.Hidden("hddnRowLenght")
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title pull-right"> @Html.ActionLink("Holiday Allocation", "LandingPage", "Academic_HolidayAllocation", new { }, htmlAttributes: new { @class = "btn btn-primary btn-xs" }) </h5>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.HolidayName)</label>
+                            <div class="select">
+                                @Html.TextBoxFor(m => m.HolidayName, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(r => Model.HolidayName, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <br /> <div class="checkbox">
+                            @Html.CheckBoxFor(r => Model.IsActive) <label>@Html.LabelFor(r => Model.IsActive) </label>
+                            @Html.ValidationMessageFor(r => Model.IsActive, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <br /> <div class="checkbox">
+                            @Html.CheckBoxFor(r => Model.HolidayForStudent) <label>@Html.LabelFor(r => Model.HolidayForStudent) </label>
+                            @Html.ValidationMessageFor(r => Model.HolidayForStudent, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-2">
+                        <br /> <div class="checkbox">
+                            @Html.CheckBoxFor(r => Model.HolidayForStaff) <label>@Html.LabelFor(r => Model.HolidayForStaff) </label>
+                            @Html.ValidationMessageFor(r => Model.HolidayForStaff, null, htmlAttributes: new { style = "color:red;" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-success" id="savebutton" type="button" onclick="DoAjaxPostAndMore(this)">Save</button>
+                <button class="btn btn-default" type="button" onclick="window.location.reload()">Reset</button>
+            </div>
+        </div>
+    }
+
+    <div class="" id="holidayMstListMainDiv">
+        @{ Html.RenderAction("LandingPage", "Academic_HolidayMaster", new { }); }
+    </div>
+</section>
+
+<script>
+    function emptyHolidayDetails() {
+        $('#HolidayName').val('');
+        $('#HolidayForStudent').attr(':checked', false);
+        $('#HolidayForStaff').attr(':checked', false);
+    }
+    function getHolidayMstList() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_HolidayMaster/LandingPage",
+            data: {},
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#holidayMstListMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    function EnableEditableRow(selectedRow) {
+        var rowCount = $('#hddnRowLenght').val();
+        for (var i = 0; i < rowCount; i++) {
+            if (i == selectedRow) {
+                $('.editableFeild_' + i).attr('readonly', false);
+
+                $('.editableFeild_Chk_' + i).attr('disabled', false);
+
+                $('#btnEdit_' + i).css('display', 'none');
+                $('#btnSave_' + i).removeAttr('style');
+            } else {
+                $('.editableFeild_' + i).attr('readonly', true);
+
+                $('.editableFeild_Chk_' + i).attr('disabled', true);
+
+                $('#btnSave_' + i).css('display', 'none');
+                $('#btnEdit_' + i).removeAttr('style');
+            }
+        }
+    }
+
+    function DeleteHolidayConfirm(HolidayId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Holiday?", MyYesFunction, MyNoFunction, HolidayId);
+    }
+
+    function MyYesFunction(HolidayId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_HolidayMaster/Academic_HolidayMaster_Delete",
+            data: { HolidayId: HolidayId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg);
+                getHolidayMstList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function UpdateHolidayMaster(i) {
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: '../Academic_HolidayMaster/Academic_HolidayMaster_CRUD',
+            data: {
+                HolidayId: $('#HolidayId_' + i).val(), HolidayName: $('#HolidayName_' + i).val(),
+                IsActive: $('#IsActive_' + i).is(':checked'), HolidayForStudent: $('#HolidayForStudent_' + i).is(':checked'),
+                HolidayForStaff: $('#HolidayForStaff_' + i).is(':checked')
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, 'Success');
+                    getHolidayMstList();
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+        return false;
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                if (response.status == 'success') {
+                    OpenMessegeAutoHideDiv(response.Msg, 'Success');
+                    getHolidayMstList();
+                    emptyHolidayDetails();
+                }
+                else {
+                    AddErrorAttributeCSS(response.ErrorList); //Available in CustomCommon.js
+                    AddValidAttributeCSS(response.ValidKeyList); //Available in CustomCommon.js
+                }
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

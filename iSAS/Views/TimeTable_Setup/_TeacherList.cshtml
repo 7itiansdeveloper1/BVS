@@ -1,0 +1,33 @@
+﻿@model ISas.Entities.TimeTable_Entities.TimeTable_SetupModels
+
+<div class="center">
+    <table class="table table-bordered">
+        @for (int i = 0; i < Model.TeacherList.Count; i++)
+        {
+            <tr>
+                <td><div id="@Model.TeacherList[i].Value" teacherId="@Model.TeacherList[i].Value" teacherName="@Model.TeacherList[i].Text" class="item">@Html.DisplayFor(r => Model.TeacherList[i].Text)</div></td>
+            </tr>
+        }
+    </table>
+</div>
+
+<script>
+    $(function () {
+        $('.center .item').draggable({
+            revert: true,
+            proxy: 'clone'
+        });
+        $('.center').droppable({
+            accept: '.assigned',
+            onDragEnter: function (e, source) {
+                $(source).addClass('trash');
+            },
+            onDragLeave: function (e, source) {
+                $(source).removeClass('trash');
+            },
+            onDrop: function (e, source) {
+                $(source).remove();
+            }
+        });
+    });
+</script>

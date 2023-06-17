@@ -1,0 +1,59 @@
+﻿@model List<ISas.Entities.TransportEntities.Transport_BusStudentDetails>
+@{
+    int NoOfStud = 0; int TotalAmt = 0;
+    if (Model != null)
+    {
+        NoOfStud = Model.Count; TotalAmt = Model.Sum(r => r.Charge);
+    }
+}
+
+<div id="tblPrintHeader_BusStudent" style="display:none;">
+    @{ Html.RenderAction("_ReportHeader", "Common", new { tempReportName = @ViewBag.selectedRoute });}
+</div>
+
+<div id="transportStudentMainDiv">
+    <table id="tblTransportRouteDetails" class="table table-bordered table-responsive table-condensed" style="width:100%;border:1px solid #808080;" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr style="border:1px solid #808080;background-color:#dcce2e;">
+                <th style="border:1px solid #808080;background-color:#dcce2e;">S.No.</th>
+                <th style="border:1px solid #808080;background-color:#dcce2e;">Adm. No.</th>
+                <th style="border:1px solid #808080;background-color:#dcce2e;">Student</th>
+                <th style="border:1px solid #808080;background-color:#dcce2e;">Class</th>
+                <th style="border:1px solid #808080;background-color:#dcce2e;">Stop Name</th>
+                <th style="border:1px solid #808080;background-color:#dcce2e;">Facility</th>
+                <th style="border:1px solid #808080;background-color:#dcce2e;">Charge</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr style="border:1px solid #808080">
+                        <td style="border:1px solid #808080">@Html.DisplayFor(r => Model[i].Sno)</td>
+                        <td style="border:1px solid #808080">@Html.DisplayFor(r => Model[i].AdmNo)</td>
+                        <td style="border:1px solid #808080">@Html.DisplayFor(r => Model[i].Student)</td>
+                        <td style="border:1px solid #808080">@Html.DisplayFor(r => Model[i].Class)</td>
+                        <td style="border:1px solid #808080">@Html.DisplayFor(r => Model[i].StopName)</td>
+                        <td style="border:1px solid #808080">@Html.DisplayFor(r => Model[i].Facility)</td>
+                        <td style="border:1px solid #808080">@Html.DisplayFor(r => Model[i].Charge)</td>
+                    </tr>
+                }
+                <tr style="border:1px solid #808080">
+                    <td colspan="4" style="border:1px solid #808080">
+                        <label>No of Students :</label> <span class="text-primary"><strong>@Html.DisplayFor(r => NoOfStud) </strong> </span>
+                    </td>
+                    <td colspan="3" style="border:1px solid #808080">
+                        <label>Total :</label><span class="text-primary"><strong>@Html.DisplayFor(r => TotalAmt) </strong> </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(function () {
+        $('#routeNameHtml').html('@ViewBag.selectedRoute');
+        $('#driverNameHtml').html('@ViewBag.selectedDriver');
+    });
+</script>

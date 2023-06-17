@@ -1,0 +1,53 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.FeesEntities.StudentDetailsModel>
+
+<div class="">
+    <table class="table table-hover table-bordered table-responsive table-condensed" id="tblStudentDetails">
+        <thead>
+            <tr>
+                <th>S. No</th>
+                <th>ERP No</th>
+                <th>Adm No</th>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Father</th>
+                <th>Mother</th>
+                <th>Mobile</th>
+                <th>Adm. Category</th>
+                <th>Snacks</th>
+                <th>Transport</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+            <tr>
+                <td>@Html.DisplayFor(r => Model[i].SNo)</td>
+                <td>@Html.DisplayFor(r => Model[i].ERPNo)</td>
+                <td>@Html.DisplayFor(r => Model[i].AdmNo)</td>
+                <td>
+                    @Html.EncodedActionLink(" ", "StudentDozear", "DashBoard_StudentStatatics", new { erpNo = Model[i].ERPNo }, htmlAttributes: new { @class = "fa fa-eye", style = "color:brown;", title = "View Student Dossier" })
+                    &nbsp;&nbsp; <strong>@Html.EncodedActionLink(Model[i].StudentName, "Updation", "Student_Admission", new { ERPNo = Model[i].ERPNo }, htmlAttributes: new { @class = "", title = "Go to details..!", target = "_blank" })</strong>
+                </td>
+                <td>@Html.DisplayFor(r => Model[i].ClassName)</td>
+                <td>@Html.DisplayFor(r => Model[i].FatherName)</td>
+                <td>@Html.DisplayFor(r => Model[i].MotherName)</td>
+                <td>@Html.DisplayFor(r => Model[i].MobileNo)</td>
+                <td>@Html.DisplayFor(r => Model[i].AdmCategoryName)</td>
+                <td>@Html.DisplayFor(r => Model[i].AvailSnacks)</td>
+                <td>@Html.DisplayFor(r => Model[i].AvailTransport)</td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#tblStudentDetails').DataTable({
+            "pageLength": 50
+        });
+    });
+</script>

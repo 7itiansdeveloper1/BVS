@@ -1,0 +1,169 @@
+﻿@model ISas.Web.ViewModels.Student_UpdationViewModel
+@{
+    ViewBag.Title = "Student Updation";
+}
+<section class="content-header">
+    <h1>
+        Student Update
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Students</li>
+        <li class="active">Student Update</li>
+    </ol>
+</section>
+
+<section class="content">
+    @using (Html.BeginForm("StudentUpdation_CRUD", "Student", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <span style="padding-left:1%;" class="box-title pull-right">
+                    <a href="#" onclick="exportToExcel('tblStudentDetails', 'tblReportHeader_WithoutLogo')" title="Export to Excel" class="fa fa-file-excel-o btnDefaultColor"></a>
+                </span>
+                <span class="box-title pull-right">
+                    <a href="#" onclick="getStudentList('YES')" title="Print" class="fa fa-print btnDefaultColor"></a>
+                </span>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Session</label>
+                            <div class="select">
+                                @Html.HiddenFor(r => Model.SelectedSessionId)
+                                @Html.DropDownListFor(m => m.SelectedSessionId, Model.SessionList, new { @class = "form-control select2", style = "width:100%;", disabled = "disabled" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Class</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedClassId, Model.ClassList, "-- Select Class --", new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionList()" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Section</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedSectionId, Model.SectionList, new { @class = "form-control select2", style = "width:100%;", onchange = "getUpdationFeildList()" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">Updation Field</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.SelectedParameterId, Model.UpdationParametersList, new { @class = "form-control select2", style = "width:100%;", onchange = "getStudentList('NO')" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="divAttendanceList">
+                            @*// @Html.Partial("_StudentClassofJoiningListPartial", Model)*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button class="btn btn-warning" onclick="DoAjaxPostAndMore(this)" type="button" id="savebutton">UPDATE</button>
+            </div>
+        </div>
+    }
+</section>
+
+<script type="text/javascript">
+    function getSectionList() {
+        $.ajax({
+            url: '../Student/GetSectionsForClass',
+            data: { classId: $('#SelectedClassId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SelectedSectionId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Section ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.SecId).text(this.SecName));
+                })
+            })
+        })
+    }
+
+    function getUpdationFeildList() {
+        $.ajax({
+            url: '../Student/GetClassUpdationParametersList',
+            data: { sessionId: $('#SelectedSessionId').val(), classId: $('#SelectedClassId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SelectedParameterId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Month ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.FieldName).text(this.FieldDisplayName));
+                })
+            })
+        })
+    }
+
+    function getStudentList(Print) {
+        var classSectionName = $('#SelectedClassId option:selected').text() + ' - ' + $('#SelectedSectionId option:selected').text();
+        $.ajax({
+            url: '../Student/GetClassofJoiningList',
+            beforeSend: function () {
+                spinnerShow();
+            },
+            data: {
+                sessionId: $('#SelectedSessionId').val(), classId: $('#SelectedClassId').val(), sectionId: $('#SelectedSectionId').val(), mode: $('#SelectedParameterId').val(),
+                Print: Print, SelectedClassSectionName: classSectionName
+            },
+            type: 'get',
+            success: function (data) {
+                if (Print == "YES") {
+                    var w = window.open('');
+                    $(w.document.body).html(data);
+                    w.print();
+                    // w.close();
+                } else {
+                    $('#divAttendanceList').empty();
+                    $('#divAttendanceList').html(data);
+                }
+                //alert(data);
+            },
+                complete: function() {
+                    spinnerHide();
+                }
+        })
+    }
+
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+        $.ajax({
+            type: "POST",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (response) {
+                $('#divAttendanceList').html('');
+                $('#SelectedParameterId').val(null);
+                $('#select2-SelectedParameterId-container').html('--Select--');
+                OpenMessegeAutoHideDiv(response.Msg, response.Color);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

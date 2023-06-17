@@ -1,0 +1,30 @@
+﻿@model ISas.Web.ViewModels.Exam_AchievementViewModel
+
+<div class="col-xs-12">
+    <div class="table-responsive searchtable table_ev_od">
+        <table class="table table-bordered table-responsive" id="AchievementTable" style="border:1px solid #808080;width:100%;" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr style="border:1px solid #808080;background-color:#dcce2e;">
+                    <th hidden>ERP No.</th>
+                    <th style="border:1px solid #808080;background-color:#dcce2e;">Adm No.</th>
+                    <th style="border:1px solid #808080;background-color:#dcce2e;">Roll No.</th>
+                    <th style="border:1px solid #808080;background-color:#dcce2e;">Student Name</th>
+                    <th style="border:1px solid #808080;background-color:#dcce2e;">Achievement</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @Model.StudentAchievementList)
+                {
+                    <tr class="abc"   style="border:1px solid #808080;">
+                        <td hidden>@item.Student.StudentERPNo </td>
+                        <td   style="border:1px solid #808080;text-align:center;">@item.Student.StudentAdmNo </td>
+                        <td   style="border:1px solid #808080;text-align:center;">@item.Student.StudentRollNo </td>
+                        <td   style="border:1px solid #808080;text-align:center;">@item.Student.StudentName </td>
+                        <td   style="border:1px solid #808080;text-align:center;">@Html.TextAreaFor(m => item.Achievement, 3, 100, null)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

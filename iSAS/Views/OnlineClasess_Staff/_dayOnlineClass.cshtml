@@ -1,0 +1,97 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.DashboardEntities.onlineclass>
+@{
+    int rowlength = 0;
+    if (Model != null && Model.Count > 0)
+    {
+        rowlength = Model.Count;
+    }
+}
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Online Class List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr class="editable" id="editable_@i">
+                            <td>
+                                @Html.DisplayFor(r => count)
+                                @Html.HiddenFor(r => Model[i].id)
+                            </td>
+                            <td><span> @Html.DisplayFor(r => Model[i].onlineClassName)</span></td>
+                            <td><span> @Html.DisplayFor(r => Model[i].classId)</span></td>
+                            <td><span> @Html.DisplayFor(r => Model[i].subjectId)</span></td>
+                            <td><span> @Html.DisplayFor(r => Model[i].onlineClassStartTime)</span></td>
+
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteOnlineClassConfirm('@Model[i].id')" title="Delete Class" class="fa fa-trash btnDefaultColor"></a>
+                                }
+
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable();
+        $('#hddnRowLenght').val('@rowlength');
+    });
+
+    function DeleteOnlineClassConfirm(classId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Class?", MyYesFunction, MyNoFunction, classId);
+    }
+
+    function MyYesFunction(classid) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../OnlineClasess_Staff/OnlineClass_DELETE",
+            data: { classId: classid },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                getOnineclassList();
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+</script>

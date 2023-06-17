@@ -1,0 +1,117 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.TimeTable_Entities.TimeTable_PeriodMatrixModels>
+
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Period Matrix List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Matrix Name</th>
+                    <th>Period Name</th>
+                    <th>Classes</th>
+                    <th>Active</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(r => count)</td>
+                            <td>
+                                @Html.DisplayFor(r => Model[i].MatrixName)
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].PeriodMatrix)</td>
+                            <td>@Html.DisplayFor(r => Model[i].Classes)</td>
+                            <td>@Html.DisplayFor(r => Model[i].IsActive)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeleteable)
+                                {
+                                    <a href="#" onclick="DeleteMatrixConfirm('@Model[i].MatrixId')" title="Delete Strecture" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span style="cursor:not-allowed;" disabled="disabled" title="Delete Strecture" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                <a href="#" onclick="PeriodMatrixClassSetup('@Model[i].MatrixId', '@Model[i].MatrixName + @Model[i].PeriodMatrix')" title="Class Setup" class="fa fa-gear btnDefaultColor"></a>
+
+                                @Html.EncodedActionLink(" ", "Updation", "TimeTable_PeriodMatrix", new { MatrixId = Model[i].MatrixId }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Matrix" })
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function Fun_checkToSelectAllClases() {
+        if ($('#checkBoxselectAllClasses').is(':checked')) {
+            $('.checkBoxclass').prop('checked', true);
+        } else {
+            $('.checkBoxclass').prop('checked', false);
+        }
+    }
+
+
+    function DeleteMatrixConfirm(MatrixId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this matrix?", MyYesFunction, MyNoFunction, MatrixId);
+    }
+
+    function MyYesFunction(MatrixId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../TimeTable_PeriodMatrix/TimeTable_PeriodMatrix_DELETE",
+            data: { MatrixId: MatrixId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                getMatrixList();
+                OpenMessegeAutoHideDiv(result.Msg, result.Color);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+
+    function PeriodMatrixClassSetup(MatrixId, MatrixName) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../TimeTable_PeriodMatrix/_PeriodMatrixClassSetup",
+            data: { MatrixId: MatrixId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenModalWithSave(result, 'Class Setup For :-' + MatrixName);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+</script>

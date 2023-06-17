@@ -1,0 +1,80 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>test</title>
+</head>
+<body>
+    <div id="Data">
+        <strong>Data to be see</strong>
+    </div>
+</body>
+
+</html>
+
+<link href="../bower_components/clientwiseloginpages/ES3/bootstrap.min.css" rel="stylesheet">
+<link href="../bower_components/clientwiseloginpages/ES3/login.css" rel="stylesheet">
+<script src="../bower_components/clientwiseloginpages/ES3/jquery-3.2.1.min.js"></script>
+
+@*<style type="text/css"></style>*@
+
+
+<script src="../bower_components/clientwiseloginpages/ES3/bootstrap.min.js"></script>
+<script src="../bower_components/clientwiseloginpages/ES3/backCommon.js"></script>
+<script src="../bower_components/clientwiseloginpages/ES3/scr.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        CheckStatus();
+    });
+    function CheckStatus() {
+        alert("I am in checkstatus");
+
+
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+
+            },
+            url: "../PaymentGateway/StatusAPI",
+            data: { Orderid: '2021022820221014141011', bankrefrenceNo: '1671007270030' },
+            error: function (xhr, status, error) {
+                alert(status);
+            },
+            success: function (response) {
+                alert("I am in Data");
+                OpenMessegeModal(response, 'Primary', 'lg', 'Receipt Details')
+
+            },
+            complete: function () {
+
+            }
+        });
+
+
+
+
+
+        //$.get('../PaymentGateway/StatusAPI', {
+
+        //    Orderid: '2021022820221014141011', bankrefrenceNo: '1671007270030'
+        //}, function (data) {
+        //    alert("I am in Data");
+        //        $('#Data').html(data);
+        //    console.log(data);
+        //    });
+
+
+
+
+
+    }
+</script>
+

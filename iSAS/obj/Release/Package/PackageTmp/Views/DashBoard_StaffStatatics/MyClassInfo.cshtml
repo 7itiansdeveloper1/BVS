@@ -1,0 +1,102 @@
+﻿@model  ISas.Entities.DashboardEntities.MyClassInfoModel
+
+<section class="content-header">
+    <h1>Class Info <small>@Html.DisplayFor(r => Model.FullClassName)</small> </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li class="active">Class Info</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <i class="fa fa-square"></i>
+                            <h5 class="box-title">Primary Details</h5>
+                        </div>
+                        <div class="box-body box-profile">
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>Strength</b> <a class="pull-right">@Html.DisplayFor(r => Model.Strength)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>New Admission</b> <a class="pull-right">@Html.DisplayFor(r => Model.NewAdm) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Old Admission</b> <a class="pull-right">@Html.DisplayFor(r => Model.OldAdm) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Boys</b> <a class="pull-right">@Html.DisplayFor(r => Model.BOY) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Girls</b> <a class="pull-right">@Html.DisplayFor(r => Model.GIRL) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>TC</b> <a class="pull-right">@Html.DisplayFor(r => Model.TC) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>NSO</b> <a class="pull-right">@Html.DisplayFor(r => Model.NSO) </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <i class="fa fa-users"></i>
+                            <h5 class="box-title">Category</h5>
+                        </div>
+                        <div class="box-body box-profile">
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>General</b> <a class="pull-right">@Html.DisplayFor(r => Model.GEN)</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>SC</b> <a class="pull-right">@Html.DisplayFor(r => Model.SC) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>ST</b> <a class="pull-right">@Html.DisplayFor(r => Model.ST) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>EWS</b> <a class="pull-right">@Html.DisplayFor(r => Model.EWS) </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <i class="fa fa-star"></i>
+                            <h5 class="box-title">Defaulters</h5>
+                        </div>
+                        <div class="box-body box-profile">
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>Fee Defaulters</b> <a class="pull-right">@Html.DisplayFor(r => Model.FeeDefaulter) </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Library Defaultes</b> <a class="pull-right">@Html.DisplayFor(r => Model.LibraryDefaulter) </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

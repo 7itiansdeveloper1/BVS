@@ -1,0 +1,214 @@
+﻿@model  ISas.Entities.TransportEntities.Transport_ReportModel
+
+<script src="~/bower_components/datatables.net/js/dataTables.buttons.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.flash.min.js"></script>
+<script src="~/bower_components/datatables.net/js/jszip.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.print.min.js"></script>
+<script src="~/bower_components/datatables.net/js/pdfmake.min.js"></script>
+<script src="~/bower_components/datatables.net/js/vfs_fonts.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.html5.min.js"></script>
+<script src="~/bower_components/datatables.net/js/buttons.colVis.min.js"></script>
+<script src="~/bower_components/datatables.net/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="~/bower_components/datatables.net/css/buttons.dataTables.min.css">
+
+<section class="content-header">
+    <h1>Transport Report</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Transport</li>
+        <li class="active">Transport Report</li>
+    </ol>
+</section>
+<section class="content">
+    @using (Html.BeginForm("_TransportReportDetails", "Transport_Report", FormMethod.Post, htmlAttributes: new { }))
+    {
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h5 class="box-title">Filter Report</h5>
+
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.ReportId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.ReportId, new SelectList(Model.ReportNameList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.ReportId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.FeeCategoryId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.FeeCategoryId, new SelectList(Model.FeeCategoryList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getInstallments()" })
+                                @Html.ValidationMessageFor(r => Model.FeeCategoryId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.InstallmentId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.InstallmentId, new SelectList(Model.InstallmentList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.InstallmentId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.RouteId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.RouteId, new SelectList(Model.RouteList, "Value", "Text"), htmlAttributes: new { @class = "form-control select2", style = "width:100%;", onchange = "getVehicleDetails()" })
+                                @Html.ValidationMessageFor(r => Model.RouteId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="">@Html.LabelFor(r => Model.VehicleId)</label>
+                            <div class="select">
+                                @Html.DropDownListFor(m => m.VehicleId, new SelectList(Model.VehicleList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control select2", style = "width:100%;" })
+                                @Html.ValidationMessageFor(r => Model.VehicleId, null, htmlAttributes: new { style = "color:red;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <br />
+                            <h5>
+                                <button type="button" class="btn btn-success" onclick="reportSearch()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h5 class="box-title">Search Result</h5>
+                @*<span class="box-title pull-right" style="padding-left:1%;">
+                    <span title="Export to Excel" class="pull-right" onclick="exportToExcel('tblTransportReport', 'tblReportHeader_ForExcel')">
+                        <a href="#" class="fa fa-file-excel-o btnDefaultColor"></a>
+                    </span>
+                </span>
+
+                <h5 class="box-title pull-right">
+                    <a href="#" value="Print" onclick="printTransportReport()">
+                        <i class="fa fa-print btnDefaultColor"></i>
+                    </a>
+                </h5>*@
+            </div>
+            <div class="box-body">
+                <div class="" id="searchResultMainDiv">
+
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    $(function () {
+        getInstallments();
+        getVehicleDetails();
+    })
+
+    function getInstallments() {
+        var installmentHtml = '<option value="">--Select--</option>';
+        if ($('#FeeCategoryId').val() != null && $('#FeeCategoryId').val() != "") {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Fee_DefaulterDetails/Fee_Installments",
+                data: { StructId: $('#FeeCategoryId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    for (var i = 0; i < result.length; i++) {
+                        installmentHtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                    }
+                    $('#InstallmentId').html(installmentHtml);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            $('#InstallmentId').val(null);
+            $('#InstallmentId').html(installmentHtml);
+        }
+    }
+    function getVehicleDetails() {
+        var vehiclehtml = '<option value="">--Select--</option>';
+        if ($('#RouteId').val() != null && $('#RouteId').val() != "") {
+            $.ajax({
+                type: "GET",
+                beforeSend: function () {
+                    spinnerShow();
+                },
+                url: "../Transport_Report/GetVehicleDetails",
+                data: { RouteId: $('#RouteId').val() },
+                error: function (xhr, status, error) {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                },
+                success: function (result) {
+                    for (var i = 0; i < result.length; i++) {
+                        vehiclehtml += '<option value=' + result[i].Value + '>' + result[i].Text + '</option>';
+                    }
+                    $('#VehicleId').html(vehiclehtml);
+                },
+                complete: function () {
+                    spinnerHide();
+                }
+            });
+        } else {
+            $('#VehicleId').val(null);
+            $('#VehicleId').html(vehiclehtml);
+        }
+    }
+    function reportSearch() {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Transport_Report/_TransportReportDetails",
+            data: {
+                ReportId: $('#ReportId').val(), FeeCategoryId: $('#FeeCategoryId').val(),
+                InstallmentId: $('#InstallmentId').val(), RouteId: $('#RouteId').val(),
+                VehicleId: $('#VehicleId').val() //, FeeStrectureId: $('#FeeStrectureId').val(),
+            },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                $('#searchResultMainDiv').html(result);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+
+    //function printTransportReport() {
+    //    var html = $('#tblReportHeader').html();
+    //    html += $('#transportReportMainDiv').html();
+    //    var w = window.open();
+    //    $(w.document.body).html(html);
+    //    w.print();
+    //}
+</script>

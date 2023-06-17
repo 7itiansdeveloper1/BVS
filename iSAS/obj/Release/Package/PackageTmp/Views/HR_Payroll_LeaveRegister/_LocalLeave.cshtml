@@ -1,0 +1,19 @@
+﻿@model ISas.Entities.HR_Payroll_Entities.HR_Payroll_LeaveRegisterModels
+
+<table class="table table-condensed table-bordered table-condensed table-hover">
+    <thead>
+        <tr>
+            <th>Leave Code</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.LocalLeaveList.Count; i++)
+        {
+            <tr>
+                <td>@Html.DisplayFor(r => Model.LocalLeaveList[i].LvCode)</td>
+                <td>@Html.DisplayFor(r => Model.LocalLeaveList[i].OpenBal)</td>
+            </tr>
+        }
+    </tbody>
+</table>

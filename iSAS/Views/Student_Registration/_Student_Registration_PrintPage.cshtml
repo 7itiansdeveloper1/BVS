@@ -1,0 +1,33 @@
+﻿@model List<ISas.Entities.RegistrationEntities.Student_RegistrationMaster>
+@{
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+<table cellpadding="0" cellspacing="0" id="example1" class="table table-striped table-bordered table-condensed table-responsive table-hover" style="border:1px solid #808080;width:100%;">
+    <thead>
+        <tr style="border:1px solid #808080;">
+            <th style="border:1px solid #808080;">Reg No</th>
+            <th style="border:1px solid #808080;">Reg Date</th>
+            <th style="border:1px solid #808080;">Form No</th>
+            <th style="border:1px solid #808080;">Student Name</th>
+            <th style="border:1px solid #808080;">Father Name</th>
+            <th style="border:1px solid #808080;">Father Mobile</th>
+            <th style="border:1px solid #808080;">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            string studentFullName = Model[i].Student_FirstName + " " + Model[i].Student_MiddleName + " " + Model[i].Student_LastName;
+            string fatherFullName = Model[i].Father_FirstName + " " + Model[i].Father_MiddleName + " " + Model[i].Father_LastName;
+            <tr style="border:1px solid #808080;">
+                <td style="border:1px solid #808080;padding-left:3px;padding-right:3px;">@Html.DisplayFor(r => Model[i].RegID)</td>
+                <td style="border:1px solid #808080;padding-left:3px;padding-right:3px;">@Html.DisplayFor(r => Model[i].RegDate)</td>
+                <td style="border:1px solid #808080;padding-left:3px;padding-right:3px;">@Html.DisplayFor(r => Model[i].FormID)</td>
+                <td style="border:1px solid #808080;padding-left:3px;padding-right:3px;">@Html.DisplayFor(r => studentFullName)</td>
+                <td style="border:1px solid #808080;padding-left:3px;padding-right:3px;">@Html.DisplayFor(r => fatherFullName)</td>
+                <td style="border:1px solid #808080;padding-left:3px;padding-right:3px;">@Html.DisplayFor(r => Model[i].Father_MoblieNo)</td>
+                <td style="border:1px solid #808080;padding-left:3px;padding-right:3px;">@Html.DisplayFor(r => Model[i].RegStatus)</td>
+            </tr>
+        }
+    </tbody>
+</table>

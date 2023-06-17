@@ -1,0 +1,23 @@
+conversation with unnati worah 19/10/2020 : 9:45 to 10:00
+1. Primary TC. Sumit maam will give the confirmation.
+2. Document Upload.
+3. Batra Sir()
+4. Gateway wala
+5. Mark Register.
+6. Bonafide Certificate to be confirm.
+
+
+20131141-XIIA
+20131621-XA
+
+Date : 29/10/2020 Daily Work Report
+Task 1 : Document Upload Form to be developed.
+Status : Ready to print
+Task 2 : deployment of retest report card form in live application.
+Status : Deeployment done, passed to chetan for further training to teachers.
+
+
+Date : 31/10/2020 : Daily Task
+Task 1 : Document Upload Form to be developed.
+Task 2 : Retest report card to be finalise after confirmation.
+

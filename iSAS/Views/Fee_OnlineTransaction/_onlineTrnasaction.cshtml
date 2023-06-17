@@ -1,0 +1,160 @@
+﻿@model ISas.Entities.FeesEntities.Fee_OnlineTransactionModel
+@{
+    int count = 1;
+    int rowCount = 0;
+    if (Model.onlineTransctionsList != null)
+    {
+        rowCount = Model.onlineTransctionsList.Count;
+    }
+
+}
+
+<div class="box-body pad table-responsive">
+
+    <table id="example1" class="table table-responsive table-bordered table-condensed " style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>@Html.CheckBox("chkBoxSelectAll", htmlAttributes: new { onchange = "fun_SelectAllSMSOutBox()", @class = "chkBoxOutbox" })</th>
+                <th>Student</th>
+                <th>Father</th>
+                <th>Class</th>
+                <th>Installment</th>
+                <th>Amount</th>
+                <th>Bank Ref No.</th>
+                <th>Mode</th>
+                <th>Payment Date</th>
+                <th>Payment Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.onlineTransctionsList != null && Model.onlineTransctionsList.Count() > 0)
+            {
+                for (int i = 0; i < Model.onlineTransctionsList.Count(); i++)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(r => count)
+                    @Html.HiddenFor(r => Model.onlineTransctionsList[i].tnxId)
+                    @Html.HiddenFor(r => Model.onlineTransctionsList[i].trackingId)
+                    @Html.HiddenFor(r => Model.onlineTransctionsList[i].isReadyForReceipt)
+                </td>
+                <td>
+                    @if (Model.onlineTransctionsList[i].isReadyForReceipt)
+                    {
+                        @Html.CheckBoxFor(r => Model.onlineTransctionsList[i].isSelected, htmlAttributes: new { @class = "chkBoxOutbox" })
+
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(r => Model.onlineTransctionsList[i].isSelected, htmlAttributes: new { @disabled = true })
+                    }
+
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].Student)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].Father)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].className)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].InstallName)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].bankRefNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].paymentMode)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].paymentSuccessOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(r => Model.onlineTransctionsList[i].statusMessage)
+                </td>
+                <td>
+                    @if (Model.onlineTransctionsList[i].Recpt == null)
+                    {
+                        <button type="button" id="btnStatus" onclick="getTransStatus('@Model.onlineTransctionsList[i].tnxId','@Model.onlineTransctionsList[i].trackingId')" class="btn btn-default" title="Check Status"><i class="fa fa-download"></i></button>
+                    }
+                    else { }
+
+                </td>
+            </tr>
+                    count++;
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>
+<div class="box-footer">
+    <content class="pull-right" style="padding-right:2%;"><h4>Total: <span class="text-primary" id="TotalSum" style="font-weight:800"> 0 </span> </h4></content>
+</div>
+<script>
+      $(document).ready(function () {
+        $('#example1').DataTable({
+            "pageLength": 100
+          });
+          var $totalsum = 0;
+          $('#example1 > tbody  > tr').each(function () {
+              $totalsum = parseFloat($totalsum) + parseFloat($(this).find("td").eq(6).html());
+          });
+          $('#TotalSum').html($totalsum);
+    });
+
+    function fun_SelectAllSMSOutBox() {
+        if ($('#chkBoxSelectAll').is(':checked')) {
+            $('.chkBoxOutbox').prop('checked', true);
+        } else {
+            $('.chkBoxOutbox').prop('checked', false);
+        }
+    
+    }
+
+
+    $(function () {
+        EnableReceipt();
+    });
+
+
+    function EnableReceipt(){
+        var selectedRow=0;
+        if ($('#selectedStatusId').val() == "S") {
+            $('#example1 tbody tr').each(function (index,value){
+                
+              if($(this).find(":checkbox").is(':checked'))
+                     {
+                        selectedRow++;
+                     }
+    
+             });
+    
+            if (selectedRow > 0) {
+                $('#btnReceiptSelected').attr('disabled', false);
+            } else {
+                $('#btnReceiptSelected').attr('disabled', true);
+            }
+        }
+    }
+
+    function getTransStatus(orderid,trackingid) {
+        $.get('../PaymentGateway/StatusAPI', { Orderid:orderid, trackingId: trackingid }, function (data) {
+            $(window).bind("../Fee_OnlineTransaction/_onlineTrnasaction",getTransactionList());
+        });
+    };
+
+    
+    $('.chkBoxOutbox').change(function() {
+        EnableReceipt();
+    });
+
+</script>

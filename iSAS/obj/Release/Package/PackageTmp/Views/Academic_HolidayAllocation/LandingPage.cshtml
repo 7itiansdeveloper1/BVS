@@ -1,0 +1,121 @@
+﻿@using ISas.Web.Models;
+@model List<ISas.Entities.Academic.Academic_HolidayAllocationModel>
+@{
+    int holidayCount = 0; int daysCount = 0;
+    if (Model != null && Model.Count > 0)
+    {
+        holidayCount = Model.Count;
+        daysCount = Model.Sum(r => r.NoofDays);
+    }
+}
+
+<section class="content-header">
+    <h1>
+        Holiday Allocation
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>Academic</li>
+        <li><a href="@Url.Action("New", "Academic_HolidayMaster")">Holiday Master</a></li>
+        <li>Holiday Allocation</li>
+    </ol>
+</section>
+
+<section class="content">
+
+    <!-- /.box -->
+    <div class="box box-success">
+        <!-- /.box-header -->
+        <div class="box-header with-border">
+            <h5 class="box-title">Holiday List Session @ViewBag.sessionName </h5>
+            <h5 class="box-title pull-right"> Holiday Count : <span class="text-primary" id="holidayCount"> @Html.DisplayFor(r => holidayCount) </span> , Days Count : <span class="text-primary" id="daysCount"> @Html.DisplayFor(r => daysCount) </span> </h5>
+        </div>
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S. No</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Department</th>
+                        <th>No of Days</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(r => Model[i].SNo)</td>
+                                <td>@Html.DisplayFor(r => Model[i].FDate)</td>
+                                <td>@Html.DisplayFor(r => Model[i].TDate)</td>
+                                <td>@Html.DisplayFor(r => Model[i].HolidayName)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Wings)</td>
+                                <td>@Html.DisplayFor(r => Model[i].Department)</td>
+                                <td>@Html.DisplayFor(r => Model[i].NoofDays)</td>
+                                <td class="text-center" style="width:100px;">
+                                    @if (Model[i].IsDeletable)
+                                    {
+                                        <a href="#" onclick="DeleteHolidayConfirm('@Model[i].HolidayId')" style="cursor:pointer;" title="Delete Holiday" class="fa fa-trash btnDefaultColor"></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" style="cursor:not-allowed;" title="Delete Holiday" class="fa fa-trash btnDefaultColor"></a>
+                                    }
+
+                                    @*@Html.EncodedActionLink(" ", "Updation", "Academic_HolidayDeclaration", new { FDate = Model[i].FDate, TDate = Model[i].TDate, HolidayName = Model[i].HolidayName, HolidayId = Model[i].HolidayId, NoofDays = Model[i].NoofDays }, htmlAttributes: new { @class = "fa fa-edit btnDefaultColor", title = "Edit Holiday" })*@
+
+                                    @Html.EncodedActionLink(" ", "HolidaySetUp", "Academic_HolidayAllocation", new { FDate = Model[i].FDate, TDate = Model[i].TDate, HolidayName = Model[i].HolidayName, HolidayId = Model[i].HolidayId, NoofDays = Model[i].NoofDays }, htmlAttributes: new { @class = "fa fa-gear btnDefaultColor", title = "Allocation Setup", style = "margin-left:4%;" })
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</section>
+
+<script>
+    $(function () {
+        $('#example1').DataTable()
+    });
+
+    function DeleteHolidayConfirm(HolidayId) {
+        AsyncConfirmYesNo("Confirmation", "Are you sure to delete this Holiday?", MyYesFunction, MyNoFunction, HolidayId);
+    }
+
+    function MyYesFunction(HolidayId) {
+        $.ajax({
+            type: "GET",
+            beforeSend: function () {
+                spinnerShow();
+            },
+            url: "../Academic_HolidayDeclaration/Academic_HolidayDeclaration_Delete",
+            data: { HolidayId: HolidayId },
+            error: function (xhr, status, error) {
+                OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+            },
+            success: function (result) {
+                OpenMessegeAutoHideDiv(result.Msg);
+                setTimeout(function () { window.location = "../Academic_HolidayAllocation/LandingPage"; }, 3000);
+            },
+            complete: function () {
+                spinnerHide();
+            }
+        });
+    }
+    function MyNoFunction() {
+        //alert('No Calling');
+    }
+</script>

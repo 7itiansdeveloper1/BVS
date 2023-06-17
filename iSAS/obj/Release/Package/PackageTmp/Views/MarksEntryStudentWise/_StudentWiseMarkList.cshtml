@@ -1,0 +1,51 @@
+﻿@model ISas.Entities.MarksEntryStudentWiseModel
+@{
+    int subjectCount_Row = 0; int assismentCount_Column = 0;
+    if (Model != null && Model.AssismentNameList != null && Model.SubjectListWithMarks != null)
+    {
+        subjectCount_Row = Model.SubjectListWithMarks.Count; assismentCount_Column = Model.AssismentNameList.Count;
+    }
+}
+@if (Model != null && Model.AssismentNameList != null && Model.SubjectListWithMarks != null)
+{
+    <table class="table table-hover table-responsive table-condensed" id="tblStudentWiseMarksEntry">
+        <thead>
+            <tr>
+                <th>Subject Name</th>
+                @for (int i = 0; i < Model.AssismentNameList.Count; i++)
+                {
+                    <th>
+                        @Html.HiddenFor(r => Model.AssismentNameList[i].AssismentName)
+                        @Html.DisplayFor(r => Model.AssismentNameList[i].AssismentName)
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.SubjectListWithMarks.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(r => Model.SubjectListWithMarks[i].SubjectName)
+                        @Html.HiddenFor(r => Model.SubjectListWithMarks[i].SubjectCode)
+                        @Html.DisplayFor(r => Model.SubjectListWithMarks[i].SubjectName)
+                    </td>
+                    @for (int j = 0; j < Model.SubjectListWithMarks[i].AssismentWithMarksList.Count; j++)
+                    {
+                        <td>
+                            @Html.HiddenFor(r => Model.SubjectListWithMarks[i].AssismentWithMarksList[j].AssismentName)
+                            @Html.TextBoxFor(r => Model.SubjectListWithMarks[i].AssismentWithMarksList[j].Marks, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(function () {
+        $('#subjectCount_Row').val(@subjectCount_Row);
+        $('#assismentCount_Column').val(@assismentCount_Column);
+    });
+</script>

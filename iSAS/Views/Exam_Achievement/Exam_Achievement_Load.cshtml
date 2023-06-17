@@ -1,0 +1,166 @@
+﻿@model ISas.Web.ViewModels.Exam_AchievementViewModel
+@{
+    ViewBag.Title = "General Remarks Entry Form";
+}
+
+<section class="content-header">
+    <h1>
+        Achievement
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript: history.go(-1)" title="Back"><i class="fa fa-arrow-left"></i> </a> |
+            <a href="#" onclick="window.location.reload()" title="Refresh"><i class="fa fa-refresh"></i></a> |
+            <a href="@Url.Action("Dashboard", "Dashboard")" title="Dashboard"><i class="fa fa-dashboard"></i></a>
+        </li>
+        <li>CCE Exam Module</li>
+        <li class="active">Achievements</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <span class="pull-right box-title">
+                <a onclick="window.open('StudentAchievement_Print','Exam_Achievement','width=650,height=800').print()"  class="fa fa-print btnDefaultColor"  id="btnPrint" ></a>
+            </span>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Session</label>
+                        @Html.HiddenFor(r => Model.SelectedSessionId)
+                        @Html.DropDownListFor(m => m.SelectedSessionId, Model.SessionList, new { @class = "form-control select2", style = "width:100%;", disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Term</label>
+                        @Html.DropDownListFor(m => m.SelectedExamId, Model.ExamList, "-- Select Exam --", new { @class = "form-control select2", style = "width:100%;", onchange = "getClassList()" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Class</label>
+                        @Html.DropDownListFor(m => m.SelectedClassId, Model.ClassList, new { @class = "form-control select2", style = "width:100%;", onchange = "getSectionList()" })
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label for="">Section</label>
+                        @Html.DropDownListFor(m => m.SelectedSectionId, Model.SectionList, new { @class = "form-control select2", style = "width:100%;", onchange = "getStudentList()" })
+                    </div>
+                </div>
+
+                <div id="divAchievementList">
+                    @Html.Partial("_StudentAchievementListPartial", Model)
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-success" id="savebutton">Save</button>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    function myfunction() {
+        var myTableArray = [];
+        $('#AchievementTable tr:not(:first)').each(function () {
+            var tds = $(this).find('td');
+            var myDets;
+                myDets = {
+                StudentERPNo: $(tds[0]).html(),
+                Achievement: $(tds[4]).find("#item_Achievement").val()
+            }
+            myTableArray.push(myDets);
+        });
+        return myTableArray;
+    }
+
+
+    function getClassList() {
+        $.ajax({
+            url: '../Exam_Achievement/BindClassddl',
+            data: { examId: $('#SelectedExamId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlClass = $('#SelectedClassId');
+                $ddlClass.empty();
+                $('#SelectedSectionId').empty();
+                $('#ddlSubjectList').empty();
+                $('#ddlAssessmentList').empty();
+                $ddlClass.append($("<option />").text("--- Select Class ---"));
+                $.each(data, function () {
+                    $ddlClass.append($("<option />").val(this.ClassId).text(this.ClassName));
+                })
+            })
+        })
+    }
+
+
+    function getSectionList() {
+        $.ajax({
+            url: '../Exam_Achievement/BindSectionddl',
+            data: { classId: $('#SelectedClassId').val(), examId: $('#SelectedExamId').val() },
+            type: 'get',
+            success: (function (data) {
+                var $ddlSec = $('#SelectedSectionId');
+                $ddlSec.empty();
+                $ddlSec.append($("<option />").text("--- Select Section ---"));
+                $.each(data, function () {
+                    $ddlSec.append($("<option />").val(this.SecId).text(this.SecName));
+                })
+            })
+        })
+    }
+
+    function getStudentList() {
+        $.ajax({
+            url: '../Exam_Achievement/BindStudentAchievementGrid',
+            data: {
+                classId: $('#SelectedClassId').val(), sectionId: $('#SelectedSectionId').val(),
+                examId: $('#SelectedExamId').val(),
+                sessionId: $('#SelectedSessionId').val(),
+
+                TermName: $('#SelectedExamId option:selected').text(),
+                ClassName: $('#SelectedClassId option:selected').text(),
+                SectionName: $('#SelectedSectionId option:selected').text()
+            },
+            type: 'get',
+            success : (function (data) {
+                $('#divAchievementList').empty();
+                $('#divAchievementList').html(data);
+            })
+        })
+    }
+
+
+    $(document).ready(function () {
+        $('#savebutton').on("click", function () {
+            //alert("abcd");
+            var myTableArray = myfunction();
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Exam_Achievement_CRUD", "Exam_Achievement")',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(
+                    {
+                        examId: $('#SelectedExamId').val(),
+                        sessionId: $('#SelectedSessionId').val()
+                        , StudentAchievementList: myTableArray
+                    }),
+                success: function (result) {
+                    OpenMessegeAutoHideDiv(result.Msg, result.Color);
+                },
+                error: function () {
+                    OpenMessegeAutoHideDiv($('#ErrorMsgOnJasonFailed').val(), 'Danger');
+                }
+            });
+            //$('#divMarkList').empty();
+        });
+
+    });
+</script>

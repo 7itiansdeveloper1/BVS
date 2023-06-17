@@ -1,0 +1,72 @@
+﻿@model List<ISas.Entities.Academic.Academic_DesignationMasterModels>
+@{
+    int rowlength = 0;
+    if (Model != null && Model.Count > 0)
+    {
+        rowlength = Model.Count;
+    }
+}
+<!-- /.box -->
+<div class="box box-primary">
+    <!-- /.box-header -->
+    <div class="box-header with-border">
+        <div class="box-title">
+            <h5 class="box-title">Designation List</h5>
+        </div>
+    </div>
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Designation</th>
+                    <th>Staff Count</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int count = 1;
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(r => count)
+                                @Html.HiddenFor(r => Model[i].DesigID, htmlAttributes: new { id = "DesigID_" + @i })
+                            </td>
+                            <td>
+                                <span style="display:none;"> @Html.DisplayFor(r => Model[i].DesigName)</span>
+                                @Html.TextBoxFor(r => Model[i].DesigName, htmlAttributes: new { @class = "form-control editableFeild_" + @i + "", id = "DesigName_" + @i, @readonly = true })
+                            </td>
+                            <td>@Html.DisplayFor(r => Model[i].StaffStrength)</td>
+                            <td class="text-center">
+                                @if (Model[i].IsDeletable)
+                                {
+                                    <a href="#" onclick="DeleteDesignationConfirm('@Model[i].DesigID')" title="Delete Designation" class="fa fa-trash btnDefaultColor"></a>
+                                }
+                                else
+                                {
+                                    <span title="Delete Designation" class="fa fa-trash btnDefaultColorFaded"></span>
+                                }
+
+                                <a href="#" onclick="EnableEditableRow('@i')" id="btnEdit_@i" style="" title="Edit Designation" class="fa fa-edit btnDefaultColor"></a>
+
+                                <a href="#" onclick="UpdateDesignation('@i')" id="btnSave_@i" style="display:none;" title="Save Designation" class="fa fa-check btnDefaultColor"></a>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    $(function () {
+        $('#example1').DataTable();
+        $('#hddnRowLenght').val('@rowlength');
+    });
+</script>
