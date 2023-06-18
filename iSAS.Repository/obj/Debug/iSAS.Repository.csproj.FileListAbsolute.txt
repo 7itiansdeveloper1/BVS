@@ -154,3 +154,15 @@ E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.c
 E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
 E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
 E:\LiveCode For DEVELOPMENT\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.dll
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.pdb
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.xml
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojAssemblyReference.cache
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
