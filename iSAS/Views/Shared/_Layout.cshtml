@@ -255,6 +255,7 @@
             <img id="img-spinner" src="../Images/System/Loading.gif" alt="Loading" style="width:100%;height:100%;" />
         </div>
     </div>
+   
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
@@ -277,14 +278,14 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                @*<img src="../@sessVal._userDisplayImage" class="user-image" alt="User Image" />*@
-                                <span class="hidden-xs">@sessVal._userDisplayname</span>
+                                <img src="../@sessVal._userDisplayImage" class="user-image" alt="User Image" onerror="this.src='../Images/System/defaultUserImg.png'" />
+                                @*<span class="hidden-xs">@sessVal._userDisplayname</span>*@
                             </a>
 
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="../@sessVal._userDisplayImage" class="img-circle" alt="User Image">
+                                    <img src="../@sessVal._userDisplayImage" class="img-circle" alt="User Image" onerror="this.src='../Images/System/defaultUserImg.png' ">
                                     <p>
                                         @sessVal._userDisplayname
                                         <small><a title="Click here to change password" style="color:white;" href="@Url.Action("ChangePassword", "Account")">Change Password</a></small>
@@ -390,12 +391,23 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="~/Images/System/defaultUserImg.png" class="img-circle" alt="User Image">
-                        @*<img src="../@sessVal._userDisplayImage" class="img-circle" alt="User Image">*@
+                        @*<img src="../@sessVal._userDisplayImage" alt="" id="arvind" />*@
+
+                        @*<img src="~/Images/System/defaultUserImg.png" class="img-circle" alt="User Image">*@
+                        <img src="../@sessVal._userDisplayImage" class="img-circle" alt="" onerror="this.src='../Images/System/defaultUserImg.png' ">
+                        
                     </div>
                     <div class="pull-left info">
                         <p>@sessVal._userDisplayname</p>
-                        <p>@sessVal._userDisplayTitle</p>
+                        @*<p>@sessVal._userDisplayImage</p>*@
+                        @if (!string.IsNullOrEmpty(sessVal._userDisplayClass) && sessVal._userDisplayTitle.ToLower() != "admin")
+                        {
+                            <p>@sessVal._userDisplayClass</p>
+                        }
+                        else
+                        {
+                            <p>@sessVal._userDisplayTitle</p>
+                        }
                         @*<a href="#">
                                 <i class="fa fa-circle text-success"></i>
                                 Online

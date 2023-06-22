@@ -136,3 +136,13 @@ D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Entities\obj\Debug\iSAS.Entities.csproj.Cor
 D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Entities\obj\Debug\iSAS.Entities.csproj.CopyComplete
 D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Entities\obj\Debug\iSAS.Entities.dll
 D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Entities\obj\Debug\iSAS.Entities.pdb
+D:\Arvind New\BVS\BVS\iSAS.Entities\bin\Debug\iSAS.Entities.dll
+D:\Arvind New\BVS\BVS\iSAS.Entities\bin\Debug\iSAS.Entities.pdb
+D:\Arvind New\BVS\BVS\iSAS.Entities\bin\Debug\EntityFramework.dll
+D:\Arvind New\BVS\BVS\iSAS.Entities\bin\Debug\EntityFramework.SqlServer.dll
+D:\Arvind New\BVS\BVS\iSAS.Entities\bin\Debug\EntityFramework.xml
+D:\Arvind New\BVS\BVS\iSAS.Entities\bin\Debug\EntityFramework.SqlServer.xml
+D:\Arvind New\BVS\BVS\iSAS.Entities\obj\Debug\iSAS.Entities.csprojResolveAssemblyReference.cache
+D:\Arvind New\BVS\BVS\iSAS.Entities\obj\Debug\iSAS.Entities.csproj.CoreCompileInputs.cache
+D:\Arvind New\BVS\BVS\iSAS.Entities\obj\Debug\iSAS.Entities.dll
+D:\Arvind New\BVS\BVS\iSAS.Entities\obj\Debug\iSAS.Entities.pdb

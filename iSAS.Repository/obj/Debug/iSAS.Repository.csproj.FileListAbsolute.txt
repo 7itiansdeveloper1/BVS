@@ -166,3 +166,14 @@ C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csp
 C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CopyComplete
 C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
 C:\DEVELOPMENT\DEVELOPER1\iSAS_BVS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb
+D:\Arvind New\BVS\BVS\iSAS.Repository\bin\Debug\iSAS.Repository.dll
+D:\Arvind New\BVS\BVS\iSAS.Repository\bin\Debug\iSAS.Repository.pdb
+D:\Arvind New\BVS\BVS\iSAS.Repository\bin\Debug\iSAS.Entities.dll
+D:\Arvind New\BVS\BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.dll
+D:\Arvind New\BVS\BVS\iSAS.Repository\bin\Debug\iSAS.Entities.pdb
+D:\Arvind New\BVS\BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.pdb
+D:\Arvind New\BVS\BVS\iSAS.Repository\bin\Debug\Newtonsoft.Json.xml
+D:\Arvind New\BVS\BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csprojResolveAssemblyReference.cache
+D:\Arvind New\BVS\BVS\iSAS.Repository\obj\Debug\iSAS.Repository.csproj.CoreCompileInputs.cache
+D:\Arvind New\BVS\BVS\iSAS.Repository\obj\Debug\iSAS.Repository.dll
+D:\Arvind New\BVS\BVS\iSAS.Repository\obj\Debug\iSAS.Repository.pdb

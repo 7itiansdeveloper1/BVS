@@ -59,12 +59,13 @@ namespace ISas.Repository.Implementation
             }
         }
 
-        public Tuple<string, string, string,string> GetUserID_By_UserName(string UserName)
+        public Tuple<string, string, string,string,string> GetUserID_By_UserName(string UserName)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["iSASDB"].ToString()))
             {
                 SqlCommand cmd = new SqlCommand("Usp_UserIDbyUserName", con);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
                 cmd.Parameters.AddWithValue("@UserName", UserName);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -73,7 +74,8 @@ namespace ISas.Repository.Implementation
                 string displayname = dt.Rows[0][1].ToString();
                 string displayImage = dt.Rows[0][2].ToString();
                 string displaytitle = dt.Rows[0][3].ToString();
-                return new Tuple<string, string, string,string>(userid, displayname, displayImage,displaytitle);
+                string displayClass = dt.Rows[0][4].ToString();
+                return new Tuple<string, string, string,string,string>(userid, displayname, displayImage,displaytitle,displayClass);
             }
         }
 

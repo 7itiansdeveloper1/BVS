@@ -132,7 +132,7 @@ namespace ISas.Web.Controllers
                 bool success = WebSecurity.Login(login.username, login.password, false);
                 if (success == true)
                 {
-                    Tuple<string, string, string,string> UserIDs = objILoginData.GetUserID_By_UserName(login.username);
+                    Tuple<string, string, string,string,string> UserIDs = objILoginData.GetUserID_By_UserName(login.username);
                     var LoginType = objILoginData.GetRoleByUserID(UserIDs.Item1);
                     var SessId = login.SelectedSessionId; //objILoginData.GetAllSessions().OrderByDescending(m => m.SessId).First().SessId;
                     var SessName = objILoginData.GetAllSessions().Where(r => r.SessId == SessId).FirstOrDefault().SessionDisplayName; //objILoginData.GetAllSessions().OrderByDescending(m => m.SessId).First().SessionDisplayName;
@@ -149,9 +149,11 @@ namespace ISas.Web.Controllers
                         Session["SessionId"] = SessId;
                         Session["DisplayName"] = UserIDs.Item2;
                         Session["DisplayImage"] = UserIDs.Item3;
+                        Session["DisplayClass"] = UserIDs.Item5;
                         Session["SessionName"] = SessName;
                         Session["LoginStudentERPNo"] = UserIDs.Item1;
                         Session["DisplayTitle"] = UserIDs.Item4;
+
                         return RedirectToAction("Dashboard", "Dashboard");
                     }
                 }

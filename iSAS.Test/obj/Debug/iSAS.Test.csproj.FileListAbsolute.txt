@@ -368,3 +368,7 @@ D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Test\obj\Debug\iSAS.Test.csproj.CoreCompile
 D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Test\obj\Debug\iSAS.Test.csproj.CopyComplete
 D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Test\obj\Debug\iSAS.Test.dll
 D:\LiveProjects\SCHOOL\iSAS_BVS\iSAS.Test\obj\Debug\iSAS.Test.pdb
+D:\Arvind New\BVS\BVS\iSAS.Test\obj\Debug\iSAS.Test.csprojResolveAssemblyReference.cache
+D:\Arvind New\BVS\BVS\iSAS.Test\obj\Debug\iSAS.Test.csproj.CoreCompileInputs.cache
+D:\Arvind New\BVS\BVS\iSAS.Test\obj\Debug\iSAS.Test.dll
+D:\Arvind New\BVS\BVS\iSAS.Test\obj\Debug\iSAS.Test.pdb

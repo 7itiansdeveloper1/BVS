@@ -54,9 +54,10 @@ namespace ISas.Web.ViewModels
             }
         }
         public List<Menu> MenuList { get { return _menuList; } }
-        public string _userDisplayname = HttpContext.Current.Session["DisplayName"] == null ? "": HttpContext.Current.Session["DisplayName"].ToString();
+        public string _userDisplayname = HttpContext.Current.Session["DisplayName"] == null ? "" : HttpContext.Current.Session["DisplayName"].ToString();
         public string _userDisplayImage = HttpContext.Current.Session["DisplayImage"] == null ? "" : HttpContext.Current.Session["DisplayImage"].ToString();
         public string _userDisplayTitle = HttpContext.Current.Session["DisplayTitle"] == null ? "" : HttpContext.Current.Session["DisplayTitle"].ToString();
         public string _sessionName = HttpContext.Current.Session["SessionName"] == null ? "" : HttpContext.Current.Session["SessionName"].ToString();
+        public string _userDisplayClass = HttpContext.Current.Session["DisplayClass"] == null ? "" : "Class :" + HttpContext.Current.Session["displayClass"].ToString();
     }
 }

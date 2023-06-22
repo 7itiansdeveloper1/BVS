@@ -153,6 +153,7 @@ namespace ISas.Repository.DashboardRepository.Repository
                 con.Open();
                 SqlCommand cmd = new SqlCommand("sp_DashBoardLandingPage", con);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
                 cmd.Parameters.AddWithValue("@UserId", UserId);
                 cmd.Parameters.AddWithValue("@UserRole", UserRole);
                 if (!string.IsNullOrEmpty(Date))
@@ -476,6 +477,7 @@ namespace ISas.Repository.DashboardRepository.Repository
                 cmd.Parameters.AddWithValue("@AttDate", Convert.ToDateTime(Date).Date.ToString("yyyy-MM-dd"));
                 cmd.Parameters.AddWithValue("@SessionId", SessionId);
                 cmd.Parameters.AddWithValue("@UserId", UserId);
+                cmd.CommandTimeout = 0;
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(ds);
                 con.Close();
