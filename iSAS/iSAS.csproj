@@ -232,6 +232,7 @@
     <Compile Include="Controllers\Dashboard\ParentRequestMasterController.cs" />
     <Compile Include="Controllers\ErrorHandlerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Staff\Staff_StaffDetailMasterController.cs" />
     <Compile Include="CrystalReports\Bonafide2.cs">
       <DependentUpon>Bonafide2.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -7847,6 +7848,13 @@
     <Content Include="Views\Common\_StudentSearchPartial_WithAllClasses.cshtml" />
     <Content Include="Views\Shared\_LayoutPrint.cshtml" />
     <Content Include="Views\DashBoard_StaffStatatics\MyTimeTable.cshtml" />
+    <Content Include="Views\Staff_StaffDetailMaster\ExportStaffDetails.cshtml" />
+    <Content Include="Views\Staff_StaffDetailMaster\NewStaff_StaffDetailMaster.cshtml" />
+    <Content Include="Views\Staff_StaffDetailMaster\SelfUpdation.cshtml" />
+    <Content Include="Views\Staff_StaffDetailMaster\Staff_StaffDetailMasterLandingPage.cshtml" />
+    <Content Include="Views\Staff_StaffDetailMaster\Staff_StaffDetailMaster_PrintPage.cshtml" />
+    <Content Include="Views\Staff_StaffDetailMaster\Updation.cshtml" />
+    <Content Include="Views\Staff_StaffDetailMaster\_StaffTimeTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

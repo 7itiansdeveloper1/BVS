@@ -153,7 +153,6 @@ namespace ISas.Web.Controllers
                         Session["SessionName"] = SessName;
                         Session["LoginStudentERPNo"] = UserIDs.Item1;
                         Session["DisplayTitle"] = UserIDs.Item4;
-
                         return RedirectToAction("Dashboard", "Dashboard");
                     }
                 }
